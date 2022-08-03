@@ -1,0 +1,11 @@
+@import "assets/scss/variables.scss";
+
+.LogBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: $primary;
+    color: #fff;
+    height: 100%;
+}

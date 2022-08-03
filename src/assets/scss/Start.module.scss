@@ -5,22 +5,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: $primary;
-    padding: 0 10px 0 10px;
-    color: #fff;
-    font-size: 16px;
+    background-color: #fff;
+    font-size: 20px;
     & .leftSide {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 220px;
+        width: 100px;
+        padding-left: 20px;
+        & .logoText {
+            font-size: 25px;
+        }
     }
     & .rightSide {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 350px;
+        width: 250px;
+        height: 100%;
     }
+}
+.btnBlock {
+    height: 100%;
 }
 .inputBlock {
     height: 35px;
@@ -46,18 +52,10 @@
         padding-left: 4px;
         font-size: 18px;
         font-weight: 600;
-        color: #fff;
+        color: black
     }
 }
-.create {
-    display: flex;
-    align-items: center;
-    height: 35px;
-    border-radius: 4px;
-    padding: 0 6px 0 6px;
-    background-color: #004285;
-    cursor: pointer;
-    &:hover {
-        background-color: #0288d5;
-    }
+.main {
+    height: 100vh;
+    background-color: rgb(221, 205, 237);
 }
