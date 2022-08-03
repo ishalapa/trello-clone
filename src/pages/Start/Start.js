@@ -4,14 +4,9 @@ import TopBarStart from 'layout/TopBarStart'
 import styles from 'assets/scss/Start.module.scss'
 import MediaCard from 'ui/MediaCard'
 
-import {
-  Container,
-  Stack,
-  Box,
-  TextField,
-  Button,
-  Divider,
-} from '@mui/material'
+import { Link } from 'react-router-dom'
+
+import { Container, Stack, Box, TextField, Button, Divider } from '@mui/material'
 
 const Start = () => {
   return (
@@ -36,26 +31,29 @@ const Start = () => {
                   id="demo-helper-text-misaligned"
                   label="Email"
                 />
-                <Button variant="contained" sx={{ height: '53px' }}>
-                  Sign Up, it's free
-                </Button>
+
+                <Link to="/home">
+                  <Button variant="contained" sx={{ height: '53px' }}>
+                    Sign Up, it's free
+                  </Button>
+                </Link>
               </Stack>
             </Box>
           </Stack>
           <Divider />
           <Stack pt={5} direction="row" spacing={3} display="flex" justifyContent="center">
             <MediaCard
-              img='https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png'
+              img="https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png"
               header="See Trello pricing"
               text="Whether you’re a team of 2 or 2,000, Trello can be customized for your organization. Explore which option is best for you."
             />
             <MediaCard
-            img="https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png"
+              img="https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png"
               header="What is Trello?"
               text="Trello is the visual tool that empowers your team to manage any type of project, workflow, or task tracking."
             />
             <MediaCard
-            img="https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png"
+              img="https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png"
               header="Discover Trello Enterprise"
               text="The productivity tool teams love, paired with the features and security needed for scale."
             />
