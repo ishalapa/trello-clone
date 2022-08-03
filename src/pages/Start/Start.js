@@ -31,7 +31,6 @@ const Start = () => {
                   id="demo-helper-text-misaligned"
                   label="Email"
                 />
-
                 <Link to="/home">
                   <Button variant="contained" sx={{ height: '53px' }}>
                     Sign Up, it's free
