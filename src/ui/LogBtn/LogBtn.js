@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from "./LogBtn.module.scss"
 
-const LogBtn = ({onClick, children, ...props}) => {
+const LogBtn = ({textColor, color, onClick, children, ...props}) => {
   return (
-    <div className={styles.LogBtn}>{children}</div>
+    <div style={{backgroundColor: color, color: textColor}} className={styles.LogBtn}>{children}</div>
   )
 }
 

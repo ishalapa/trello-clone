@@ -2,11 +2,16 @@
 
 .containerTop {
     height: 50px;
+    width: 100%;
+    position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #fff;
     font-size: 20px;
+    font-family: "Montserrat";
+    font-weight: 400;
+    z-index: 100;
     & .leftSide {
         display: flex;
         justify-content: space-between;
@@ -21,27 +26,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 250px;
+        width: 320px;
         height: 100%;
-    }
-}
-.btnBlock {
-    height: 100%;
-}
-.inputBlock {
-    height: 35px;
-    border-radius: 12px;
-    input {
-        background-color: rgba(40, 116, 207, 0.595);
-        color: white;
-        height: 100%;
-        border-radius: 4px;
-        border: 1px solid rgba(255, 255, 255, 0.775);
-        font-size: 1em;
-        padding-left: 8px;
-    }
-    input::placeholder {
-        color: white;
+        & li {
+            height: 100%;
+        }
     }
 }
 .a {
@@ -54,9 +43,4 @@
         font-weight: 600;
         color: black
     }
-}
-.main {
-    height: 100vh;
-    background-color: rgb(247, 241, 253);
-    font-family: "Montserrat";
 }
