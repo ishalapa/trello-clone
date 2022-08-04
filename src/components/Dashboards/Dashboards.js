@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { dashboardsState } from 'store/slices/dashboardsSlice'
-
 import Dashboard from './Dashboard/Dashboard'
 
 const Dashboards = () => {
