@@ -3,15 +3,9 @@ import styles from 'assets/scss/TopBar.module.scss'
 
 import { CgMenuGridR, CgTrello } from 'react-icons/cg'
 import AddBoardForm from 'ui/AddBoardForm'
-import { useSelector } from 'react-redux'
-import { dashboardsState } from 'store/slices/dashboardsSlice'
-
-
 
 const TopBar = () => {
   const [open, setIsOpen] = useState(false);
-  const dashboards = useSelector(dashboardsState)
-  console.log(dashboards)
   return (
     <div className={styles.containerTop}>
       <ul className={styles.leftSide}>

@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-
-import { useDispatch } from 'react-redux'
+import React, {useState} from 'react'
 
 import {
   Modal,
@@ -16,10 +14,12 @@ import {
   TextField,
   FormHelperText,
 } from '@mui/material'
-// import { dashboardState, openDashboardForm} from 'store/slices/dashboardSlice'
+import { addDoc } from 'firebase/firestore'
+import { dashboardsCollection } from 'firebase-client'
+
 
 const AddBoardForm = ({ open, setIsOpen }) => {
-  // const dispatch = useDispatch()
+  const [inp, setInp] = useState("")
   const style = {
     position: 'absolute',
     top: '50%',
@@ -31,10 +31,14 @@ const AddBoardForm = ({ open, setIsOpen }) => {
     boxShadow: 24,
     p: 4,
   }
-
-  // const handleClose = () => {
-  //     dispatch(openDashboardForm(false))
-  // }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    addDoc(dashboardsCollection, {
+      title: inp
+    })
+    setInp("")
+    setIsOpen(false)
+  }
   return (
     <Modal
       open={open}
@@ -59,13 +63,14 @@ const AddBoardForm = ({ open, setIsOpen }) => {
         <Typography pt={2} id="modal-modal-title" variant="h6" component="h6">
           Board title:
         </Typography>
-        <FormControl>
-          <TextField sx={{ width: '300px' }} id="my-input" aria-describedby="my-helper-text" />
+        <form onSubmit={handleSubmit}>
+          <TextField value={inp} onChange={(e) => setInp(e.target.value)} sx={{ width: '300px' }} id="my-input" aria-describedby="my-helper-text" />
           <FormHelperText id="my-helper-text">Board title is required</FormHelperText>
-        </FormControl>
+        
         <Box display="flex" justifyContent="center" pt={1}>
           <Button type='submit' variant="contained">Submit</Button>
         </Box>
+        </form>
       </Card>
     </Modal>
   )
