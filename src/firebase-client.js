@@ -1,18 +1,20 @@
-import { initializeApp } from "firebase/app";
-import { collection, getFirestore } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
 
+import { initializeApp } from "firebase/app";
+import { collection, getFirestore } from "firebase/firestore";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAoRx0GJ3CpqtyMx34tlQ1DZ5Z7ItzmuJQ",
-  authDomain: "trello-clone-d8c73.firebaseapp.com",
-  projectId: "trello-clone-d8c73",
-  storageBucket: "trello-clone-d8c73.appspot.com",
-  messagingSenderId: "309563818791",
-  appId: "1:309563818791:web:2c79316bf1d5186aa11f02"
+  apiKey: "AIzaSyCm9utte6v4lTceymRPeHjNo9OJMPG4Klo",
+  authDomain: "test-pro-9794c.firebaseapp.com",
+  projectId: "test-pro-9794c",
+  storageBucket: "test-pro-9794c.appspot.com",
+  messagingSenderId: "558241115026",
+  appId: "1:558241115026:web:a2da8da47ec5a4fe63ef4b"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-//
-export const db = getFirestore(firebaseConfig);
-export const auth = getAuth(app);
+
+const db = getFirestore(app)
+
+export const dashboardsCollection = collection(db, "dashboards")
