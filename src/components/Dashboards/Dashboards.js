@@ -8,7 +8,7 @@ const Dashboards = () => {
   const dashboards = useSelector(dashboardsState)
   return (
     <>
-      {dashboards.map(board => (
+      {dashboards && dashboards.map(board => (
         <Dashboard key={board.id} board={board}/>
       ))}
     </>

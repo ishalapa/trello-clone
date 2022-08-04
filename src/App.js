@@ -6,14 +6,20 @@ import { Route, Routes } from 'react-router-dom'
 import Layout from 'ui/Layout'
 
 import './App.css'
+import DashboardPage from 'pages/DashboardPage'
+import { useSelector } from 'react-redux'
+import { currentDashboardState } from 'store/slices/currentDashboardSlice'
 
 function App() {
+  const currentDashboard = useSelector(currentDashboardState)
+  const path = currentDashboard.title
   return (
     <GetState>
       <Routes>
         <Route index element={<Start />} />
         <Route path="/" element={<Layout />}>
           <Route path="/home" element={<Home />} />
+          <Route path={`/home/:${path}`} element={<DashboardPage />} />
           <Route path="/dashboard" element={<Dashboards />} />
         </Route>
       </Routes>
