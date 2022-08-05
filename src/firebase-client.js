@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { collection, getFirestore } from "firebase/firestore";
+import { collection, doc, getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,3 +18,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 
 export const dashboardsCollection = collection(db, "dashboards")
+export const cardsCollection = doc(dashboardsCollection, "cards")
