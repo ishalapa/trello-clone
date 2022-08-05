@@ -6,7 +6,7 @@ const DashboardPage = () => {
     const currentDashboard = useSelector(currentDashboardState)
   return (
     <div>
-        {currentDashboard.title}
+        {currentDashboard && currentDashboard.title}
     </div>
   )
 }
