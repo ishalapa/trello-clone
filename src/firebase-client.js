@@ -18,4 +18,3 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 
 export const dashboardsCollection = collection(db, "dashboards")
-export const cardsCollection = doc(dashboardsCollection, "cards")

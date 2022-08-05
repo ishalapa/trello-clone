@@ -3,19 +3,22 @@ import React from 'react'
 import { Button, Grid } from '@mui/material'
 import { useParams, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { currentDashboardState, setCurrentDashboard } from 'store/slices/currentDashboardSlice'
+import { currentDashboardState, setCurrentDashboard, setCurrentDashboardId } from 'store/slices/currentDashboardSlice'
 import { doc, getDoc } from 'firebase/firestore'
 import { dashboardsCollection } from 'firebase-client'
+import { boardCardsState } from 'store/slices/boardCardsSlice'
 
 const Dashboard = ({ board }) => {
   const { path } = useParams()
 
   const dispatch = useDispatch()
   const currentDashboard = useSelector(currentDashboardState)
+  const cards = useSelector(boardCardsState)
 
   const handleClick = async (id) => {
     const docRef = doc(dashboardsCollection, id)
     const docSnap = await getDoc(docRef)
+    dispatch(setCurrentDashboardId(board.id))
     dispatch(setCurrentDashboard(docSnap.data()))
   }
   const urlTitle = board.title.replace(/\s+/g, '+')

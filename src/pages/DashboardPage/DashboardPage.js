@@ -1,5 +1,6 @@
 import { Container, Box } from '@mui/material'
-import BoardCard from 'components/BoardCard'
+import BoardCard from 'components/BoardCards/BoardCard'
+
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { currentDashboardState } from 'store/slices/currentDashboardSlice'

@@ -3,8 +3,11 @@ import React, { useState } from 'react'
 import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { cardsCollection } from 'firebase-client'
+import { useSelector } from 'react-redux'
+import { boardCardsState } from 'store/slices/boardCardsSlice'
 const BoardCard = () => {
   const [isBtnClicked, setIsBtnClicked] = useState(false)
+  const subcoll = useSelector(boardCardsState)
   return (
     <Card sx={{ width: '250px', backgroundColor:"#f2f2f2" }}>
       <CardContent>
@@ -34,7 +37,7 @@ const BoardCard = () => {
               fullWidth
             />
             <Stack pt={1} spacing={1} direction="row" alignItems="center">
-              <Button onClick={()=> console.log(cardsCollection.data())} variant="contained">Add card</Button>
+              <Button onClick={()=> console.log(subcoll)} variant="contained">Add card</Button>
               <IconButton onClick={() => setIsBtnClicked(false)} size="small">
                 <AiOutlineClose />
               </IconButton>
