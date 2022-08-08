@@ -1,45 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
-import { useDispatch, useSelector } from 'react-redux'
-import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
+import { useSelector } from 'react-redux'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { dashboardsCollection } from 'firebase-client'
-import { setTasks, tasksState } from 'store/slices/tasksSlice'
-import Tasks from 'components/Tasks'
 
-const BoardCard = ({card}) => {
+const BoardCard = ({ card }) => {
   const [isBtnClicked, setIsBtnClicked] = useState(false)
-  const [inp, setInp] = useState("")
-  const dispatch = useDispatch()
+  const [inp, setInp] = useState('')
   const dashboardId = useSelector(currentDashboardIdState)
-  const tasks = useSelector(tasksState)
-  const tasksCollection = collection(dashboardsCollection, `${dashboardId}`, "cards", card.id, "tasks")
+  const tasksDoc = doc(dashboardsCollection, `${dashboardId}`, 'cards', card.id)
 
-  useEffect(() => {
-    onSnapshot(tasksCollection, (snapshot) => {
-      const taskSnap = snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id }
-      })
-      dispatch(setTasks(taskSnap))
-    })
-  }, [dashboardId])
-  console.log(tasks)
   const addTask = async (e) => {
     e.preventDefault()
-    addDoc(tasksCollection, {
-      title: inp
+    await updateDoc(tasksDoc, {
+      tasks: arrayUnion(inp),
     })
-    setInp("")
+    setInp('')
   }
   return (
-    <Card sx={{ width: '290px', backgroundColor:"#f2f2f2" }}>
+    <Card sx={{ width: '290px', backgroundColor: '#f2f2f2' }}>
       <CardContent>
         <Typography variant="h6" color="#000066">
           {card.title}
         </Typography>
-        <Tasks />
+        <Stack pt={1} spacing={1}>
+          {card.tasks && card.tasks.map((task) => (
+            <Card sx={{ boxShadow: 1, display: "flex", alignItems: "center"  }} color="#000066">
+              <Typography p={1} variant="subtitle1" color="#000066">
+                {task}
+              </Typography>
+            </Card>
+          ))}
+        </Stack>
+
         {!isBtnClicked ? (
           <Button
             onClick={() => setIsBtnClicked(true)}
@@ -54,8 +50,8 @@ const BoardCard = ({card}) => {
           <Box pt={1}>
             <TextField
               value={inp}
-              onChange={(e)=> setInp(e.target.value)}
-              sx={{backgroundColor:"white"}}
+              onChange={(e) => setInp(e.target.value)}
+              sx={{ backgroundColor: 'white' }}
               size="small"
               variant="outlined"
               multiline
@@ -65,7 +61,9 @@ const BoardCard = ({card}) => {
               fullWidth
             />
             <Stack pt={1} spacing={1} direction="row" alignItems="center">
-              <Button onClick={addTask} variant="contained">Add card</Button>
+              <Button onClick={addTask} variant="contained">
+                Add card
+              </Button>
               <IconButton onClick={() => setIsBtnClicked(false)} size="small">
                 <AiOutlineClose />
               </IconButton>

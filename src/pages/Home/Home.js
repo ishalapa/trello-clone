@@ -2,7 +2,7 @@ import React from 'react'
 
 import 'assets/scss/Home.scss'
 import Dashboards from 'components/Dashboards'
-import { Stack, Box, Typography, Grid } from '@mui/material'
+import { Box, Typography, Grid } from '@mui/material'
 import { Container } from '@mui/system'
 
 import { CgTrello } from 'react-icons/cg'

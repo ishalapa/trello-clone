@@ -5,13 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setBoardCards } from 'store/slices/boardCardsSlice'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { setDashboards } from 'store/slices/dashboardsSlice'
-import { tasksState } from 'store/slices/tasksSlice'
 
 const GetState = ({ children }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
-  // const tasks = useSelector(tasksState)
-  // const tasksCollection = collection()
   const cardsCollection = collection(dashboardsCollection, `${dashboardId}`, "cards")
 
   useEffect(() => {
