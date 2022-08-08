@@ -8,11 +8,11 @@ import AddNewListBtn from 'components/AddNewListBtn'
 
 const BoardCards = () => {
   const cards = useSelector(boardCardsState)
-  
+
   return (
     <Stack spacing={2} direction="row">
       {cards && cards.map((card) => <BoardCard key={card.id} card={card} />)}
-        <AddNewListBtn />
+      <AddNewListBtn />
     </Stack>
   )
 }
