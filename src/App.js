@@ -9,11 +9,13 @@ import './App.css'
 import DashboardPage from 'pages/DashboardPage'
 import { useSelector } from 'react-redux'
 import { currentDashboardState } from 'store/slices/currentDashboardSlice'
+import { DragDropContext } from "react-beautiful-dnd"
 
 function App() {
   const path = useSelector(currentDashboardState)
   return (
     <GetState>
+      <DragDropContext onDragEnd={(result) => console.log(result)}>
       <Routes>
         <Route index element={<Start />} />
         <Route path="/" element={<Layout />}>
@@ -22,6 +24,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboards />} />
         </Route>
       </Routes>
+      </DragDropContext>
+      
     </GetState>
   )
 }

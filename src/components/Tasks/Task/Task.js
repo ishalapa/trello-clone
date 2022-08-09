@@ -1,8 +1,25 @@
 import React from 'react'
 
-const Task = ({task}) => {
+import { Card, Typography } from '@mui/material'
+import { Draggable } from 'react-beautiful-dnd'
+
+const Task = ({ task, index }) => {
   return (
-    <div>{task.title}</div>
+    <Draggable draggableId={task.id.toString()} index={index}>
+      {(provided) => (
+        <Card
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          sx={{ boxShadow: 1, display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+          color="#000066"
+        >
+          <Typography p={1} variant="subtitle1" color="#000066">
+            {task.title}
+          </Typography>
+        </Card>
+      )}
+    </Draggable>
   )
 }
 

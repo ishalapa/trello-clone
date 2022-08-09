@@ -25,11 +25,10 @@ const Dashboard = ({ board }) => {
 
   return (
     <Grid item xs={6} md={3}>
-      <Box position="relative">
-        <Link
-          onClick={() => {
+      <Box position="relative" onClick={() => {
             handleClick(board.id)
-          }}
+          }}>
+        <Link
           to={`/home/:${urlTitle}`}
         >
           <Button sx={{ width: '200px', height: '200px' }} variant="outlined" size="large">
