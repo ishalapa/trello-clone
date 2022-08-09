@@ -7,25 +7,31 @@ import Layout from 'ui/Layout'
 
 import './App.css'
 import DashboardPage from 'pages/DashboardPage'
-import { useSelector } from 'react-redux'
-import { currentDashboardState } from 'store/slices/currentDashboardSlice'
+
 import { DragDropContext } from "react-beautiful-dnd"
 
 function App() {
-  const path = useSelector(currentDashboardState)
+  const onDragEnd = (result) => {
+    const { source, destination } = result
+
+    if (!destination) return
+
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    console.log(result)
+  }
   return (
     <GetState>
-      <DragDropContext onDragEnd={(result) => console.log(result)}>
-      <Routes>
-        <Route index element={<Start />} />
-        <Route path="/" element={<Layout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path={`/home/:dashboard`} element={<DashboardPage />} />
-          <Route path="/dashboard" element={<Dashboards />} />
-        </Route>
-      </Routes>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Routes>
+          <Route index element={<Start />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path={`/home/:dashboard`} element={<DashboardPage />} />
+            <Route path="/dashboard" element={<Dashboards />} />
+          </Route>
+        </Routes>
       </DragDropContext>
-      
     </GetState>
   )
 }

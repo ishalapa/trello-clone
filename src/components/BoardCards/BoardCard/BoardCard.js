@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { dashboardsCollection } from 'firebase-client'
-import { Draggable, Droppable } from 'react-beautiful-dnd'
+import { Droppable } from 'react-beautiful-dnd'
 import Task from 'components/Tasks/Task'
 
 const BoardCard = ({ card }) => {
@@ -28,7 +28,6 @@ const BoardCard = ({ card }) => {
     })
     setInp('')
   }
-  console.log(generateKey(card.title))
   return (
     <Droppable droppableId={card.title}>
       {(provided) => (
