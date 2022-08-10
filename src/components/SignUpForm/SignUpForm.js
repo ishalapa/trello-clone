@@ -4,7 +4,12 @@ import { Card, CardContent, Typography, Box, TextField, Button, Alert } from '@m
 
 import { FcGoogle } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateName, setCurrentUserEmail, setCurrentUserName } from 'store/slices/currentUserSlice'
+import {
+  currentUserStateEmail,
+  currentUserStateName,
+  setCurrentUserEmail,
+  setCurrentUserName,
+} from 'store/slices/currentUserSlice'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
@@ -31,20 +36,17 @@ const SignUpForm = () => {
 
     signInWithPopup(auth, googleProvider)
       .then((result) => {
-    
         const user = result.user
-        
+
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
       })
-      .then (() => {
+      .then(() => {
         console.log(currentUser)
         console.log(currentEmail)
-        navigate("/home")
+        navigate('/home')
       })
-      .catch((error) => {
-
-      })
+      .catch((error) => {})
   }
   return (
     <Box width="450px">

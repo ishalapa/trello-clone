@@ -1,12 +1,12 @@
 @import "assets/scss/variables.scss";
 
 .containerTop {
-    height: 50px;
+    height: 55px;
     display: flex;
+    padding: 10px;
     justify-content: space-between;
     align-items: center;
     background-color: $primary;
-    padding: 0 10px 0 10px;
     color: #fff;
     font-size: 16px;
     font-family: "Montserrat";
@@ -20,7 +20,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 550px;
+        width: 300px;
     }
 }
 .inputBlock {
