@@ -3,9 +3,13 @@ import styles from 'assets/scss/TopBar.module.scss'
 
 import { CgMenuGridR, CgTrello } from 'react-icons/cg'
 import AddBoardForm from 'ui/AddBoardForm'
+import { useSelector } from 'react-redux'
+import { currentUserStateEmail, currentUserStateName } from 'store/slices/currentUserSlice'
 
 const TopBar = () => {
   const [open, setIsOpen] = useState(false);
+  const userEmail = useSelector(currentUserStateEmail)
+  const userName = useSelector(currentUserStateName)
   return (
     <div className={styles.containerTop}>
       <ul className={styles.leftSide}>
@@ -22,9 +26,7 @@ const TopBar = () => {
       </ul>
       <ul className={styles.rightSide}>
         <li className={styles.inputBlock}><input type="text" placeholder='Search'/></li>
-        <li>Icon</li>
-        <li>Icon</li>
-        <li>Icon</li>
+         <li>{userEmail}</li>
       </ul>
       <AddBoardForm open={open} setIsOpen={setIsOpen}/>
     </div>

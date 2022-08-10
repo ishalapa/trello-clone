@@ -9,6 +9,7 @@ import './App.css'
 import DashboardPage from 'pages/DashboardPage'
 
 import { DragDropContext } from "react-beautiful-dnd"
+import SignUp from 'pages/SignUp'
 
 function App() {
   const onDragEnd = (result) => {
@@ -25,6 +26,7 @@ function App() {
       <DragDropContext onDragEnd={onDragEnd}>
         <Routes>
           <Route index element={<Start />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path={`/home/:dashboard`} element={<DashboardPage />} />

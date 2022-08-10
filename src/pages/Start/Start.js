@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import TopBarStart from 'layout/TopBarStart'
 import styles from 'assets/scss/Start.module.scss'
@@ -7,8 +7,16 @@ import MediaCard from 'ui/MediaCard'
 import { Link } from 'react-router-dom'
 
 import { Container, Stack, Box, TextField, Button, Divider } from '@mui/material'
+import { useDispatch } from 'react-redux'
+import { setCurrentUserEmail } from 'store/slices/currentUserSlice'
 
 const Start = () => {
+  const dispatch = useDispatch()
+  const [email, setEmail] = useState("")
+
+  const dispatchEmail = () => {
+    dispatch(setCurrentUserEmail(email))
+  }
   return (
     <>
       <TopBarStart />
@@ -27,12 +35,14 @@ const Start = () => {
               </Box>
               <Stack direction="row" spacing={2} pt="20px" display="flex" justifyContent="center">
                 <TextField
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   sx={{ width: '400px', backgroundColor: 'white' }}
                   id="demo-helper-text-misaligned"
                   label="Email"
                 />
-                <Link to="/home">
-                  <Button variant="contained" sx={{ height: '53px' }}>
+                <Link to="/signup">
+                  <Button onClick={dispatchEmail} variant="contained" sx={{ height: '53px' }}>
                     Sign Up, it's free
                   </Button>
                 </Link>
