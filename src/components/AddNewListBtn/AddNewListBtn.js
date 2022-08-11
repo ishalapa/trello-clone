@@ -6,13 +6,18 @@ import { addDoc, collection } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { dashboardsCollection } from 'firebase-client'
+import { usersCollection } from 'firebase-client'
+import { currentUserStateId } from 'store/slices/currentUserSlice'
 
 const AddNewListBtn = () => {
   const [isBtnClicked, setIsBtnClicked] = useState(false)
   const [inp, setInp] = useState('')
+  const userId = useSelector(currentUserStateId)
+
+  const dashboardId = useSelector(currentDashboardIdState)
+  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
   
-  const dashboardIf = useSelector(currentDashboardIdState)
-  const cardsCollection = collection(dashboardsCollection, `${dashboardIf}`, 'cards')
+  const cardsCollection = collection(dashCollection, `${dashboardId}`, 'cards')
   const handleSubmit = async (e) => {
     e.preventDefault()
     addDoc(cardsCollection, {

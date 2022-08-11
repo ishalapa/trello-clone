@@ -62,26 +62,23 @@ const SignUpForm = () => {
   }
   const signUpWithPass = (e) => {
     e.preventDefault()
-    createUserWithEmailAndPassword(auth, email, password).then((result) => {
-      const user = result.user
-      dispatch(setCurrentUserName(user.displayName))
-      dispatch(setCurrentUserEmail(user.email))
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        const user = result.user
+        addDoc(usersCollection, { name: email })
 
-      addDoc(usersCollection, { name: email })
-
-      return user.email
-    })
-    .then((email) => {
-      const id = users.find((user) => user.name == email)
-        return id.id
-    })
-      .then((id) => {
-        dispatch(setCurrentUserId(id))
-        navigate('/home')
-        isSignUp && alert('User was succesfully created!')
+        dispatch(setCurrentUserName(user.displayName))
+        dispatch(setCurrentUserEmail(user.email))
+        return user.email
       })
-      .catch((error) => {
-
+      .then((userEmail) => {
+        const id = users.find((user) => user.name === userEmail)
+        console.log(userEmail)
+        return id.id
+      })
+      .then((id) => {
+        navigate('/home')
+        dispatch(setCurrentUserId(id))
       })
   }
   const signInwithPass = async (e) => {
@@ -93,13 +90,13 @@ const SignUpForm = () => {
         dispatch(setCurrentUserEmail(user.email))
         return user.email
       })
-      .then((email) => {
-        const id = users.find((user) => user.name == email)
+      .then((userEmail) => {
+        const id = users.find((user) => user.name === userEmail)
         return id.id
       })
       .then((id) => {
-        dispatch(setCurrentUserId(id))
         navigate('/home')
+        dispatch(setCurrentUserId(id))
       })
   }
   console.log(users)

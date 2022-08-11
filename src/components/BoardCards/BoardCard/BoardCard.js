@@ -3,17 +3,22 @@ import React, { useState } from 'react'
 import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
-import { dashboardsCollection } from 'firebase-client'
 import { Droppable } from 'react-beautiful-dnd'
 import Task from 'components/Tasks/Task'
+import { usersCollection } from 'firebase-client'
+import { currentUserStateId } from 'store/slices/currentUserSlice'
 
 const BoardCard = ({ card }) => {
   const [isBtnClicked, setIsBtnClicked] = useState(false)
   const [inp, setInp] = useState('')
+
   const dashboardId = useSelector(currentDashboardIdState)
-  const tasksDoc = doc(dashboardsCollection, `${dashboardId}`, 'cards', card.id)
+  const userId = useSelector(currentUserStateId)
+
+  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const tasksDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
   const generateKey = (key) => {
     return `${key}_${new Date().getTime()}`
   }
@@ -27,6 +32,7 @@ const BoardCard = ({ card }) => {
       tasks: arrayUnion({ title: inp, id: genNumKey(1) }),
     })
     setInp('')
+    console.log(card)
   }
   return (
     <Droppable droppableId={card.title}>

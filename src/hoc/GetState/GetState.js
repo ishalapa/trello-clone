@@ -13,9 +13,9 @@ const GetState = ({ children }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
-  const cardsCollection = collection(dashboardsCollection, `${dashboardId}`, "cards")
 
   const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const cardsCollection = collection(dashCollection, `${dashboardId}`, "cards")
 
   useEffect(() => {
     onSnapshot(usersCollection, (snapshot) => {
@@ -33,7 +33,7 @@ const GetState = ({ children }) => {
       })
       dispatch(setDashboards(dashboardSnap))
     })
-  }, [])
+  }, [dashCollection])
  
   useEffect(() => {
     onSnapshot(cardsCollection, (snapshot) => {
