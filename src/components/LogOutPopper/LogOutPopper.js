@@ -1,24 +1,38 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 import { Box, Popper, Fade, Paper, Typography, Divider, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateName } from 'store/slices/currentUserSlice'
+import { currentUserStateEmail, currentUserStateName, setCurrentUserEmail, setCurrentUserName } from 'store/slices/currentUserSlice'
 
 import { signOut } from 'firebase/auth'
 import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 const LogOutPopper = ({ open, anchorEl, placement }) => {
   const userName = useSelector(currentUserStateName)
   const userEmail = useSelector(currentUserStateEmail)
   const navigate = useNavigate()
-  const iconName = userName.split(' ')[0].slice(0, 1) + userName.split(' ')[1].slice(0, 1)
-
+  const dispatch = useDispatch()
+  const [iconName, setIconName] = useState("")
+  useEffect(() => {
+    if(userName) {
+      setIconName(userName.split(' ')[0].slice(0, 1) + userName.split(' ')[1].slice(0, 1))
+    } else setIconName("")
+  }, [userName]);
+  
   const logOut = () => {
     signOut(auth).then(() => {
+      dispatch(setCurrentUserEmail(""))
+      dispatch(setCurrentUserName(""))
+      setIconName("Name Name")
+    }).then(() => {
       navigate('/signup')
+      console.log(userName)
     })
   }
+  
+  
   return (
     <Popper
       sx={{ paddingTop: '10px', width: 300, zIndex: '100' }}
@@ -45,7 +59,7 @@ const LogOutPopper = ({ open, anchorEl, placement }) => {
                 borderRadius="50%"
               >
                 <Typography color={'white'} fontSize={14} textAlign="center" variant="subtitle2" sx={{ p: 1 }}>
-                  {iconName}
+                {iconName ? iconName : "User"}
                 </Typography>
               </Box>
               <Box width="75%" display="flex" flexDirection="column" justifyContent="center">

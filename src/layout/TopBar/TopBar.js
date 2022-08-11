@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from 'assets/scss/TopBar.module.scss'
 
 import { CgMenuGridR, CgTrello } from 'react-icons/cg'
@@ -17,13 +17,17 @@ const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [placement, setPlacement] = useState()
-  const iconName = userName.split(' ')[0].slice(0, 1) + userName.split(' ')[1].slice(0, 1)
+  const [iconName, setIconName] = useState("")
+  useEffect(() => {
+    if(userName) {
+      setIconName(userName.split(' ')[0].slice(0, 1) + userName.split(' ')[1].slice(0, 1))
+    } else setIconName("")
+  }, [userName]);
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget)
     setOpen((prev) => placement !== newPlacement || !prev)
     setPlacement(newPlacement)
-    console.log(userName)
   }
   return (
     <div className={styles.containerTop}>
@@ -57,7 +61,7 @@ const TopBar = () => {
             borderRadius="50%"
           >
             <Typography color={'white'} fontSize={14} textAlign="center" variant="subtitle2" sx={{ p: 1 }}>
-              {iconName}
+              {iconName ? iconName : "User"}
             </Typography>
           </Box>
         </Box>
