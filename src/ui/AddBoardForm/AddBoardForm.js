@@ -11,11 +11,16 @@ import {
   TextField,
   FormHelperText,
 } from '@mui/material'
-import { addDoc } from 'firebase/firestore'
+import { addDoc, collection } from 'firebase/firestore'
 import { dashboardsCollection } from 'firebase-client'
+import { usersCollection } from 'firebase-client'
+import { useSelector } from 'react-redux'
+import { currentUserStateId } from 'store/slices/currentUserSlice'
 
 
 const AddBoardForm = ({ open, setIsOpen }) => {
+  const userId = useSelector(currentUserStateId)
+  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
   const [inp, setInp] = useState("")
   const style = {
     position: 'absolute',
@@ -28,9 +33,10 @@ const AddBoardForm = ({ open, setIsOpen }) => {
     boxShadow: 24,
     p: 4,
   }
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    addDoc(dashboardsCollection, {
+    console.log(userId)
+    addDoc(dashCollection, {
       title: inp
     })
     setInp("")

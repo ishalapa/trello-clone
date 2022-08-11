@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 
 import { Box, Popper, Fade, Paper, Typography, Divider, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateName, setCurrentUserEmail, setCurrentUserName } from 'store/slices/currentUserSlice'
+import { currentUserStateEmail, currentUserStateId, currentUserStateName, setCurrentUserEmail, setCurrentUserId, setCurrentUserName } from 'store/slices/currentUserSlice'
 
 import { signOut } from 'firebase/auth'
 import { auth } from 'firebase-client'
@@ -23,12 +23,12 @@ const LogOutPopper = ({ open, anchorEl, placement }) => {
   
   const logOut = () => {
     signOut(auth).then(() => {
+      dispatch(setCurrentUserId(null))
       dispatch(setCurrentUserEmail(""))
       dispatch(setCurrentUserName(""))
       setIconName("Name Name")
     }).then(() => {
       navigate('/signup')
-      console.log(userName)
     })
   }
   

@@ -6,8 +6,9 @@ import { FcGoogle } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
 import {
   currentUserStateEmail,
-  currentUserStateName,
+  currentUserStateId,
   setCurrentUserEmail,
+  setCurrentUserId,
   setCurrentUserName,
 } from 'store/slices/currentUserSlice'
 import {
@@ -22,11 +23,14 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
+import { usersState } from 'store/slices/usersSlice'
+import { async } from '@firebase/util'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
-  const currentUser = useSelector(currentUserStateName)
+  const users = useSelector(usersState)
+  const userId = useSelector(currentUserStateId)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')
@@ -48,10 +52,8 @@ const SignUpForm = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         const user = result.user
-
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
-
       })
       .then(() => {
         navigate('/home')
@@ -60,34 +62,47 @@ const SignUpForm = () => {
   }
   const signUpWithPass = (e) => {
     e.preventDefault()
-     createUserWithEmailAndPassword(auth, email, password)
-          .then((result) => {
-            const user = result.user
-            dispatch(setCurrentUserName(user.displayName))
-            dispatch(setCurrentUserEmail(user.email))
-          })
-          addDoc(usersCollection, {name: email})
-          .then(() => {
-            navigate('/home')
-            isSignUp && alert('User was succesfully created!')
-          })
-          .catch((error) => {
-            console.log(email)
-            console.log(password)
-          })
-  }
-  const signInwithPass = (e) => {
-    e.preventDefault()
-    signInWithEmailAndPassword(auth, email, password)
-    .then((result) => {
+    createUserWithEmailAndPassword(auth, email, password).then((result) => {
       const user = result.user
       dispatch(setCurrentUserName(user.displayName))
       dispatch(setCurrentUserEmail(user.email))
+
+      addDoc(usersCollection, { name: email })
+
+      return user.email
     })
-    .then(() => {
-      navigate('/home')
+    .then((email) => {
+      const id = users.find((user) => user.name == email)
+        return id.id
     })
+      .then((id) => {
+        dispatch(setCurrentUserId(id))
+        navigate('/home')
+        isSignUp && alert('User was succesfully created!')
+      })
+      .catch((error) => {
+
+      })
   }
+  const signInwithPass = async (e) => {
+    e.preventDefault()
+    signInWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        const user = result.user
+        dispatch(setCurrentUserName(user.displayName))
+        dispatch(setCurrentUserEmail(user.email))
+        return user.email
+      })
+      .then((email) => {
+        const id = users.find((user) => user.name == email)
+        return id.id
+      })
+      .then((id) => {
+        dispatch(setCurrentUserId(id))
+        navigate('/home')
+      })
+  }
+  console.log(users)
   return (
     <Box width="450px">
       <Card sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -95,7 +110,7 @@ const SignUpForm = () => {
           <Typography pb={2} fontWeight="600" textAlign="center" variant="h6" color="text.secondary">
             {isSignUp ? 'Sign up for your account' : 'Sign in for your account'}
           </Typography>
-          <form action="" onSubmit={(e) =>  isSignUp ? signUpWithPass(e) : signInwithPass(e)}>
+          <form action="" onSubmit={(e) => (isSignUp ? signUpWithPass(e) : signInwithPass(e))}>
             <Stack spacing={1}>
               <TextField
                 required
