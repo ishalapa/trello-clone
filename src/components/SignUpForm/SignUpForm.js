@@ -20,6 +20,8 @@ import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { addDoc } from 'firebase/firestore'
+import { usersCollection } from 'firebase-client'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
@@ -49,6 +51,7 @@ const SignUpForm = () => {
 
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
+
       })
       .then(() => {
         navigate('/home')
@@ -57,23 +60,33 @@ const SignUpForm = () => {
   }
   const signUpWithPass = (e) => {
     e.preventDefault()
-    isSignUp
-      ? createUserWithEmailAndPassword(auth, email, password)
-      : signInWithEmailAndPassword(auth, email, password)
+     createUserWithEmailAndPassword(auth, email, password)
           .then((result) => {
             const user = result.user
             dispatch(setCurrentUserName(user.displayName))
             dispatch(setCurrentUserEmail(user.email))
           })
+          addDoc(usersCollection, {name: email})
           .then(() => {
             navigate('/home')
             isSignUp && alert('User was succesfully created!')
-            console.log()
           })
           .catch((error) => {
             console.log(email)
             console.log(password)
           })
+  }
+  const signInwithPass = (e) => {
+    e.preventDefault()
+    signInWithEmailAndPassword(auth, email, password)
+    .then((result) => {
+      const user = result.user
+      dispatch(setCurrentUserName(user.displayName))
+      dispatch(setCurrentUserEmail(user.email))
+    })
+    .then(() => {
+      navigate('/home')
+    })
   }
   return (
     <Box width="450px">
@@ -82,7 +95,7 @@ const SignUpForm = () => {
           <Typography pb={2} fontWeight="600" textAlign="center" variant="h6" color="text.secondary">
             {isSignUp ? 'Sign up for your account' : 'Sign in for your account'}
           </Typography>
-          <form action="" onSubmit={(e) => signUpWithPass(e)}>
+          <form action="" onSubmit={(e) =>  isSignUp ? signUpWithPass(e) : signInwithPass(e)}>
             <Stack spacing={1}>
               <TextField
                 required
@@ -103,7 +116,7 @@ const SignUpForm = () => {
                 fullWidth
                 size="small"
               />
-              {isSignUp && (
+              {/* {isSignUp && (
                 <TextField
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -113,7 +126,7 @@ const SignUpForm = () => {
                   fullWidth
                   size="small"
                 />
-              )}
+              )} */}
             </Stack>
 
             <Typography pt={1} pb={1} textAlign="center" variant="subtitle2" color="text.secondary">

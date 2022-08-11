@@ -19,3 +19,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 export const auth = getAuth(app)
 export const dashboardsCollection = collection(db, "dashboards")
+export const usersCollection = collection(db, "users")
