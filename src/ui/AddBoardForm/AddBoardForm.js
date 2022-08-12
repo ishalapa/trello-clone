@@ -12,16 +12,17 @@ import {
   FormHelperText,
 } from '@mui/material'
 import { addDoc, collection } from 'firebase/firestore'
-import { dashboardsCollection } from 'firebase-client'
 import { usersCollection } from 'firebase-client'
 import { useSelector } from 'react-redux'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { useNavigate } from 'react-router-dom'
 
 
 const AddBoardForm = ({ open, setIsOpen }) => {
   const userId = useSelector(currentUserStateId)
   const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
   const [inp, setInp] = useState("")
+  const navigate = useNavigate()
   const style = {
     position: 'absolute',
     top: '50%',
@@ -35,7 +36,7 @@ const AddBoardForm = ({ open, setIsOpen }) => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(userId)
+    navigate("/home")
     addDoc(dashCollection, {
       title: inp
     })
