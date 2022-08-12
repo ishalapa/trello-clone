@@ -7,6 +7,7 @@ import boardCardsReducer from "./slices/boardCardsSlice"
 import tasksReducer from "./slices/tasksSlice"
 import currentUserReducer from "./slices/currentUserSlice"
 import usersReducer from "./slices/usersSlice"
+import currentTaskReducer from "./slices/currentTaskSlice"
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
         boardCards: boardCardsReducer,
         tasks: tasksReducer,
         currentUser: currentUserReducer,
-        users: usersReducer
+        users: usersReducer,
+        currentTask: currentTaskReducer
     }
 })

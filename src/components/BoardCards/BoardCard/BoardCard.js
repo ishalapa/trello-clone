@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton } from '@mui/material'
+import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton, Modal } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
@@ -9,19 +9,21 @@ import { Droppable } from 'react-beautiful-dnd'
 import Task from 'components/Tasks/Task'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
+import TaskDescription from 'components/TaskDescription'
 
 const BoardCard = ({ card }) => {
   const [isBtnClicked, setIsBtnClicked] = useState(false)
+  const [openDesc, setOpenDesc] = useState(false)
+  const handleOpen = () => setOpenDesc(true)
+  const handleClose = () => setOpenDesc(false)
   const [inp, setInp] = useState('')
 
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
 
-  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const tasksDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
-  const generateKey = (key) => {
-    return `${key}_${new Date().getTime()}`
-  }
+
   const genNumKey = (key) => {
     return key + new Date().getTime()
   }
@@ -32,7 +34,6 @@ const BoardCard = ({ card }) => {
       tasks: arrayUnion({ title: inp, id: genNumKey(1) }),
     })
     setInp('')
-    console.log(card)
   }
   return (
     <Droppable droppableId={card.title}>
@@ -44,7 +45,9 @@ const BoardCard = ({ card }) => {
             </Typography>
             <Stack pt={1} spacing={1}>
               {card.tasks &&
-                card.tasks.map((task, index) => <Task key={task.id} task={task} index={index} />)}
+                card.tasks.map((task, index) => (
+                  <Task key={task.id} task={task} index={index} handleOpen={handleOpen} />
+                ))}
             </Stack>
             {!isBtnClicked ? (
               <Button
@@ -80,6 +83,7 @@ const BoardCard = ({ card }) => {
                 </Stack>
               </Box>
             )}
+            <TaskDescription openDesc={openDesc} handleClose={handleClose} card={card}/>
           </CardContent>
           {provided.placeholder}
         </Card>
