@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Card, Modal, Typography, Grid, Box, TextField, Stack, Button, IconButton } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
-import { currentTaskState } from 'store/slices/currentTaskSlice'
+import { currentTaskState, setCurrentTask, setCurrentTaskTitle } from 'store/slices/currentTaskSlice'
 import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { usersCollection } from 'firebase-client'
@@ -19,31 +19,6 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
   const userId = useSelector(currentUserStateId)
   const description = useSelector(descriptionState)
 
-  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const descriptionDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
-
-  const addDascription = async (e) => {
-    e.preventDefault()
-    
-    await updateDoc(descriptionDoc, {
-      descriptions: arrayUnion({ title: inp, id: currentTask.id }),
-    })
-    setIsBtnClicked(false)
-    setInp('')
-  }
-  const updateDascription = async (e) => {
-    e.preventDefault()
-
-    await updateDoc(descriptionDoc, {
-      descriptions: arrayRemove( {title: description.title,  id: currentTask.id} ),
-    })
-    await dispatch(setDescriptionId(null))
-    await updateDoc(descriptionDoc, {
-      descriptions: arrayUnion({ title: inp, id: currentTask.id }),
-    })
-    setIsBtnClicked(false)
-    setInp('')
-  }
   const style = {
     position: 'absolute',
     top: '50%',
@@ -55,14 +30,51 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
     boxShadow: 24,
     p: 4,
   }
-  const [inp, setInp] = useState('')
-  const [isBtnClicked, setIsBtnClicked] = useState(false)
 
+  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const descriptionDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
+
+  const [isBtnClicked, setIsBtnClicked] = useState(false)
+  const [inp, setInp] = useState('')
+
+  const updateDascription = async (e) => {
+    e.preventDefault()
+
+    await updateDoc(descriptionDoc, {
+      descriptions: arrayRemove({ title: description.title, id: currentTask.id }),
+    })
+    await dispatch(setDescriptionId(null))
+    await updateDoc(descriptionDoc, {
+      descriptions: arrayUnion({ title: inp, id: currentTask.id }),
+    })
+    setIsBtnClicked(false)
+    setInp('')
+  }
+  const [editTaskTitle, setEditTaskTitleOpen] = useState(false)
+  const [editInp, setEditInp] = useState('')
+  const updateTaskTitleOpen = async () => {
+    setEditTaskTitleOpen(true)
+    setEditInp(currentTask.title)
+    
+  }
+  const updateTaskTitle = async () => {
+    
+    await updateDoc(tasksDoc, {
+      tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
+    })
+    await updateDoc(tasksDoc, {
+      tasks: arrayUnion({ title: editInp, id: new Date().getTime() }),
+    })
+    dispatch(setCurrentTaskTitle(editInp))
+    setEditTaskTitleOpen(false)
+    setEditInp("")
+  }
   const openDescription = () => {
     setIsBtnClicked(true)
     setInp(description.title)
   }
-  console.log(inp)
+
   return (
     <Modal
       open={openDesc}
@@ -74,16 +86,34 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
         <Grid container>
           <Grid item md={10}>
             <Box width="95%">
-              <Typography id="modal-modal-title" variant="h5" component="h2">
-                {currentTask && currentTask.title}
-              </Typography>
+              {!editTaskTitle ? (
+                <Box onClick={updateTaskTitleOpen} display={"inline-block"} sx={{cursor: "pointer"}}>
+                  <Typography id="modal-modal-title" variant="h5" component="h2">
+                    {currentTask && currentTask.title}
+                  </Typography>
+                </Box>
+              ) : (
+                <Stack spacing={1}>
+                  <TextField
+                    type={'text'}
+                    size="small"
+                    sx={{ width: '320px' }}
+                    value={editInp}
+                    onChange={(e) => setEditInp(e.target.value)}
+                  />
+                  <Button onClick={updateTaskTitle} size="small" sx={{ width: '40px' }} variant="contained">
+                    Save
+                  </Button>
+                </Stack>
+              )}
+
               <Typography id="modal-modal-title" variant="subtitle1">
                 in list <u>{card.title}</u>
               </Typography>
               <Typography variant="h6" id="modal-modal-description" sx={{ mt: 2 }}>
                 Description
               </Typography>
-              {card.descriptions &&
+              {!isBtnClicked && card.descriptions &&
                 currentTask &&
                 card.descriptions.map((desc) => {
                   if (desc.id === currentTask.id) {
@@ -92,13 +122,13 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
                 })}
               {!isBtnClicked ? (
                 <Button
+                size='medium'
                   onClick={openDescription}
                   startIcon={<AiOutlinePlus />}
-                  fullWidth
                   variant="text"
                   sx={{ justifyContent: 'flex-start', marginTop: '5px', '&:hover': { backgroundColor: '#e6e6e6' } }}
                 >
-                  {description.exist && description.id === currentTask.id
+                  {description.title && description.id === currentTask.id
                     ? 'Update description'
                     : 'Add more detailed description'}
                 </Button>
@@ -117,14 +147,9 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
                     fullWidth
                   />
                   <Stack pt={1} spacing={1} direction="row" alignItems="center">
-                    {description.exist && description.id === currentTask.id ? (
-                      <Button onClick={(e) => updateDascription(e)} variant="contained">Update</Button>
-                    ) : (
-                      <Button onClick={(e) => addDascription(e)} variant="contained">
-                        Add description
-                      </Button>
-                    )}
-
+                    <Button onClick={(e) => updateDascription(e)} variant="contained">
+                      {description.title && description.id === currentTask.id ? 'Update' : 'Add description'}
+                    </Button>
                     <IconButton onClick={() => setIsBtnClicked(false)} size="small">
                       <AiOutlineClose />
                     </IconButton>

@@ -2,19 +2,25 @@ import {createSlice} from "@reduxjs/toolkit"
 
 
 const initialState = {
-    currentTask: null
+    currentTask: {
+        title: "", 
+        id: null
+    }
 }
 const currentTaskSlice = createSlice({
     name: "currentTask",
     initialState,
     reducers: {
-        setCurrentTask: (state, action) => {
-            state.currentTask = action.payload
+        setCurrentTaskTitle: (state, action) => {
+            state.currentTask.title = action.payload
+        },
+        setCurrentTaskId: (state, action) => {
+            state.currentTask.id = action.payload
         }
     }
 })
 
-export const { setCurrentTask } = currentTaskSlice.actions
+export const { setCurrentTaskTitle, setCurrentTaskId } = currentTaskSlice.actions
 
 export const currentTaskState = state => state.currentTask.currentTask
 

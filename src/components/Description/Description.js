@@ -13,7 +13,7 @@ const Description = ({desc}) => {
     }, [desc]);
 
   return (
-    <Typography variant="body2" sx={{ mt: 1 }}>{desc.title}</Typography>
+    <Typography variant="body1" sx={{ mt: 1 }}>{desc.title}</Typography>
   )
 }
 

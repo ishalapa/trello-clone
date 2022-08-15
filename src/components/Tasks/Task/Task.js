@@ -1,22 +1,20 @@
 import React from 'react'
 
-import { Card, Typography, IconButton, Box, Stack, Button } from '@mui/material'
+import { Card, Typography, Box, Stack } from '@mui/material'
 import { Draggable } from 'react-beautiful-dnd'
 
 import { RiPencilLine } from 'react-icons/ri'
 import { MdOutlineDescription } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
-import { currentTaskState, setCurrentTask } from 'store/slices/currentTaskSlice'
-import { useSelector } from 'react-redux'
-import { descriptionState } from 'store/slices/descriptionSlice'
+import { setCurrentTaskId, setCurrentTaskTitle } from 'store/slices/currentTaskSlice'
+
 
 const Task = ({ card, task, index, handleOpen }) => {
   const dispatch = useDispatch()
-  const currentTask = useSelector(currentTaskState)
-  const description = useSelector(descriptionState)
 
   const handleOpenDispatch = () => {
-    dispatch(setCurrentTask(task))
+    dispatch(setCurrentTaskTitle(task.title))
+    dispatch(setCurrentTaskId(task.id))
     handleOpen()
   }
   return (
@@ -56,7 +54,7 @@ const Task = ({ card, task, index, handleOpen }) => {
               <Stack direction={'row'} sx={{ position: 'relative', left: 5 }}>
                 {card.descriptions &&
                   card.descriptions.map((desc, index) => {
-                    if (desc.id === task.id) {
+                    if ((desc.id === task.id) && (desc.title)) {
                       return <MdOutlineDescription key={index} style={{marginBottom:"8px"}} size={16} color="#666666" />
                     }
                   })}
