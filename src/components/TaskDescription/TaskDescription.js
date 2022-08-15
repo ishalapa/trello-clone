@@ -4,14 +4,16 @@ import { Card, Modal, Typography, Grid, Box, TextField, Stack, Button, IconButto
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { currentTaskState } from 'store/slices/currentTaskSlice'
-import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
 import Description from 'components/Description/Description'
-import { descriptionState } from 'store/slices/descriptionSlice'
+import { descriptionState, setDescriptionId } from 'store/slices/descriptionSlice'
+import { useDispatch } from 'react-redux'
 
-const TaskDescription = ({ descInp, setDescInp, openDesc, handleClose, card }) => {
+const TaskDescription = ({ openDesc, handleClose, card }) => {
+  const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
   const userId = useSelector(currentUserStateId)
@@ -22,6 +24,20 @@ const TaskDescription = ({ descInp, setDescInp, openDesc, handleClose, card }) =
 
   const addDascription = async (e) => {
     e.preventDefault()
+    
+    await updateDoc(descriptionDoc, {
+      descriptions: arrayUnion({ title: inp, id: currentTask.id }),
+    })
+    setIsBtnClicked(false)
+    setInp('')
+  }
+  const updateDascription = async (e) => {
+    e.preventDefault()
+
+    await updateDoc(descriptionDoc, {
+      descriptions: arrayRemove( {title: description.title,  id: currentTask.id} ),
+    })
+    await dispatch(setDescriptionId(null))
     await updateDoc(descriptionDoc, {
       descriptions: arrayUnion({ title: inp, id: currentTask.id }),
     })
@@ -44,7 +60,6 @@ const TaskDescription = ({ descInp, setDescInp, openDesc, handleClose, card }) =
 
   const openDescription = () => {
     setIsBtnClicked(true)
-
     setInp(description.title)
   }
   console.log(inp)
@@ -103,7 +118,7 @@ const TaskDescription = ({ descInp, setDescInp, openDesc, handleClose, card }) =
                   />
                   <Stack pt={1} spacing={1} direction="row" alignItems="center">
                     {description.exist && description.id === currentTask.id ? (
-                      <Button variant="contained">Update</Button>
+                      <Button onClick={(e) => updateDascription(e)} variant="contained">Update</Button>
                     ) : (
                       <Button onClick={(e) => addDascription(e)} variant="contained">
                         Add description
