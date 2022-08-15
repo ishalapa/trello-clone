@@ -10,12 +10,20 @@ import Task from 'components/Tasks/Task'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
 import TaskDescription from 'components/TaskDescription'
+import { useDispatch } from 'react-redux'
+import { setDescriptionTitle } from 'store/slices/descriptionSlice'
 
 const BoardCard = ({ card }) => {
+  const dispatch = useDispatch()
   const [isBtnClicked, setIsBtnClicked] = useState(false)
   const [openDesc, setOpenDesc] = useState(false)
   const handleOpen = () => setOpenDesc(true)
-  const handleClose = () => setOpenDesc(false)
+  const handleClose = (setInput, setIsDescOpen) => {
+    setOpenDesc(false)
+    setInput("")
+    dispatch(setDescriptionTitle(""))
+    setIsDescOpen(false)
+  }
   const [inp, setInp] = useState('')
 
   const dashboardId = useSelector(currentDashboardIdState)
@@ -46,7 +54,7 @@ const BoardCard = ({ card }) => {
             <Stack pt={1} spacing={1}>
               {card.tasks &&
                 card.tasks.map((task, index) => (
-                  <Task key={task.id} task={task} index={index} handleOpen={handleOpen} />
+                  <Task card={card} key={task.id} task={task} index={index} handleOpen={handleOpen} />
                 ))}
             </Stack>
             {!isBtnClicked ? (

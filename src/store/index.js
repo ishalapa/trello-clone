@@ -8,6 +8,7 @@ import tasksReducer from "./slices/tasksSlice"
 import currentUserReducer from "./slices/currentUserSlice"
 import usersReducer from "./slices/usersSlice"
 import currentTaskReducer from "./slices/currentTaskSlice"
+import descriptionReducer from "./slices/descriptionSlice"
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         tasks: tasksReducer,
         currentUser: currentUserReducer,
         users: usersReducer,
-        currentTask: currentTaskReducer
+        currentTask: currentTaskReducer,
+        description: descriptionReducer
     }
 })

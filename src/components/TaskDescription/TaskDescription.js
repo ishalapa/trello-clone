@@ -8,11 +8,14 @@ import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
+import Description from 'components/Description/Description'
+import { descriptionState } from 'store/slices/descriptionSlice'
 
-const TaskDescription = ({ openDesc, handleClose, card }) => {
+const TaskDescription = ({ descInp, setDescInp, openDesc, handleClose, card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
   const userId = useSelector(currentUserStateId)
+  const description = useSelector(descriptionState)
 
   const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const descriptionDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
@@ -38,12 +41,17 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
   }
   const [inp, setInp] = useState('')
   const [isBtnClicked, setIsBtnClicked] = useState(false)
-  const [isDisabled, setIsDisabled] = useState(false)
 
+  const openDescription = () => {
+    setIsBtnClicked(true)
+
+    setInp(description.title)
+  }
+  console.log(inp)
   return (
     <Modal
       open={openDesc}
-      onClose={handleClose}
+      onClose={() => handleClose(setInp, setIsBtnClicked)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -60,24 +68,24 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
               <Typography variant="h6" id="modal-modal-description" sx={{ mt: 2 }}>
                 Description
               </Typography>
-              {
-                card.descriptions &&
+              {card.descriptions &&
+                currentTask &&
                 card.descriptions.map((desc) => {
                   if (desc.id === currentTask.id) {
-                    setIsDisabled(true)
-                    return <Typography variant="body2" sx={{ mt: 1 }}>{desc.title}</Typography>
+                    return <Description key={new Date().getTime()} desc={desc} />
                   }
                 })}
               {!isBtnClicked ? (
                 <Button
-                  
-                  onClick={() => setIsBtnClicked(true)}
+                  onClick={openDescription}
                   startIcon={<AiOutlinePlus />}
                   fullWidth
                   variant="text"
                   sx={{ justifyContent: 'flex-start', marginTop: '5px', '&:hover': { backgroundColor: '#e6e6e6' } }}
                 >
-                  Add more detailed description
+                  {description.exist && description.id === currentTask.id
+                    ? 'Update description'
+                    : 'Add more detailed description'}
                 </Button>
               ) : (
                 <Box pt={1}>
@@ -94,9 +102,14 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
                     fullWidth
                   />
                   <Stack pt={1} spacing={1} direction="row" alignItems="center">
-                    <Button onClick={(e) => addDascription(e)} variant="contained">
-                      Add description
-                    </Button>
+                    {description.exist && description.id === currentTask.id ? (
+                      <Button variant="contained">Update</Button>
+                    ) : (
+                      <Button onClick={(e) => addDascription(e)} variant="contained">
+                        Add description
+                      </Button>
+                    )}
+
                     <IconButton onClick={() => setIsBtnClicked(false)} size="small">
                       <AiOutlineClose />
                     </IconButton>
