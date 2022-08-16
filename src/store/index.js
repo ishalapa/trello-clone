@@ -9,6 +9,7 @@ import currentUserReducer from "./slices/currentUserSlice"
 import usersReducer from "./slices/usersSlice"
 import currentTaskReducer from "./slices/currentTaskSlice"
 import descriptionReducer from "./slices/descriptionSlice"
+import commentsReducer from "./slices/commentsSlice"
 
 export const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
         currentUser: currentUserReducer,
         users: usersReducer,
         currentTask: currentTaskReducer,
-        description: descriptionReducer
+        description: descriptionReducer,
+        comments: commentsReducer
     }
 })

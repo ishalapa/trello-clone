@@ -1,28 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from 'assets/scss/TopBar.module.scss'
 
 import { CgMenuGridR, CgTrello } from 'react-icons/cg'
 import AddBoardForm from 'ui/AddBoardForm'
-import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateName } from 'store/slices/currentUserSlice'
 
-import { Button, Typography, Box } from '@mui/material'
 import LogOutPopper from 'components/LogOutPopper'
+import UserCircle from 'ui/UserCircle'
 
 const TopBar = () => {
   const [openModal, setOpenModal] = useState(false)
-  const userEmail = useSelector(currentUserStateEmail)
-  const userName = useSelector(currentUserStateName)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [open, setOpen] = useState(false)
   const [placement, setPlacement] = useState()
-  const [iconName, setIconName] = useState("")
-  useEffect(() => {
-    if(userName) {
-      setIconName(userName.split(' ')[0].slice(0, 1) + userName.split(' ')[1].slice(0, 1))
-    } else setIconName("")
-  }, [userName]);
+
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget)
@@ -50,21 +41,7 @@ const TopBar = () => {
           <input type="text" placeholder="Search" />
         </li>
         <LogOutPopper open={open} anchorEl={anchorEl} placement={placement} />
-        <Box onClick={handleClick('bottom-start')} variant="contained">
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            width={45}
-            height={45}
-            sx={{ backgroundColor: '#004285', cursor:"pointer" }}
-            borderRadius="50%"
-          >
-            <Typography color={'white'} fontSize={14} textAlign="center" variant="subtitle2" sx={{ p: 1 }}>
-              {iconName ? iconName : "User"}
-            </Typography>
-          </Box>
-        </Box>
+        <UserCircle handleClick={handleClick} size={45}/>
       </ul>
       <AddBoardForm open={openModal} setIsOpen={setOpenModal} />
     </div>

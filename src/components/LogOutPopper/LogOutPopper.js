@@ -8,6 +8,7 @@ import { signOut } from 'firebase/auth'
 import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import UserCircle from 'ui/UserCircle'
 
 const LogOutPopper = ({ open, anchorEl, placement }) => {
   const userName = useSelector(currentUserStateName)
@@ -28,11 +29,11 @@ const LogOutPopper = ({ open, anchorEl, placement }) => {
       dispatch(setCurrentUserName(""))
       setIconName("Name Name")
     }).then(() => {
-      navigate('/signup')
+      navigate('/signin')
     })
   }
   
-  
+  const handleClick = () => null
   return (
     <Popper
       sx={{ paddingTop: '10px', width: 300, zIndex: '100' }}
@@ -49,19 +50,7 @@ const LogOutPopper = ({ open, anchorEl, placement }) => {
             </Typography>
             <Divider />
             <Box p={1} display="flex" justifyContent="space-between">
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width={50}
-                height={50}
-                sx={{ backgroundColor: '#004285' }}
-                borderRadius="50%"
-              >
-                <Typography color={'white'} fontSize={14} textAlign="center" variant="subtitle2" sx={{ p: 1 }}>
-                {iconName ? iconName : "User"}
-                </Typography>
-              </Box>
+              <UserCircle handleClick={handleClick} size={45}/>
               <Box width="75%" display="flex" flexDirection="column" justifyContent="center">
                 <Typography variant="h6">{userName}</Typography>
                 <Typography variant="body2">{userEmail}</Typography>
