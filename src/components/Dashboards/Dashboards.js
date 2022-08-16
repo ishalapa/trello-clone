@@ -1,17 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { dashboardsState } from 'store/slices/dashboardsSlice'
+// TODO change to DashboardCard
 import Dashboard from './Dashboard/Dashboard'
 
 const Dashboards = () => {
   const dashboards = useSelector(dashboardsState)
-  return (
-    <>
-      {dashboards && dashboards.map(board => (
-        <Dashboard key={board.id} board={board}/>
-      ))}
-    </>
-  )
+  return <>{dashboards && dashboards.map((board) => <Dashboard key={board.id} board={board} />)}</>
 }
 
 export default Dashboards

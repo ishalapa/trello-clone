@@ -14,27 +14,34 @@ import { currentUserStateId } from 'store/slices/currentUserSlice'
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()
   const userId = useSelector(currentUserStateId)
-  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
+  // TODO change to dashboardCollection
+  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
 
+  // TODO change to openCard
   const handleClick = async (id) => {
     const docRef = doc(dashCollection, id)
     const docSnap = await getDoc(docRef)
     dispatch(setCurrentDashboardId(board.id))
     dispatch(setCurrentDashboard(docSnap.data()))
   }
+
+  // TODO change to handleDeleteCard
   const handleDelete = async (id) => {
     await deleteDoc(doc(dashCollection, id))
   }
+
+  // TODO delete variable
   const urlTitle = board.title.replace(/\s+/g, '+')
 
   return (
     <Grid item xs={6} md={3}>
-      <Box position="relative" onClick={() => {
-            handleClick(board.id)
-          }}>
-        <Link
-          to={`/home/:${urlTitle}`}
-        >
+      <Box
+        position="relative"
+        onClick={() => {
+          handleClick(board.id)
+        }}
+      >
+        <Link to={`/home/:${urlTitle}`}>
           <Button sx={{ width: '200px', height: '200px' }} variant="outlined" size="large">
             {board.title}
           </Button>

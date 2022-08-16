@@ -1,11 +1,13 @@
 import React from 'react'
 
 import 'assets/scss/Home.scss'
+// TODO change to DashboardList
 import Dashboards from 'components/Dashboards'
 import { Box, Typography, Grid } from '@mui/material'
 import { Container } from '@mui/system'
 
 import { CgTrello } from 'react-icons/cg'
+// TODO change to Main
 
 const Home = () => {
   return (
@@ -16,7 +18,7 @@ const Home = () => {
           <Typography variant="h5">Trello Workspace</Typography>
         </Box>
         <Grid container textAlign="center" rowSpacing={2} columnSpacing={2}>
-            <Dashboards />
+          <Dashboards />
         </Grid>
       </Box>
     </Container>

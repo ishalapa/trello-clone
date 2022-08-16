@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 import TopBarStart from 'layout/TopBarStart'
 import styles from 'assets/scss/Start.module.scss'
@@ -9,10 +9,10 @@ import { Link } from 'react-router-dom'
 import { Container, Stack, Box, TextField, Button, Divider } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { setCurrentUserEmail } from 'store/slices/currentUserSlice'
-
+// TODO change to HomePage
 const Start = () => {
   const dispatch = useDispatch()
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState('')
 
   const dispatchEmail = () => {
     dispatch(setCurrentUserEmail(email))

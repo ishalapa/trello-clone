@@ -13,6 +13,7 @@ import TaskDescription from 'components/TaskDescription'
 
 const BoardCard = ({ card }) => {
   const [isBtnClicked, setIsBtnClicked] = useState(false)
+  // TODO change to isDescriptionOpen
   const [openDesc, setOpenDesc] = useState(false)
   const handleOpen = () => setOpenDesc(true)
   const handleClose = () => setOpenDesc(false)
@@ -83,7 +84,7 @@ const BoardCard = ({ card }) => {
                 </Stack>
               </Box>
             )}
-            <TaskDescription openDesc={openDesc} handleClose={handleClose} card={card}/>
+            <TaskDescription openDesc={openDesc} handleClose={handleClose} card={card} />
           </CardContent>
           {provided.placeholder}
         </Card>

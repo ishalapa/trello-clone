@@ -6,7 +6,7 @@ import { tasksState } from 'store/slices/tasksSlice'
 import Task from './Task/Task'
 
 const Tasks = () => {
-    const tasks = useSelector(tasksState)
+  const tasks = useSelector(tasksState)
   return (
     <Stack spacing={1}>
       {tasks && tasks.map((task) => <Task key={task.id} task={task} />)}

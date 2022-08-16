@@ -8,8 +8,10 @@ import Layout from 'ui/Layout'
 import './App.css'
 import DashboardPage from 'pages/DashboardPage'
 
-import { DragDropContext } from "react-beautiful-dnd"
+import { DragDropContext } from 'react-beautiful-dnd'
 import SignUp from 'pages/SignUp'
+
+// TODO change /home/:dashboard to /home/:dashboardName
 
 function App() {
   const onDragEnd = (result) => {

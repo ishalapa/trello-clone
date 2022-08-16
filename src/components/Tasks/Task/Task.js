@@ -10,10 +10,11 @@ import { setCurrentTask } from 'store/slices/currentTaskSlice'
 const Task = ({ task, index, handleOpen }) => {
   const dispatch = useDispatch()
 
-const handleOpenDispatch = () => {
-  dispatch(setCurrentTask(task))
-  handleOpen()
-}
+  // TODO change to openTaskDetailsModal
+  const handleOpenDispatch = () => {
+    dispatch(setCurrentTask(task))
+    handleOpen()
+  }
   return (
     <Draggable draggableId={task.id.toString()} index={index}>
       {(provided) => (
