@@ -4,10 +4,9 @@ import { Card, Typography, Box, Stack } from '@mui/material'
 import { Draggable } from 'react-beautiful-dnd'
 
 import { RiPencilLine } from 'react-icons/ri'
-import { MdOutlineDescription } from 'react-icons/md'
+import { MdOutlineDescription, MdOutlineModeComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { setCurrentTaskId, setCurrentTaskTitle } from 'store/slices/currentTaskSlice'
-
 
 const Task = ({ card, task, index, handleOpen }) => {
   const dispatch = useDispatch()
@@ -17,6 +16,8 @@ const Task = ({ card, task, index, handleOpen }) => {
     dispatch(setCurrentTaskId(task.id))
     handleOpen()
   }
+
+  const isCommentExist = card.comments && card.comments.find((comment) => (comment.id === task.id && comment.title ? true : false))
   return (
     <Draggable draggableId={task.id.toString()} index={index}>
       {(provided) => (
@@ -51,13 +52,18 @@ const Task = ({ card, task, index, handleOpen }) => {
               </Typography>
             </Box>
             <Box>
-              <Stack direction={'row'} sx={{ position: 'relative', left: 5 }}>
+              <Stack spacing={1} direction={'row'} sx={{ position: 'relative', left: 5 }}>
                 {card.descriptions &&
                   card.descriptions.map((desc, index) => {
-                    if ((desc.id === task.id) && (desc.title)) {
-                      return <MdOutlineDescription key={index} style={{marginBottom:"8px"}} size={16} color="#666666" />
+                    if (desc.id === task.id && desc.title) {
+                      return (
+                        <MdOutlineDescription key={index} style={{ marginBottom: '8px' }} size={16} color="#666666" />
+                      )
                     }
                   })}
+                {isCommentExist && (
+                  <MdOutlineModeComment key={index} style={{ marginBottom: '8px' }} size={16} color="#666666" />
+                )}
               </Stack>
             </Box>
           </Stack>

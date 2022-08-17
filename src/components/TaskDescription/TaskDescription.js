@@ -13,6 +13,7 @@ import { descriptionState, setDescriptionId } from 'store/slices/descriptionSlic
 import { useDispatch } from 'react-redux'
 import CommentWrite from 'components/Comments/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
+import Comments from 'components/Comments'
 
 const TaskDescription = ({ openDesc, handleClose, card }) => {
   const dispatch = useDispatch()
@@ -84,99 +85,101 @@ const TaskDescription = ({ openDesc, handleClose, card }) => {
     >
       <Card sx={style}>
         <Grid container>
-          <Grid item md={10} width={"95%"}>
-              <Grid container>
-                <Grid item md={1}>
-                  <MdOutlineSubtitles size={27} color={'#595959'}/>
-                </Grid>
-                <Grid item md={11}>
-                  {!editTaskTitle ? (
-                    <Box onClick={updateTaskTitleOpen} display={'inline-block'} sx={{ cursor: 'pointer' }}>
-                      <Typography id="modal-modal-title" variant="h5" component="h2">
-                        {currentTask && currentTask.title}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Stack spacing={1}>
-                      <TextField
-                        type={'text'}
-                        size="small"
-                        sx={{ width: '320px' }}
-                        value={editInp}
-                        onChange={(e) => setEditInp(e.target.value)}
-                      />
-                      <Button onClick={updateTaskTitle} size="small" sx={{ width: '40px' }} variant="contained">
-                        Save
-                      </Button>
-                    </Stack>
-                  )}
-                  <Typography id="modal-modal-title" variant="subtitle1">
-                    in list <u>{card.title}</u>
-                  </Typography>
-                </Grid>
+          <Grid item md={10} width={'95%'}>
+            <Grid container>
+              <Grid item md={1}>
+                <MdOutlineSubtitles size={27} color={'#595959'} />
               </Grid>
-              <Grid container pt={2}>
-                <Grid item md={1}>
-                  <MdOutlineDescription size={27} color={'#595959'}/>
-                </Grid>
-                <Grid item md={11}>
-                  <Typography variant="h6" id="modal-modal-description">
-                    Description
-                  </Typography>
-                  {!isBtnClicked &&
-                    card.descriptions &&
-                    currentTask &&
-                    card.descriptions.map((desc) => {
-                      if (desc.id === currentTask.id) {
-                        return <Description key={new Date().getTime()} desc={desc} />
-                      }
-                    })}
-
-                  {!isBtnClicked ? (
-                    <Button
-                      size="medium"
-                      onClick={openDescription}
-                      startIcon={<AiOutlinePlus />}
-                      variant="text"
-                      sx={{
-                        justifyContent: 'flex-start',
-                        marginTop: '5px',
-                        marginBottom: '15px',
-                        '&:hover': { backgroundColor: '#e6e6e6' },
-                      }}
-                    >
-                      {description.title && description.id === currentTask.id
-                        ? 'Update description'
-                        : 'Add more detailed description'}
+              <Grid item md={11}>
+                {!editTaskTitle ? (
+                  <Box onClick={updateTaskTitleOpen} display={'inline-block'} sx={{ cursor: 'pointer' }}>
+                    <Typography id="modal-modal-title" variant="h5" component="h2">
+                      {currentTask && currentTask.title}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Stack spacing={1}>
+                    <TextField
+                      type={'text'}
+                      size="small"
+                      sx={{ width: '320px' }}
+                      value={editInp}
+                      onChange={(e) => setEditInp(e.target.value)}
+                    />
+                    <Button onClick={updateTaskTitle} size="small" sx={{ width: '40px' }} variant="contained">
+                      Save
                     </Button>
-                  ) : (
-                    <Box pb={1} pt={1}>
-                      <TextField
-                        value={inp}
-                        onChange={(e) => setInp(e.target.value)}
-                        sx={{ backgroundColor: 'white' }}
-                        size="small"
-                        variant="outlined"
-                        multiline
-                        minRows={4}
-                        maxRows={6}
-                        placeholder="Add more detailed description"
-                        fullWidth
-                      />
-                      <Stack pt={1} spacing={1} direction="row" alignItems="center">
-                        <Button onClick={(e) => updateDascription(e)} variant="contained">
-                          {description.title && description.id === currentTask.id ? 'Update' : 'Add description'}
-                        </Button>
-                        <IconButton onClick={() => setIsBtnClicked(false)} size="small">
-                          <AiOutlineClose />
-                        </IconButton>
-                      </Stack>
-                    </Box>
-                  )}
-                </Grid>
+                  </Stack>
+                )}
+                <Typography id="modal-modal-title" variant="subtitle1">
+                  in list <u>{card.title}</u>
+                </Typography>
               </Grid>
+            </Grid>
+            <Grid container pt={2}>
+              <Grid item md={1}>
+                <MdOutlineDescription size={27} color={'#595959'} />
+              </Grid>
+              <Grid item md={11}>
+                <Typography variant="h6" id="modal-modal-description">
+                  Description
+                </Typography>
+                {!isBtnClicked &&
+                  card.descriptions &&
+                  currentTask &&
+                  card.descriptions.map((desc) => {
+                    if (desc.id === currentTask.id) {
+                      return <Description key={new Date().getTime()} desc={desc} />
+                    }
+                  })}
 
-              <CommentWrite  card={card}/>
+                {!isBtnClicked ? (
+                  <Button
+                    size="medium"
+                    onClick={openDescription}
+                    startIcon={<AiOutlinePlus />}
+                    variant="text"
+                    sx={{
+                      justifyContent: 'flex-start',
+                      marginTop: '5px',
+                      marginBottom: '15px',
+                      '&:hover': { backgroundColor: '#e6e6e6' },
+                    }}
+                  >
+                    {description.title && description.id === currentTask.id
+                      ? 'Update description'
+                      : 'Add more detailed description'}
+                  </Button>
+                ) : (
+                  <Box pb={1} pt={1}>
+                    <TextField
+                      value={inp}
+                      onChange={(e) => setInp(e.target.value)}
+                      sx={{ backgroundColor: 'white' }}
+                      size="small"
+                      variant="outlined"
+                      multiline
+                      minRows={4}
+                      maxRows={6}
+                      placeholder="Add more detailed description"
+                      fullWidth
+                    />
+                    <Stack pt={1} spacing={1} direction="row" alignItems="center">
+                      <Button onClick={(e) => updateDascription(e)} variant="contained">
+                        {description.title && description.id === currentTask.id ? 'Update' : 'Add description'}
+                      </Button>
+                      <IconButton onClick={() => setIsBtnClicked(false)} size="small">
+                        <AiOutlineClose />
+                      </IconButton>
+                    </Stack>
+                  </Box>
+                )}
+              </Grid>
+            </Grid>
+            <Stack spacing={2}>
+              <CommentWrite card={card} />
+              <Comments card={card} />
+            </Stack>
           </Grid>
           <Grid item md={2}>
             <ul>

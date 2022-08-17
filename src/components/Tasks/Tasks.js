@@ -9,8 +9,7 @@ const Tasks = () => {
     const tasks = useSelector(tasksState)
   return (
     <Stack spacing={1}>
-      {tasks && tasks.map((task) => <Task key={task.id} task={task} />)}
-      dsadsa
+      {/* {tasks && tasks.map((task) => <Task key={task.id} task={task} />)} */}
     </Stack>
   )
 }

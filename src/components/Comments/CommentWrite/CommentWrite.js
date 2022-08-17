@@ -7,6 +7,7 @@ import UserCircle from 'ui/UserCircle'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
+import { currentTaskState } from 'store/slices/currentTaskSlice'
 
 const CommentWrite = ({card}) => {
   const [iconName, setIconName] = useState('')
@@ -16,6 +17,7 @@ const CommentWrite = ({card}) => {
   const userId = useSelector(currentUserStateId)
   const dashboardId = useSelector(currentDashboardIdState)
   const userName = useSelector(currentUserStateName)
+  const currentTask = useSelector(currentTaskState)
 
   const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const tasksDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
@@ -26,10 +28,14 @@ const CommentWrite = ({card}) => {
     } else setIconName('')
   }, [userName])
 
+  const genNumKey = (key) => {
+    return key + new Date().getTime()
+  }
+
   const addComment = async (e) => {
     e.preventDefault()
     await updateDoc(tasksDoc, {
-      comments: arrayUnion({ comment: inp, id: new Date().getTime() }),
+      comments: arrayUnion({ title: inp, id: currentTask.id, unic: genNumKey(currentTask.id) }),
     })
     setIsCommentClicked(false)
     setInp('')
