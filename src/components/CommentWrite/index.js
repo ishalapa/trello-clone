@@ -6,8 +6,8 @@ import { currentUserStateId } from 'store/slices/currentUserSlice'
 import UserCircle from 'ui/UserCircle'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
-import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
-import { currentTaskState } from 'store/slices/currentTaskSlice'
+import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
+import { currentTaskState } from 'store/slices/tasksSlice'
 
 const CommentWrite = ({card}) => {
   const userId = useSelector(currentUserStateId)

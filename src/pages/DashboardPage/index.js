@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux'
 import { Container, Box, Stack, Button, TextField } from '@mui/material'
 import { useNavigate} from "react-router-dom"
 import CustomSelect from 'components/CustomSelect'
-import { currentDashboardState } from 'store/slices/currentDashboardSlice'
+import { currentDashboardState } from 'store/slices/dashboardsSlice'
 import BoardCard from 'components/BoardCard'
 import AddNewListBtn from 'components/AddNewListBtn'
-import { boardCardsState } from 'store/slices/boardCardsSlice'
+import { boardCardsState } from 'store/slices/dashboardsSlice'
 import {MdOutlineArrowBackIos} from "react-icons/md"
 
 const DashboardPage = () => {

@@ -6,7 +6,7 @@ import { Draggable } from 'react-beautiful-dnd'
 import { RiPencilLine } from 'react-icons/ri'
 import { MdOutlineDescription, MdOutlineModeComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
-import { setCurrentTaskId, setCurrentTaskTitle } from 'store/slices/currentTaskSlice'
+import { setCurrentTaskId, setCurrentTaskTitle } from 'store/slices/tasksSlice'
 
 const Task = ({ card, task, index, openDescriptionModal }) => {
   const dispatch = useDispatch()

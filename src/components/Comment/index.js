@@ -8,8 +8,8 @@ import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/fi
 import { usersCollection } from 'firebase-client'
 import { useSelector } from 'react-redux'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
-import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
-import { currentTaskState } from 'store/slices/currentTaskSlice'
+import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
+import { currentTaskState } from 'store/slices/tasksSlice'
 
 const Comment = ({ comment, card }) => {
   const userId = useSelector(currentUserStateId)

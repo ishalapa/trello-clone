@@ -3,7 +3,7 @@ import React from 'react'
 import { Button, Grid, IconButton, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setCurrentDashboard, setCurrentDashboardId } from 'store/slices/currentDashboardSlice'
+import { setCurrentDashboard, setCurrentDashboardId } from 'store/slices/dashboardsSlice'
 import { collection, deleteDoc, doc, getDoc } from 'firebase/firestore'
 
 import { AiFillDelete } from 'react-icons/ai'

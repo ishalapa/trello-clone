@@ -4,7 +4,7 @@ import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButto
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
-import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
+import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { Droppable } from 'react-beautiful-dnd'
 import Task from 'components/Task'
 import { usersCollection } from 'firebase-client'

@@ -4,7 +4,7 @@ import { Button, Box, Stack, IconButton, TextField } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { addDoc, collection } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
-import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
+import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
 
