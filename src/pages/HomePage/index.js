@@ -10,7 +10,7 @@ import { Container, Stack, Box, TextField, Button, Divider } from '@mui/material
 import { useDispatch } from 'react-redux'
 import { setCurrentUserEmail } from 'store/slices/currentUserSlice'
 
-const Start = () => {
+const HomePage = () => {
   const dispatch = useDispatch()
   const [email, setEmail] = useState("")
 
@@ -73,4 +73,4 @@ const Start = () => {
   )
 }
 
-export default Start
+export default HomePage

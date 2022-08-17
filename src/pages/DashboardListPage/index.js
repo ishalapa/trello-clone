@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { dashboardsState } from 'store/slices/dashboardsSlice'
 import Dashboard from 'components/Dashboard'
 
-const Home = () => {
+const DashboardListPage = () => {
   const dashboards = useSelector(dashboardsState)
   return (
     <Container maxWidth="md">
@@ -26,4 +26,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default DashboardListPage

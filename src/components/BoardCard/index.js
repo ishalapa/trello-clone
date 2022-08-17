@@ -31,8 +31,8 @@ const BoardCard = ({ card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
 
-  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const tasksDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
+  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
 
   const genNumKey = (key) => {
     return key + new Date().getTime()

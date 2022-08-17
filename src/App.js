@@ -1,6 +1,6 @@
 import GetState from 'hoc/GetState'
-import Home from 'pages/Home'
-import Start from 'pages/Start'
+import DashboardListPage from 'pages/DashboardListPage'
+import HomePage from 'pages/HomePage'
 import { Route, Routes } from 'react-router-dom'
 import Layout from 'ui/Layout'
 
@@ -24,11 +24,11 @@ function App() {
     <GetState>
       <DragDropContext onDragEnd={onDragEnd}>
         <Routes>
-          <Route index element={<Start />} />
+          <Route index element={<HomePage />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignUp />} />
           <Route path="/" element={<Layout />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<DashboardListPage />} />
             <Route path={`/home/:dashboardName`} element={<DashboardPage />} />
           </Route>
         </Routes>

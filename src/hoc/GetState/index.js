@@ -13,8 +13,8 @@ const GetState = ({ children }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
 
-  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const cardsCollection = collection(dashCollection, `${dashboardId}`, "cards")
+  const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const cardsCollection = collection(dashboardCollection, `${dashboardId}`, "cards")
 
   useEffect(() => {
     onSnapshot(usersCollection, (snapshot) => {
@@ -26,13 +26,13 @@ const GetState = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    onSnapshot(dashCollection, (snapshot) => {
+    onSnapshot(dashboardCollection, (snapshot) => {
       const dashboardSnap = snapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id }
       })
       dispatch(setDashboards(dashboardSnap))
     })
-  }, [dashCollection])
+  }, [dashboardCollection])
  
   useEffect(() => {
     onSnapshot(cardsCollection, (snapshot) => {

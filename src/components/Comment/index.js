@@ -16,8 +16,8 @@ const Comment = ({ comment, card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
 
-  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const commentDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
+  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const commentDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
 
   const [editInp, setEditInp] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)

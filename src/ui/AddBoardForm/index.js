@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 
 const AddBoardForm = ({ open, setIsOpen }) => {
   const userId = useSelector(currentUserStateId)
-  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
   const [inp, setInp] = useState("")
   const navigate = useNavigate()
   const style = {
@@ -37,7 +37,7 @@ const AddBoardForm = ({ open, setIsOpen }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     navigate("/home")
-    addDoc(dashCollection, {
+    addDoc(dashboardCollection, {
       title: inp
     })
     setInp("")

@@ -38,9 +38,9 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     p: 4,
   }
 
-  const dashCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const descriptionDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
-  const tasksDoc = doc(dashCollection, `${dashboardId}`, 'cards', card.id)
+  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const descriptionDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
 
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [descriptionText, setDescriptionText] = useState('')
