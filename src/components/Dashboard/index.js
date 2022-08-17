@@ -9,7 +9,7 @@ import { collection, deleteDoc, doc, getDoc } from 'firebase/firestore'
 import { AiFillDelete } from 'react-icons/ai'
 import { usersCollection } from 'firebase-client'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()

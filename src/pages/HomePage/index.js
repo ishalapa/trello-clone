@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 import { Container, Stack, Box, TextField, Button, Divider } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import { setCurrentUserEmail } from 'store/slices/currentUserSlice'
+import { setCurrentUserEmail } from 'store/slices/usersSlice'
 
 const HomePage = () => {
   const dispatch = useDispatch()

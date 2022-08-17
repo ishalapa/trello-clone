@@ -6,7 +6,7 @@ import { addDoc, collection } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 
 const AddNewListBtn = () => {
   const [isNewListInputOpen, setIsNewListInputOpen] = useState(false)

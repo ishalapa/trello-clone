@@ -10,7 +10,7 @@ import {
   setCurrentUserEmail,
   setCurrentUserId,
   setCurrentUserName,
-} from 'store/slices/currentUserSlice'
+} from 'store/slices/usersSlice'
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Grid, Card, Box, Typography, TextField, Stack, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 import UserCircle from 'ui/UserCircle'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'

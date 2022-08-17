@@ -14,7 +14,7 @@ import {
 import { addDoc, collection } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 import { useNavigate } from 'react-router-dom'
 
 

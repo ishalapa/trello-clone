@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setBoardCards } from 'store/slices/dashboardsSlice'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 import { setDashboards } from 'store/slices/dashboardsSlice'
 import { setUsers } from 'store/slices/usersSlice'
 

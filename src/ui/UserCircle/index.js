@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, {useState, useEffect} from 'react'
 import { useSelector } from 'react-redux';
-import { currentUserStateName } from 'store/slices/currentUserSlice';
+import { currentUserStateName } from 'store/slices/usersSlice';
 
 const UserCircle = ({handleClick, size}) => {
     const [iconName, setIconName] = useState("")

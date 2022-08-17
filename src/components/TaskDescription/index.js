@@ -7,7 +7,7 @@ import { currentTaskState, setCurrentTaskTitle } from 'store/slices/tasksSlice'
 import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 import Description from 'components/Description'
 import { descriptionState, setDescriptionId } from 'store/slices/descriptionSlice'
 import { useDispatch } from 'react-redux'
@@ -49,7 +49,6 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
 
   const updateDascription = async (e) => {
     e.preventDefault()
-
     await updateDoc(descriptionDoc, {
       descriptions: arrayRemove({ title: description.title, id: currentTask.id }),
     })

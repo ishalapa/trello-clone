@@ -7,7 +7,7 @@ import { commentState, setCommentId, setCommentTitle } from 'store/slices/commen
 import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/currentUserSlice'
+import { currentUserStateId } from 'store/slices/usersSlice'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentTaskState } from 'store/slices/tasksSlice'
 
