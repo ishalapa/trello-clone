@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/currentDashboardSlice'
 import { Droppable } from 'react-beautiful-dnd'
-import Task from 'components/Tasks/Task'
+import Task from 'components/Task'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/currentUserSlice'
 import TaskDescription from 'components/TaskDescription'
@@ -15,11 +15,13 @@ import { setDescriptionTitle } from 'store/slices/descriptionSlice'
 
 const BoardCard = ({ card }) => {
   const dispatch = useDispatch()
-  const [isBtnClicked, setIsBtnClicked] = useState(false)
-  const [openDesc, setOpenDesc] = useState(false)
-  const handleOpen = () => setOpenDesc(true)
-  const handleClose = (setInput, setIsDescOpen) => {
-    setOpenDesc(false)
+  const [isNewTaskInputOpen, setIsNewTaskInputOpen] = useState(false)
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
+
+  const openDescriptionModal = () => setIsDescriptionModalOpen(true)
+  
+  const closeDescriptionModal = (setInput, setIsDescOpen) => {
+    setIsDescriptionModalOpen(false)
     setInput("")
     dispatch(setDescriptionTitle(""))
     setIsDescOpen(false)
@@ -54,12 +56,12 @@ const BoardCard = ({ card }) => {
             <Stack pt={1} spacing={1}>
               {card.tasks &&
                 card.tasks.map((task, index) => (
-                  <Task card={card} key={task.id} task={task} index={index} handleOpen={handleOpen} />
+                  <Task card={card} key={task.id} task={task} index={index} openDescriptionModal={openDescriptionModal} />
                 ))}
             </Stack>
-            {!isBtnClicked ? (
+            {!isNewTaskInputOpen ? (
               <Button
-                onClick={() => setIsBtnClicked(true)}
+                onClick={() => setIsNewTaskInputOpen(true)}
                 startIcon={<AiOutlinePlus />}
                 fullWidth
                 variant="text"
@@ -85,13 +87,13 @@ const BoardCard = ({ card }) => {
                   <Button onClick={addTask} variant="contained">
                     Add card
                   </Button>
-                  <IconButton onClick={() => setIsBtnClicked(false)} size="small">
+                  <IconButton onClick={() => setIsNewTaskInputOpen(false)} size="small">
                     <AiOutlineClose />
                   </IconButton>
                 </Stack>
               </Box>
             )}
-            <TaskDescription openDesc={openDesc} handleClose={handleClose} card={card}/>
+            <TaskDescription isDescriptionModalOpen={isDescriptionModalOpen} closeDescriptionModal={closeDescriptionModal} card={card}/>
           </CardContent>
           {provided.placeholder}
         </Card>

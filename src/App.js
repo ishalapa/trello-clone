@@ -1,5 +1,4 @@
 import GetState from 'hoc/GetState'
-import Dashboards from 'components/Dashboards'
 import Home from 'pages/Home'
 import Start from 'pages/Start'
 import { Route, Routes } from 'react-router-dom'
@@ -30,8 +29,7 @@ function App() {
           <Route path="/signin" element={<SignUp />} />
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
-            <Route path={`/home/:dashboard`} element={<DashboardPage />} />
-            <Route path="/dashboard" element={<Dashboards />} />
+            <Route path={`/home/:dashboardName`} element={<DashboardPage />} />
           </Route>
         </Routes>
       </DragDropContext>

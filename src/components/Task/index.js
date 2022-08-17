@@ -8,16 +8,17 @@ import { MdOutlineDescription, MdOutlineModeComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { setCurrentTaskId, setCurrentTaskTitle } from 'store/slices/currentTaskSlice'
 
-const Task = ({ card, task, index, handleOpen }) => {
+const Task = ({ card, task, index, openDescriptionModal }) => {
   const dispatch = useDispatch()
 
-  const handleOpenDispatch = () => {
+  const openCurrentUserDescriptionModal = () => {
     dispatch(setCurrentTaskTitle(task.title))
     dispatch(setCurrentTaskId(task.id))
-    handleOpen()
+    openDescriptionModal()
   }
 
   const isCommentExist = card.comments && card.comments.find((comment) => (comment.id === task.id && comment.title ? true : false))
+  
   return (
     <Draggable draggableId={task.id.toString()} index={index}>
       {(provided) => (
@@ -31,7 +32,7 @@ const Task = ({ card, task, index, handleOpen }) => {
           <Stack direction="column">
             <Box>
               <Box
-                onClick={handleOpenDispatch}
+                onClick={openCurrentUserDescriptionModal}
                 display="flex"
                 justifyContent={'center'}
                 alignItems={'center'}

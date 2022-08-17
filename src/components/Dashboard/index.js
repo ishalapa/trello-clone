@@ -14,18 +14,17 @@ import { currentUserStateId } from 'store/slices/currentUserSlice'
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()
   const userId = useSelector(currentUserStateId)
-  const dashCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
 
   const handleClick = async (id) => {
-    const docRef = doc(dashCollection, id)
+    const docRef = doc(dashboardCollection, id)
     const docSnap = await getDoc(docRef)
     dispatch(setCurrentDashboardId(board.id))
     dispatch(setCurrentDashboard(docSnap.data()))
   }
   const handleDelete = async (id) => {
-    await deleteDoc(doc(dashCollection, id))
+    await deleteDoc(doc(dashboardCollection, id))
   }
-  const urlTitle = board.title.replace(/\s+/g, '+')
 
   return (
     <Grid item xs={6} md={3}>
@@ -33,7 +32,7 @@ const Dashboard = ({ board }) => {
             handleClick(board.id)
           }}>
         <Link
-          to={`/home/:${urlTitle}`}
+          to={`/home/:${board.title.replace(/\s+/g, '+')}`}
         >
           <Button sx={{ width: '200px', height: '200px' }} variant="outlined" size="large">
             {board.title}
