@@ -1,4 +1,4 @@
-import{useState} from "react"
+import { useState } from 'react'
 import GetState from 'hoc/GetState'
 import DashboardListPage from 'pages/DashboardListPage'
 import HomePage from 'pages/HomePage'
@@ -8,67 +8,89 @@ import Layout from 'ui/Layout'
 import './App.css'
 import DashboardPage from 'pages/DashboardPage'
 
-import { DragDropContext } from "react-beautiful-dnd"
+import { DragDropContext } from 'react-beautiful-dnd'
 import SignUp from 'pages/SignUp'
 import { useSelector } from 'react-redux'
-import { boardCardsState } from 'store/slices/dashboardsSlice'
+import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboardsSlice'
+import { collection, doc, updateDoc } from 'firebase/firestore'
+import { usersCollection } from 'firebase-client'
+import { currentUserStateId } from 'store/slices/usersSlice'
 
 function App() {
+  const userId = useSelector(currentUserStateId)
+  const dashboardId = useSelector(currentDashboardIdState)
+
+  const [finalColumn, setFinalColumn] = useState(null)
+
+  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const boardCardColumns = useSelector(boardCardsState)
-  const [colums, setColums] = useState(boardCardColumns)
-  const onDragEnd = (result) => {
+
+  const reorderColumnList = (sourceColumn, startIndex, endIndex) => {
+    const newTasks = Array.from(sourceColumn.tasks)
+    const [removed] = newTasks.splice(startIndex, 1)
+    newTasks.splice(endIndex, 0, removed)
+
+    const newColumn = {
+      ...sourceColumn,
+      tasks: newTasks,
+    }
+    return newColumn
+  }
+
+  const onDragEnd = async (result) => {
     const { source, destination } = result
 
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
-    const sourceCol = source.droppableId
-    const destinationCol = destination.droppableId
+    const sourceColumnName = source.droppableId
+    const destinationColumnName = destination.droppableId
 
-    if (sourceCol === destinationCol){
-      const currentColumn = boardCardColumns.filter(column => column.title === sourceCol ? column : null)
-      const fromColumn = currentColumn[0]
+    const sourceColumnArr = boardCardColumns.filter((column) => (column.title === sourceColumnName ? column : null))
+    const desctinationColumnArr = boardCardColumns.filter((column) =>
+      column.title === destinationColumnName ? column : null
+    )
+    const sourceColumn = sourceColumnArr[0]
+    const destinationColumn = desctinationColumnArr[0]
+    const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
+    // if user drops within the same column
+    if (sourceColumnName === destinationColumnName) {
+      const newColumn = reorderColumnList(sourceColumn, source.index, destination.index)
 
-      const reorderColumnList = (fromColumn, startIndex, endIndex) => {
-        const newTaskIds = Array.from(fromColumn.taskIds)
-        const [removed] = newTaskIds.splice(startIndex, 1)
-        newTaskIds.splice(endIndex, 0, removed)
+      await updateDoc(tasksDoc, {
+        tasks: newColumn.tasks,
+      })
+      // if user drops from one column to another
+    } else {
+      const newTSourceColumnTasks = Array.from(sourceColumn.tasks)
+      const [removed] = newTSourceColumnTasks.splice(source.index, 1)
 
-        const newColumn = {
-          ...fromColumn,
-          taskIds: newTaskIds
-        }
-        return newColumn
+      const newSourceColumn = {
+        ...sourceColumn,
+        tasks: newTSourceColumnTasks,
       }
-      const newColumn = reorderColumnList(fromColumn, source.index, destination.index)
-      
-      const newObj = newColumn.taskIds.map(id => newColumn.tasks.filter(task => id === task.index))
+      await updateDoc(tasksDoc, {
+        tasks: newSourceColumn.tasks,
+      })
 
-      const newestColumn = {
-        ...newColumn,
-        tasks: [...newObj]
+      const destinationColumnTasks = Array.from(destination.tasks)
+      destinationColumnTasks.splice(destination.index, 0, removed)
+
+      const newDestinationColumn = {
+        ...destinationColumn,
+        tasks: destinationColumnTasks
       }
-
-      const currentCard = boardCardColumns.filter(card => card.id === newObj.id)
-      console.log(newObj)
+      await updateDoc(tasksDoc, {
+        tasks: newDestinationColumn.tasks,
+      })
     }
-    
   }
-
-  // const greatObj = {
-  //   tasks: [
-  //     { title: '11', id: 1660742682353, index: 1 },
-  //     { title: '33', id: 1660742684985, index: 3 },
-  //     { index: 2, id: 1660742683586, title: '22' }
-      
-  //   ],
-  //   ids: [1, 3, 2]
-  // }
-  // const newObj = greatObj.ids.map(id => greatObj.tasks.filter(task => id === task.index))
-  // console.log(newObj)
+  const onDragStart = () => {
+    setFinalColumn(finalColumn)
+  }
   return (
     <GetState>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="/signup" element={<SignUp />} />
