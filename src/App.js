@@ -12,7 +12,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import SignUp from 'pages/SignUp'
 import { useSelector } from 'react-redux'
 import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { collection, doc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/usersSlice'
 
@@ -68,22 +68,17 @@ function App() {
       const sourceColumnTasks = Array.from(sourceColumn.tasks)
       const [removedTask] = sourceColumnTasks.splice(source.index, 1)
 
-      const getRemoved = (arr) => {
-        const removed = sourceColumn.descriptions.filter(desc => desc.id === removedTask.id)
-        arr = sourceColumn.descriptions.filter(desc => desc.id !== removedTask.id)
-        return removed
-      }
-      // const removedDescription = sourceColumn.descriptions ? sourceColumn.descriptions.filter((desc, index) => {
-      //   return desc.id === removedTask.id ? sourceColumn.descriptions.splice(index, 1) : null
-      // }) : null
+      const removedDescription = sourceColumn.descriptions ? sourceColumn.descriptions.filter(desc => desc.id === removedTask.id).pop() : null
       // const removedCommentsIndex = sourceColumn.comments ? sourceColumn.comments.findIndex(comment => comment.id === removedTask.id) : null
-
+      console.log(removedDescription)
 
       // console.log(sourceColumn.comments.splice(removedCommentsIndex, 1))
       // const newSourceColumn = {
       //   ...sourceColumn,
       //   tasks: sourceColumnTasks,
       // }
+
+  
       await updateDoc(sourceDoc, {
         tasks: sourceColumnTasks,
       })
@@ -97,6 +92,7 @@ function App() {
       // }
       await updateDoc(destinationDoc, {
         tasks: destinationColumnTasks,
+        descriptions: arrayUnion(removedDescription)
       })
     }
   }
