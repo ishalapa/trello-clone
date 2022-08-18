@@ -99,7 +99,7 @@ const SignUpForm = () => {
         dispatch(setCurrentUserId(id))
       })
   }
-  console.log(users)
+
   return (
     <Box width="450px">
       <Card sx={{ display: 'flex', justifyContent: 'center' }}>

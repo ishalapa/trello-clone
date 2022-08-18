@@ -41,10 +41,12 @@ const BoardCard = ({ card }) => {
   const addTask = async (e) => {
     e.preventDefault()
     await updateDoc(tasksDoc, {
-      tasks: arrayUnion({ title: inp, id: genNumKey(1) }),
+      tasks: arrayUnion({ title: inp, id: genNumKey(1), index: card.tasks ? card.tasks.length+1 : 1 }),
+      taskIds: arrayUnion(card.tasks ? card.tasks.length+1 : 1)
     })
     setInp('')
   }
+  
   return (
     <Droppable droppableId={card.title}>
       {(provided) => (
