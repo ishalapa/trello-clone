@@ -52,36 +52,51 @@ function App() {
     )
     const sourceColumn = sourceColumnArr[0]
     const destinationColumn = desctinationColumnArr[0]
-    const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
+    
+    const sourceDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
     // if user drops within the same column
     if (sourceColumnName === destinationColumnName) {
       const newColumn = reorderColumnList(sourceColumn, source.index, destination.index)
 
-      await updateDoc(tasksDoc, {
+      await updateDoc(sourceDoc, {
         tasks: newColumn.tasks,
       })
       // if user drops from one column to another
     } else {
-      const newTSourceColumnTasks = Array.from(sourceColumn.tasks)
-      const [removed] = newTSourceColumnTasks.splice(source.index, 1)
+      const destinationDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', destinationColumn.id)
 
-      const newSourceColumn = {
-        ...sourceColumn,
-        tasks: newTSourceColumnTasks,
+      const sourceColumnTasks = Array.from(sourceColumn.tasks)
+      const [removedTask] = sourceColumnTasks.splice(source.index, 1)
+
+      const getRemoved = (arr) => {
+        const removed = sourceColumn.descriptions.filter(desc => desc.id === removedTask.id)
+        arr = sourceColumn.descriptions.filter(desc => desc.id !== removedTask.id)
+        return removed
       }
-      await updateDoc(tasksDoc, {
-        tasks: newSourceColumn.tasks,
+      // const removedDescription = sourceColumn.descriptions ? sourceColumn.descriptions.filter((desc, index) => {
+      //   return desc.id === removedTask.id ? sourceColumn.descriptions.splice(index, 1) : null
+      // }) : null
+      // const removedCommentsIndex = sourceColumn.comments ? sourceColumn.comments.findIndex(comment => comment.id === removedTask.id) : null
+
+
+      // console.log(sourceColumn.comments.splice(removedCommentsIndex, 1))
+      // const newSourceColumn = {
+      //   ...sourceColumn,
+      //   tasks: sourceColumnTasks,
+      // }
+      await updateDoc(sourceDoc, {
+        tasks: sourceColumnTasks,
       })
 
-      const destinationColumnTasks = Array.from(destination.tasks)
-      destinationColumnTasks.splice(destination.index, 0, removed)
+      const destinationColumnTasks = Array.from(destinationColumn.tasks)
+      destinationColumnTasks.splice(destination.index, 0, removedTask)
 
-      const newDestinationColumn = {
-        ...destinationColumn,
-        tasks: destinationColumnTasks
-      }
-      await updateDoc(tasksDoc, {
-        tasks: newDestinationColumn.tasks,
+      // const newDestinationColumn = {
+      //   ...destinationColumn,
+      //   tasks: destinationColumnTasks
+      // }
+      await updateDoc(destinationDoc, {
+        tasks: destinationColumnTasks,
       })
     }
   }
