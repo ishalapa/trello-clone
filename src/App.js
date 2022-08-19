@@ -52,7 +52,7 @@ function App() {
     )
     const sourceColumn = sourceColumnArr[0]
     const destinationColumn = desctinationColumnArr[0]
-    
+
     const sourceDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
     // if user drops within the same column
     if (sourceColumnName === destinationColumnName) {
@@ -68,9 +68,10 @@ function App() {
       const sourceColumnTasks = Array.from(sourceColumn.tasks)
       const [removedTask] = sourceColumnTasks.splice(source.index, 1)
 
-      const removedDescription = sourceColumn.descriptions ? sourceColumn.descriptions.filter(desc => desc.id === removedTask.id).pop() : null
+      const removedDescription = sourceColumn.descriptions
+        ? sourceColumn.descriptions.filter((desc) => desc.id === removedTask.id)
+        : null
       // const removedCommentsIndex = sourceColumn.comments ? sourceColumn.comments.findIndex(comment => comment.id === removedTask.id) : null
-      console.log(removedDescription)
 
       // console.log(sourceColumn.comments.splice(removedCommentsIndex, 1))
       // const newSourceColumn = {
@@ -78,13 +79,15 @@ function App() {
       //   tasks: sourceColumnTasks,
       // }
 
-  
       await updateDoc(sourceDoc, {
         tasks: sourceColumnTasks,
       })
 
-      const destinationColumnTasks = Array.from(destinationColumn.tasks)
-      destinationColumnTasks.splice(destination.index, 0, removedTask)
+      let destinationColumnTasks = destinationColumn.tasks ? Array.from(destinationColumn.tasks) : []
+
+      destinationColumnTasks.length >= 1
+        ? destinationColumnTasks.splice(destination.index, 0, removedTask)
+        : (destinationColumnTasks = [removedTask])
 
       // const newDestinationColumn = {
       //   ...destinationColumn,
@@ -92,7 +95,7 @@ function App() {
       // }
       await updateDoc(destinationDoc, {
         tasks: destinationColumnTasks,
-        descriptions: arrayUnion(removedDescription)
+        // descriptions: arrayUnion(removedDescription)
       })
     }
   }
