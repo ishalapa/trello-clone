@@ -69,18 +69,18 @@ function App() {
       const [removedTask] = sourceColumnTasks.splice(source.index, 1)
 
       const removedDescription = sourceColumn.descriptions
-        ? sourceColumn.descriptions.filter((desc) => desc.id === removedTask.id)
+        ? sourceColumn.descriptions.filter((desc) => desc.id === removedTask.id).pop()
         : null
-      // const removedCommentsIndex = sourceColumn.comments ? sourceColumn.comments.findIndex(comment => comment.id === removedTask.id) : null
 
-      // console.log(sourceColumn.comments.splice(removedCommentsIndex, 1))
-      // const newSourceColumn = {
-      //   ...sourceColumn,
-      //   tasks: sourceColumnTasks,
-      // }
-
+      const removedComments = sourceColumn.comments
+        ? sourceColumn.comments.filter((comment) => comment.id === removedTask.id)
+        : null
+        const restComments = sourceColumn.comments
+        ? sourceColumn.comments.filter((comment) => comment.id !== removedTask.id)
+        : null
       await updateDoc(sourceDoc, {
         tasks: sourceColumnTasks,
+        comments: restComments
       })
 
       let destinationColumnTasks = destinationColumn.tasks ? Array.from(destinationColumn.tasks) : []
@@ -89,14 +89,27 @@ function App() {
         ? destinationColumnTasks.splice(destination.index, 0, removedTask)
         : (destinationColumnTasks = [removedTask])
 
-      // const newDestinationColumn = {
-      //   ...destinationColumn,
-      //   tasks: destinationColumnTasks
-      // }
       await updateDoc(destinationDoc, {
         tasks: destinationColumnTasks,
-        // descriptions: arrayUnion(removedDescription)
       })
+      removedDescription &&
+        (await updateDoc(destinationDoc, {
+          descriptions: arrayUnion(removedDescription),
+        }))
+
+      removedComments &&
+      destinationColumn.comments &&(
+          await updateDoc(destinationDoc, {
+            comments: destinationColumn.comments.concat(removedComments),
+          })
+        )
+        removedComments &&
+        !destinationColumn.comments &&(
+          await updateDoc(destinationDoc, {
+            comments: removedComments,
+          })
+        )
+        console.log(removedComments)
     }
   }
   const onDragStart = () => {
