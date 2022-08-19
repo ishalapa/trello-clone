@@ -26,7 +26,7 @@ const BoardCard = ({ card }) => {
     dispatch(setDescriptionTitle(""))
     setIsDescOpen(false)
   }
-  const [inp, setInp] = useState('')
+  const [cardTitle, setCardTitle] = useState('')
 
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
@@ -41,10 +41,9 @@ const BoardCard = ({ card }) => {
   const addTask = async (e) => {
     e.preventDefault()
     await updateDoc(tasksDoc, {
-      tasks: arrayUnion({ title: inp, id: genNumKey(1), index: card.tasks ? card.tasks.length+1 : 1 }),
-      taskIds: arrayUnion(card.tasks ? card.tasks.length+1 : 1)
+      tasks: arrayUnion({ title: cardTitle, id: genNumKey(1)}),
     })
-    setInp('')
+    setCardTitle('')
   }
   
   return (
@@ -74,8 +73,8 @@ const BoardCard = ({ card }) => {
             ) : (
               <Box pt={1}>
                 <TextField
-                  value={inp}
-                  onChange={(e) => setInp(e.target.value)}
+                  value={cardTitle}
+                  onChange={(e) => setCardTitle(e.target.value)}
                   sx={{ backgroundColor: 'white' }}
                   size="small"
                   variant="outlined"

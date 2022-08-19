@@ -75,12 +75,12 @@ function App() {
       const removedComments = sourceColumn.comments
         ? sourceColumn.comments.filter((comment) => comment.id === removedTask.id)
         : null
-        const restComments = sourceColumn.comments
+      const restComments = sourceColumn.comments
         ? sourceColumn.comments.filter((comment) => comment.id !== removedTask.id)
         : null
       await updateDoc(sourceDoc, {
         tasks: sourceColumnTasks,
-        comments: restComments
+        comments: restComments,
       })
 
       let destinationColumnTasks = destinationColumn.tasks ? Array.from(destinationColumn.tasks) : []
@@ -98,18 +98,16 @@ function App() {
         }))
 
       removedComments &&
-      destinationColumn.comments &&(
-          await updateDoc(destinationDoc, {
-            comments: destinationColumn.comments.concat(removedComments),
-          })
-        )
-        removedComments &&
-        !destinationColumn.comments &&(
-          await updateDoc(destinationDoc, {
-            comments: removedComments,
-          })
-        )
-        console.log(removedComments)
+        destinationColumn.comments &&
+        (await updateDoc(destinationDoc, {
+          comments: destinationColumn.comments.concat(removedComments),
+        }))
+      removedComments &&
+        !destinationColumn.comments &&
+        (await updateDoc(destinationDoc, {
+          comments: removedComments,
+        }))
+        console.log(destinationColumn.id)
     }
   }
   const onDragStart = () => {

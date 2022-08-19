@@ -44,7 +44,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
 
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [descriptionText, setDescriptionText] = useState('')
-  const [editInp, setEditInp] = useState('')
+  const [taskTitle, setTaskTitle] = useState('')
   const [isEditTitleOpen, setIsEditTitleOpen] = useState(false)
 
   const updateDascription = async (e) => {
@@ -61,20 +61,23 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
   }
 
   const editTaskTitle = async () => {
+    console.log(currentTask.title)
     setIsEditTitleOpen(true)
-    setEditInp(currentTask.title)
+    setTaskTitle(currentTask.title)
   }
 
   const updateTaskTitle = async () => {
+    console.log(currentTask.title)
+    console.log(currentTask.id)
     await updateDoc(tasksDoc, {
       tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
     })
     await updateDoc(tasksDoc, {
-      tasks: arrayUnion({ title: editInp, id: currentTask.id }),
+      tasks: arrayUnion({ title: taskTitle, id: currentTask.id }),
     })
-    dispatch(setCurrentTaskTitle(editInp))
+    dispatch(setCurrentTaskTitle(taskTitle))
     setIsEditTitleOpen(false)
-    setEditInp('')
+    setTaskTitle('')
   }
 
   const openDescription = () => {
@@ -109,8 +112,8 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
                       type={'text'}
                       size="small"
                       sx={{ width: '320px' }}
-                      value={editInp}
-                      onChange={(e) => setEditInp(e.target.value)}
+                      value={taskTitle}
+                      onChange={(e) => setTaskTitle(e.target.value)}
                     />
                     <Button onClick={updateTaskTitle} size="small" sx={{ width: '40px' }} variant="contained">
                       Save
