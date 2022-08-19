@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 import TopBarStart from 'layout/TopBarStart'
 import styles from 'assets/scss/Start.module.scss'
@@ -11,8 +11,9 @@ import { useDispatch } from 'react-redux'
 import { setCurrentUserEmail } from 'store/slices/usersSlice'
 
 const HomePage = () => {
+
   const dispatch = useDispatch()
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState('')
 
   const dispatchEmail = () => {
     dispatch(setCurrentUserEmail(email))

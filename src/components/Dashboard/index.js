@@ -14,6 +14,7 @@ import { currentUserStateId } from 'store/slices/usersSlice'
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()
   const userId = useSelector(currentUserStateId)
+
   const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
 
   const handleClick = async (id) => {
@@ -22,6 +23,7 @@ const Dashboard = ({ board }) => {
     dispatch(setCurrentDashboardId(board.id))
     dispatch(setCurrentDashboard(docSnap.data()))
   }
+
   const handleDelete = async (id) => {
     await deleteDoc(doc(dashboardCollection, id))
   }

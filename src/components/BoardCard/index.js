@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { setDescriptionTitle } from 'store/slices/descriptionSlice'
 
 const BoardCard = ({ card }) => {
+
   const dispatch = useDispatch()
   const [isNewTaskInputOpen, setIsNewTaskInputOpen] = useState(false)
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
@@ -26,6 +27,7 @@ const BoardCard = ({ card }) => {
     dispatch(setDescriptionTitle(""))
     setIsDescOpen(false)
   }
+
   const [inp, setInp] = useState('')
 
   const dashboardId = useSelector(currentDashboardIdState)
@@ -95,6 +97,7 @@ const BoardCard = ({ card }) => {
                 </Stack>
               </Box>
             )}
+
             <TaskDescription isDescriptionModalOpen={isDescriptionModalOpen} closeDescriptionModal={closeDescriptionModal} card={card}/>
           </CardContent>
           {provided.placeholder}

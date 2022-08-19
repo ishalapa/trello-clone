@@ -1,13 +1,16 @@
 import React from 'react'
 
 import 'assets/scss/Home.scss'
+
 import { Box, Typography, Grid } from '@mui/material'
 import { Container } from '@mui/system'
 
 import { CgTrello } from 'react-icons/cg'
+
 import { useSelector } from 'react-redux'
 import { dashboardsState } from 'store/slices/dashboardsSlice'
 import Dashboard from 'components/Dashboard'
+
 
 const DashboardListPage = () => {
   const dashboards = useSelector(dashboardsState)

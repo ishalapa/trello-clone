@@ -8,10 +8,12 @@ import Layout from 'ui/Layout'
 import './App.css'
 import DashboardPage from 'pages/DashboardPage'
 
-import { DragDropContext } from "react-beautiful-dnd"
+import { DragDropContext } from 'react-beautiful-dnd'
 import SignUp from 'pages/SignUp'
 import { useSelector } from 'react-redux'
 import { boardCardsState } from 'store/slices/dashboardsSlice'
+
+// TODO change /home/:dashboard to /home/:dashboardName
 
 function App() {
   const boardCardColumns = useSelector(boardCardsState)
