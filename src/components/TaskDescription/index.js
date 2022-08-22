@@ -61,14 +61,11 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
   }
 
   const editTaskTitle = async () => {
-    console.log(currentTask.title)
     setIsEditTitleOpen(true)
     setTaskTitle(currentTask.title)
   }
 
   const updateTaskTitle = async () => {
-    console.log(currentTask.title)
-    console.log(currentTask.id)
     await updateDoc(tasksDoc, {
       tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
     })
@@ -84,6 +81,18 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     setIsDescriptionOpen(true)
     setDescriptionText(description.title)
   }
+
+  const deleteTask = async () => {
+    await updateDoc(tasksDoc, {
+      tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
+    })
+    card.descriptions.map(async(desc) => {
+      if (desc.id === currentTask.id) {
+        await updateDoc(tasksDoc, {
+          descriptions: arrayRemove({ title: desc.title, id: desc.id }),
+        })
+      } 
+    })}
 
   return (
     <Modal
@@ -198,13 +207,9 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
             </Stack>
           </Grid>
           <Grid item md={2}>
-            <ul>
-              <li>dsa</li>
-              <li>dsa</li>
-              <li>dsad</li>
-              <li>dsad</li>
-              <li>dsad</li>
-            </ul>
+            <Button onClick={deleteTask} variant="outlined" color="error">
+              Delete this task
+            </Button>
           </Grid>
         </Grid>
       </Card>
