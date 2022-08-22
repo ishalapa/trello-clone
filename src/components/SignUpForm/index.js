@@ -73,7 +73,6 @@ const SignUpForm = () => {
       })
       .then((userEmail) => {
         const id = users.find((user) => user.name === userEmail)
-        console.log(userEmail)
         return id.id
       })
       .then((id) => {

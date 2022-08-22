@@ -4,19 +4,45 @@ import { useSelector } from 'react-redux'
 import { Container, Box, Stack, Button, TextField } from '@mui/material'
 import { useNavigate} from "react-router-dom"
 import CustomSelect from 'components/CustomSelect'
-import { currentDashboardState } from 'store/slices/dashboardsSlice'
+import { currentDashboardIdState, currentDashboardState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
 import BoardCard from 'components/BoardCard'
 import AddNewListBtn from 'components/AddNewListBtn'
 import { boardCardsState } from 'store/slices/dashboardsSlice'
 import {MdOutlineArrowBackIos} from "react-icons/md"
+import { doc, updateDoc } from 'firebase/firestore'
+import { usersCollection } from 'firebase-client'
+import { currentUserStateId } from 'store/slices/usersSlice'
+import { useDispatch } from 'react-redux'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const dashboardId = useSelector(currentDashboardIdState)
   const currentDashboard = useSelector(currentDashboardState)
-  const cards = useSelector(boardCardsState)
+  const cardList = useSelector(boardCardsState)
+  const userId = useSelector(currentUserStateId)
+
+  const dashboardDoc =  dashboardId && doc(usersCollection, `${userId}`, "dashboards", dashboardId)
   
   const [isDashboardTitleEditOpen, setIsDashboardTitleEditOpen] = useState(false)
-  const [dashboardTitle, setDashboardTitle] = useState('')
+  const [dashboardTitle, setDashboardTitle] = useState(currentDashboard ? currentDashboard.title : "")
+
+  const updateDashboardTitle = async (e) => {
+    e.preventDefault()
+
+    updateDoc(dashboardDoc, {
+      title: dashboardTitle
+    })
+    dispatch(setCurrentDashboard({title:dashboardTitle}))
+    setIsDashboardTitleEditOpen(false)
+  }
+
+  const spreadCardList = [...cardList]
+  
+  const sortedCardList = spreadCardList.sort((a,b) => {
+    return new Date(a.timeOfAdd) - new Date(b.timeOfAdd);
+  });
+
   return (
     <Container maxWidth="lg">
       <Stack direction="row" spacing={2} pt={2}>
@@ -30,22 +56,23 @@ const DashboardPage = () => {
             variant="outlined"
             sx={{ justifyContent: 'flex-start', '&:hover': { backgroundColor: '#e6e6e6' } }}
           >
-            {currentDashboard && currentDashboard.title}
+            {dashboardTitle}
           </Button>
         ) : (
-          <TextField
+          <form action="" onSubmit={(e) => updateDashboardTitle(e)}>
+            <TextField
             value={dashboardTitle}
             onChange={(e) => setDashboardTitle(e.target.value)}
             sx={{ backgroundColor: 'white' }}
             size="small"
             variant="outlined"
-            placeholder="Enter a title for this card"
           />
+          </form>
         )}
       </Stack>
       <Box pt={3}>
         <Stack spacing={2} direction="row">
-          {cards && cards.map((card) => <BoardCard key={card.id} card={card} />)}
+          {sortedCardList && sortedCardList.map((card) => <BoardCard key={card.id} card={card} />)}
           <AddNewListBtn />
         </Stack>
       </Box>

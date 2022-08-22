@@ -13,7 +13,14 @@ import Dashboard from 'components/Dashboard'
 
 
 const DashboardListPage = () => {
-  const dashboards = useSelector(dashboardsState)
+  const dashboardList = useSelector(dashboardsState)
+
+  const spreadDashboards = [...dashboardList]
+
+  const sortedDashboardList = spreadDashboards.sort((a,b) => {
+    return new Date(a.timeOfAdd) - new Date(b.timeOfAdd);
+  });
+
   return (
     <Container maxWidth="md">
       <Box pt="30px">
@@ -22,7 +29,7 @@ const DashboardListPage = () => {
           <Typography variant="h5">Trello Workspace</Typography>
         </Box>
         <Grid container textAlign="center" rowSpacing={2} columnSpacing={2}>
-          {dashboards && dashboards.map((board) => <Dashboard key={board.id} board={board} />)}
+          {sortedDashboardList && sortedDashboardList.map((board) => <Dashboard key={board.id} board={board} />)}
         </Grid>
       </Box>
     </Container>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton } from '@mui/material'
+import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton, Alert } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
@@ -14,17 +14,17 @@ import { useDispatch } from 'react-redux'
 import { setDescriptionTitle } from 'store/slices/descriptionSlice'
 
 const BoardCard = ({ card }) => {
-
   const dispatch = useDispatch()
   const [isNewTaskInputOpen, setIsNewTaskInputOpen] = useState(false)
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
+  const [isValid, setIsValid] = useState(true)
 
   const openDescriptionModal = () => setIsDescriptionModalOpen(true)
-  
+
   const closeDescriptionModal = (setInput, setIsDescOpen) => {
     setIsDescriptionModalOpen(false)
-    setInput("")
-    dispatch(setDescriptionTitle(""))
+    setInput('')
+    dispatch(setDescriptionTitle(''))
     setIsDescOpen(false)
   }
 
@@ -42,12 +42,18 @@ const BoardCard = ({ card }) => {
 
   const addTask = async (e) => {
     e.preventDefault()
-    await updateDoc(tasksDoc, {
-      tasks: arrayUnion({ title: cardTitle, id: genNumKey(1)}),
-    })
-    setCardTitle('')
+
+    if (!cardTitle.trim()) {
+      setIsValid(false)
+    } else {
+      setIsValid(true)
+      await updateDoc(tasksDoc, {
+        tasks: arrayUnion({ title: cardTitle, id: genNumKey(1) }),
+      })
+      setCardTitle('')
+    }
   }
-  
+
   return (
     <Droppable droppableId={card.title}>
       {(provided) => (
@@ -59,7 +65,13 @@ const BoardCard = ({ card }) => {
             <Stack pt={1} spacing={1}>
               {card.tasks &&
                 card.tasks.map((task, index) => (
-                  <Task card={card} key={task.id} task={task} index={index} openDescriptionModal={openDescriptionModal} />
+                  <Task
+                    card={card}
+                    key={task.id}
+                    task={task}
+                    index={index}
+                    openDescriptionModal={openDescriptionModal}
+                  />
                 ))}
             </Stack>
             {!isNewTaskInputOpen ? (
@@ -74,30 +86,42 @@ const BoardCard = ({ card }) => {
               </Button>
             ) : (
               <Box pt={1}>
-                <TextField
-                  value={cardTitle}
-                  onChange={(e) => setCardTitle(e.target.value)}
-                  sx={{ backgroundColor: 'white' }}
-                  size="small"
-                  variant="outlined"
-                  multiline
-                  minRows={1}
-                  maxRows={5}
-                  placeholder="Enter a title for this card"
-                  fullWidth
-                />
-                <Stack pt={1} spacing={1} direction="row" alignItems="center">
-                  <Button onClick={addTask} variant="contained">
-                    Add card
-                  </Button>
-                  <IconButton onClick={() => setIsNewTaskInputOpen(false)} size="small">
-                    <AiOutlineClose />
-                  </IconButton>
-                </Stack>
+                <form action="" onSubmit={addTask}>
+                  <TextField
+                    required
+                    value={cardTitle}
+                    onChange={(e) => setCardTitle(e.target.value)}
+                    sx={{ backgroundColor: 'white' }}
+                    size="small"
+                    variant="outlined"
+                    multiline
+                    minRows={1}
+                    maxRows={5}
+                    placeholder="Enter a title for this task"
+                    fullWidth
+                  />
+                  {!isValid && (
+                    <Alert sx={{ mt: '3px' }} severity="warning">
+                      Try another title
+                    </Alert>
+                  )}
+                  <Stack pt={1} spacing={1} direction="row" alignItems="center">
+                    <Button type="submit" variant="contained">
+                      Add card
+                    </Button>
+                    <IconButton onClick={() => setIsNewTaskInputOpen(false)} size="small">
+                      <AiOutlineClose />
+                    </IconButton>
+                  </Stack>
+                </form>
               </Box>
             )}
 
-            <TaskDescription isDescriptionModalOpen={isDescriptionModalOpen} closeDescriptionModal={closeDescriptionModal} card={card}/>
+            <TaskDescription
+              isDescriptionModalOpen={isDescriptionModalOpen}
+              closeDescriptionModal={closeDescriptionModal}
+              card={card}
+            />
           </CardContent>
           {provided.placeholder}
         </Card>

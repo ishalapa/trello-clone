@@ -17,10 +17,10 @@ const Dashboard = ({ board }) => {
 
   const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
 
-  const handleClick = async (id) => {
+  const openDashboardPage = async (id) => {
     const docRef = doc(dashboardCollection, id)
     const docSnap = await getDoc(docRef)
-    dispatch(setCurrentDashboardId(board.id))
+    dispatch(setCurrentDashboardId(id))
     dispatch(setCurrentDashboard(docSnap.data()))
   }
 
@@ -31,7 +31,7 @@ const Dashboard = ({ board }) => {
   return (
     <Grid item xs={6} md={3}>
       <Box position="relative" onClick={() => {
-            handleClick(board.id)
+            openDashboardPage(board.id)
           }}>
         <Link
           to={`/home/:${board.title.replace(/\s+/g, '+')}`}

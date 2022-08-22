@@ -79,20 +79,22 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
 
   const openDescription = () => {
     setIsDescriptionOpen(true)
-    setDescriptionText(description.title)
+    setDescriptionText(description && description.title)
   }
 
   const deleteTask = async () => {
     await updateDoc(tasksDoc, {
       tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
     })
-    card.descriptions.map(async(desc) => {
+    card.descriptions && card.descriptions.map(async(desc) => {
       if (desc.id === currentTask.id) {
         await updateDoc(tasksDoc, {
           descriptions: arrayRemove({ title: desc.title, id: desc.id }),
         })
       } 
-    })}
+    })
+    closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
+  }
 
   return (
     <Modal
