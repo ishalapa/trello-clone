@@ -12,6 +12,7 @@ import { currentUserStateId } from 'store/slices/usersSlice'
 import TaskDescription from 'components/TaskDescription'
 import { useDispatch } from 'react-redux'
 import { setDescriptionTitle } from 'store/slices/descriptionSlice'
+import DeletePopover from 'components/DeleteListPopover'
 
 const BoardCard = ({ card }) => {
   const dispatch = useDispatch()
@@ -59,9 +60,12 @@ const BoardCard = ({ card }) => {
       {(provided) => (
         <Card ref={provided.innerRef} {...provided.droppableProps} sx={{ width: '290px', backgroundColor: '#f2f2f2' }}>
           <CardContent>
-            <Typography variant="h6" color="#000066">
-              {card.title}
-            </Typography>
+            <Box display={"flex"} flexDirection={"row"} justifyContent="space-between">
+              <Typography variant="h6" color="#000066">
+                {card.title}
+              </Typography>
+              <DeletePopover title={card.title} card={card}/>
+            </Box>
             <Stack pt={1} spacing={1}>
               {card.tasks &&
                 card.tasks.map((task, index) => (
@@ -116,7 +120,6 @@ const BoardCard = ({ card }) => {
                 </form>
               </Box>
             )}
-
             <TaskDescription
               isDescriptionModalOpen={isDescriptionModalOpen}
               closeDescriptionModal={closeDescriptionModal}

@@ -11,8 +11,8 @@ import { useDispatch } from 'react-redux'
 import { setCurrentUserEmail } from 'store/slices/usersSlice'
 
 const HomePage = () => {
-
   const dispatch = useDispatch()
+  
   const [email, setEmail] = useState('')
 
   const dispatchEmail = () => {

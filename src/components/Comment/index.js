@@ -30,9 +30,9 @@ const Comment = ({ comment, card }) => {
     await updateDoc(commentDoc, {
       comments: arrayRemove({ title: comment.title, id: comment.id, unic: comment.unic }),
     })
-    await updateDoc(commentDoc, {
-      comments: arrayUnion({ title: editInp, id: currentTask.id, unic: genNumKey(currentTask.id) }),
-    })
+    // await updateDoc(commentDoc, {
+    //   comments: arrayUnion({ title: editInp, id: currentTask.id, unic: genNumKey(currentTask.id) }),
+    // })
     // await updateDoc(commentDoc, {
     //   tasks: arrayUnion({ title: editInp, id: currentTask.id }),
     // })

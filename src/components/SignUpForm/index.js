@@ -6,7 +6,6 @@ import { FcGoogle } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
 import {
   currentUserStateEmail,
-  currentUserStateId,
   setCurrentUserEmail,
   setCurrentUserId,
   setCurrentUserName,
@@ -24,13 +23,11 @@ import { Link } from 'react-router-dom'
 import { addDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { usersState } from 'store/slices/usersSlice'
-import { async } from '@firebase/util'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
   const users = useSelector(usersState)
-  const userId = useSelector(currentUserStateId)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')

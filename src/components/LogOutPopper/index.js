@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 
 import { Box, Popper, Fade, Paper, Typography, Divider, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateId, currentUserStateName, setCurrentUserEmail, setCurrentUserId, setCurrentUserName } from 'store/slices/usersSlice'
+import { currentUserStateEmail, currentUserStateName, setCurrentUserEmail, setCurrentUserId, setCurrentUserName } from 'store/slices/usersSlice'
 
 import { signOut } from 'firebase/auth'
 import { auth } from 'firebase-client'
