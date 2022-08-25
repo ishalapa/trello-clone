@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Container, Box, Stack, Button, TextField } from '@mui/material'
 import { useNavigate} from "react-router-dom"
 import CustomSelect from 'components/CustomSelect'
-import { currentDashboardIdState, currentDashboardState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
+import { currentDashboardState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
 import BoardCard from 'components/BoardCard'
 import AddNewListBtn from 'components/AddNewListBtn'
 import { boardCardsState } from 'store/slices/dashboardsSlice'
@@ -17,13 +17,13 @@ import { useDispatch } from 'react-redux'
 const DashboardPage = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const dashboardId = useSelector(currentDashboardIdState)
+
   const currentDashboard = useSelector(currentDashboardState)
   const cardList = useSelector(boardCardsState)
   const userId = useSelector(currentUserStateId)
 
-  const dashboardDoc =  dashboardId && doc(usersCollection, `${userId}`, "dashboards", dashboardId)
-  
+  const dashboardDoc =  currentDashboard && doc(usersCollection, `${userId}`, "dashboards", currentDashboard.id)
+  console.log(currentDashboard)
   const [isDashboardTitleEditOpen, setIsDashboardTitleEditOpen] = useState(false)
   const [dashboardTitle, setDashboardTitle] = useState(currentDashboard ? currentDashboard.title : "")
 
@@ -33,7 +33,7 @@ const DashboardPage = () => {
     updateDoc(dashboardDoc, {
       title: dashboardTitle
     })
-    dispatch(setCurrentDashboard({title:dashboardTitle}))
+    dispatch(setCurrentDashboard({...currentDashboard, title:dashboardTitle}))
     setIsDashboardTitleEditOpen(false)
   }
 

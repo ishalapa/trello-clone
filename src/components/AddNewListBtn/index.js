@@ -6,7 +6,7 @@ import { addDoc, collection } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
+import { currentUserStateEmail, currentUserStateId } from 'store/slices/usersSlice'
 
 const AddNewListBtn = () => {
   const [isNewListInputOpen, setIsNewListInputOpen] = useState(false)
@@ -14,7 +14,7 @@ const AddNewListBtn = () => {
   const [isValid, setIsValid] = useState(true)
 
   const userId = useSelector(currentUserStateId)
-
+  const currentUserEmail = useSelector(currentUserStateEmail)
   const dashboardId = useSelector(currentDashboardIdState)
   const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
   const cardsCollection = collection(dashboardsCollection, `${dashboardId}`, 'cards')
@@ -29,7 +29,8 @@ const AddNewListBtn = () => {
 
       addDoc(cardsCollection, {
         title: boardCardText,
-        timeOfAdd: new Date().getTime()
+        timeOfAdd: new Date().getTime(),
+        members: [currentUserEmail]
       })
       setBoardCardText('')
     }
