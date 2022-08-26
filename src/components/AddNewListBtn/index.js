@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Button, Box, Stack, IconButton, TextField, Alert } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, query, where } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { usersCollection } from 'firebase-client'
@@ -18,6 +18,7 @@ const AddNewListBtn = () => {
   const currentUserEmail = useSelector(currentUserStateEmail)
   const dashboardId = useSelector(currentDashboardIdState)
   // const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const qGeneralBoardCollection = query(generalBoardCollection, where("members", "array-contains", `${userId}`))
   const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, 'cards')
 
   const addNewList = async (e) => {

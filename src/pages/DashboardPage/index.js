@@ -13,6 +13,7 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/usersSlice'
 import { useDispatch } from 'react-redux'
+import { generalBoardCollection } from 'firebase-client'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -22,8 +23,9 @@ const DashboardPage = () => {
   const cardList = useSelector(boardCardsState)
   const userId = useSelector(currentUserStateId)
 
-  const dashboardDoc =  currentDashboard && doc(usersCollection, `${userId}`, "dashboards", currentDashboard.id)
-  console.log(currentDashboard)
+  // const dashboardDoc =  currentDashboard && doc(usersCollection, `${userId}`, "dashboards", currentDashboard.id)
+  const dashboardDoc =  currentDashboard && doc(generalBoardCollection, currentDashboard.id)
+
   const [isDashboardTitleEditOpen, setIsDashboardTitleEditOpen] = useState(false)
   const [dashboardTitle, setDashboardTitle] = useState(currentDashboard ? currentDashboard.title : "")
 

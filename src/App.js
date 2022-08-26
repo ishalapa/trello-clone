@@ -111,15 +111,14 @@ function App() {
         (await updateDoc(destinationDoc, {
           comments: removedComments,
         }))
-        console.log(destinationColumn.id)
     }
   }
   const onDragStart = () => {
     setFinalColumn(finalColumn)
   }
   return (
-    <GetState>
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <GetState>
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="/signup" element={<SignUp />} />
@@ -129,8 +128,8 @@ function App() {
             <Route path={`/home/:dashboardName`} element={<DashboardPage />} />
           </Route>
         </Routes>
-      </DragDropContext>
-    </GetState>
+      </GetState>
+    </DragDropContext>
   )
 }
 

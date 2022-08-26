@@ -210,9 +210,14 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
             </Stack>
           </Grid>
           <Grid item md={2}>
-            <Button onClick={deleteTask} variant="outlined" color="error">
+            <Stack spacing={1}>
+            <Button onClick={deleteTask} variant="outlined">
+              Add members
+            </Button><Button onClick={deleteTask} variant="outlined" color="error">
               Delete this task
             </Button>
+            </Stack>
+            
           </Grid>
         </Grid>
       </Card>
