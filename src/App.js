@@ -16,6 +16,7 @@ import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboard
 import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/usersSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 // TODO change /home/:dashboard to /home/:dashboardName
 
@@ -25,7 +26,7 @@ function App() {
 
   const [finalColumn, setFinalColumn] = useState(null)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const boardCardColumns = useSelector(boardCardsState)
 
   const reorderColumnList = (sourceColumn, startIndex, endIndex) => {
@@ -56,7 +57,7 @@ function App() {
     const sourceColumn = sourceColumnArr[0]
     const destinationColumn = desctinationColumnArr[0]
 
-    const sourceDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
+    const sourceDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
     // if user drops within the same column
     if (sourceColumnName === destinationColumnName) {
       const newColumn = reorderColumnList(sourceColumn, source.index, destination.index)
@@ -66,7 +67,7 @@ function App() {
       })
       // if user drops from one column to another
     } else {
-      const destinationDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', destinationColumn.id)
+      const destinationDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', destinationColumn.id)
 
       const sourceColumnTasks = Array.from(sourceColumn.tasks)
       const [removedTask] = sourceColumnTasks.splice(source.index, 1)

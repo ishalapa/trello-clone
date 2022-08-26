@@ -8,6 +8,7 @@ import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentTaskState } from 'store/slices/tasksSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 const CommentWrite = ({card}) => {
   const userId = useSelector(currentUserStateId)
@@ -17,8 +18,8 @@ const CommentWrite = ({card}) => {
   const [commentText, setCommentText] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const genNumKey = (key) => {
     return key + new Date().getTime()

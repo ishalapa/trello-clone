@@ -7,12 +7,13 @@ import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/usersSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 const DeletePopover = ({ title, card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
-  const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const cardsCollection = collection(dashboardsCollection, `${dashboardId}`, 'cards')
+  // const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, 'cards')
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClick = (event) => {

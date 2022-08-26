@@ -10,19 +10,20 @@ import { AiFillDelete } from 'react-icons/ai'
 import { usersCollection } from 'firebase-client'
 import { useSelector } from 'react-redux'
 import { currentUserStateId } from 'store/slices/usersSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()
   const userId = useSelector(currentUserStateId)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
 
   const openDashboardPage = async (id) => {
     dispatch(setCurrentDashboard({ title: board.title, id: id, members: board.members }))
   }
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(dashboardCollection, id))
+    await deleteDoc(doc(generalBoardCollection, id))
   }
 
   return (

@@ -7,14 +7,15 @@ import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentUserStateId } from 'store/slices/usersSlice'
 import { setDashboards } from 'store/slices/dashboardsSlice'
 import { setUsers } from 'store/slices/usersSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 const GetState = ({ children }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const cardsCollection = collection(dashboardCollection, `${dashboardId}`, "cards")
+  // const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, "cards")
 
   useEffect(() => {
     onSnapshot(usersCollection, (snapshot) => {
@@ -26,13 +27,13 @@ const GetState = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    onSnapshot(dashboardCollection, (snapshot) => {
+    onSnapshot(generalBoardCollection, (snapshot) => {
       const dashboardSnap = snapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id }
       })
       dispatch(setDashboards(dashboardSnap))
     })
-  }, [dashboardCollection])
+  }, [generalBoardCollection])
  
   useEffect(() => {
     onSnapshot(cardsCollection, (snapshot) => {

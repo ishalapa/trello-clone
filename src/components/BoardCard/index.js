@@ -13,6 +13,7 @@ import TaskDescription from 'components/TaskDescription'
 import { useDispatch } from 'react-redux'
 import { setDescriptionTitle } from 'store/slices/descriptionSlice'
 import DeletePopover from 'components/DeleteListPopover'
+import { generalBoardCollection } from 'firebase-client'
 
 const BoardCard = ({ card }) => {
   const dispatch = useDispatch()
@@ -34,8 +35,8 @@ const BoardCard = ({ card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const userId = useSelector(currentUserStateId)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const genNumKey = (key) => {
     return key + new Date().getTime()

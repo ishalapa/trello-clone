@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
+import { generalBoardCollection } from 'firebase-client'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
@@ -38,9 +39,9 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     p: 4,
   }
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const descriptionDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const descriptionDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [descriptionText, setDescriptionText] = useState('')

@@ -10,14 +10,15 @@ import { useSelector } from 'react-redux'
 import { currentUserStateId } from 'store/slices/usersSlice'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentTaskState } from 'store/slices/tasksSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 const Comment = ({ comment, card }) => {
   const userId = useSelector(currentUserStateId)
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const commentDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+  const commentDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const [editInp, setEditInp] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)
