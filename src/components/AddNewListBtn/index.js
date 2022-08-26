@@ -30,7 +30,6 @@ const AddNewListBtn = () => {
       addDoc(cardsCollection, {
         title: boardCardText,
         timeOfAdd: new Date().getTime(),
-        members: [currentUserEmail]
       })
       setBoardCardText('')
     }

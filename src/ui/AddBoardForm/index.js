@@ -40,7 +40,8 @@ const AddBoardForm = ({ open, setIsOpen }) => {
     navigate("/home")
     addDoc(dashboardCollection, {
       title: dashboardTitle, 
-      timeOfAdd: new Date().getTime()
+      timeOfAdd: new Date().getTime(),
+      members: [userId]
     })
     setDashboardTitle("")
     setIsOpen(false)
