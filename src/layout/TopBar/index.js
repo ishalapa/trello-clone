@@ -13,15 +13,6 @@ import { Typography } from '@mui/material'
 const TopBar = () => {
   const [openModal, setOpenModal] = useState(false)
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [open, setOpen] = useState(false)
-  const [placement, setPlacement] = useState()
-
-  const handleClick = (newPlacement) => (event) => {
-    setAnchorEl(event.currentTarget)
-    setOpen((prev) => placement !== newPlacement || !prev)
-    setPlacement(newPlacement)
-  }
   return (
     <div className={styles.containerTop}>
       <ul className={styles.leftSide}>
@@ -42,8 +33,7 @@ const TopBar = () => {
         <li className={styles.inputBlock}>
           <input type="text" placeholder="Search" />
         </li>
-        <LogOutPopper open={open} anchorEl={anchorEl} placement={placement} />
-        <UserCircle handleClick={handleClick} size={45} />
+        <LogOutPopper />
       </ul>
       <AddBoardForm open={openModal} setIsOpen={setOpenModal} />
     </div>

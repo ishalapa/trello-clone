@@ -15,6 +15,7 @@ import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
 import { generalBoardCollection } from 'firebase-client'
+import MembersPopper from 'components/MembersPopper'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
@@ -87,13 +88,14 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     await updateDoc(tasksDoc, {
       tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
     })
-    card.descriptions && card.descriptions.map(async(desc) => {
-      if (desc.id === currentTask.id) {
-        await updateDoc(tasksDoc, {
-          descriptions: arrayRemove({ title: desc.title, id: desc.id }),
-        })
-      } 
-    })
+    card.descriptions &&
+      card.descriptions.map(async (desc) => {
+        if (desc.id === currentTask.id) {
+          await updateDoc(tasksDoc, {
+            descriptions: arrayRemove({ title: desc.title, id: desc.id }),
+          })
+        }
+      })
     closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
   }
 
@@ -211,13 +213,12 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
           </Grid>
           <Grid item md={2}>
             <Stack spacing={1}>
-            <Button onClick={deleteTask} variant="outlined">
-              Add members
-            </Button><Button onClick={deleteTask} variant="outlined" color="error">
-              Delete this task
-            </Button>
+              <MembersPopper  />
+              {/* <Button onClick={handleClick} variant="outlined">Add members</Button> */}
+              <Button onClick={deleteTask} variant="outlined" color="error">
+                Delete this task
+              </Button>
             </Stack>
-            
           </Grid>
         </Grid>
       </Card>
