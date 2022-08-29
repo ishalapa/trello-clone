@@ -68,10 +68,6 @@ const SignUpForm = () => {
         dispatch(setCurrentUserEmail(user.email))
         return user.email
       })
-      .then((userEmail) => {
-        const id = users.find((user) => user.name === userEmail)
-        return id.id
-      })
       .then((id) => {
         navigate('/home')
         dispatch(setCurrentUserId(id))
@@ -85,10 +81,6 @@ const SignUpForm = () => {
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
         return user.email
-      })
-      .then((userEmail) => {
-        const id = users.find((user) => user.name === userEmail)
-        return id.id
       })
       .then((id) => {
         navigate('/home')
