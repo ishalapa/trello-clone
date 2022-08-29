@@ -5,18 +5,15 @@ import { AiFillDelete } from 'react-icons/ai'
 import { collection, deleteDoc, doc } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import { generalBoardCollection } from 'firebase-client'
 
 const DeletePopover = ({ title, card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
-  const userId = useSelector(currentUserStateId)
-  // const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, 'cards')
-  const [anchorEl, setAnchorEl] = useState(null)
 
-  const handleClick = (event) => {
+  const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, 'cards')
+  const [anchorEl, setAnchorEl] = useState(null) // перейменувати 
+
+  const handleClick = (event) => { // перейменувати і сетити тру
     setAnchorEl(event.currentTarget)
   }
 

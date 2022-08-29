@@ -11,18 +11,17 @@ import {
   TextField,
   FormHelperText,
 } from '@mui/material'
-import { addDoc, collection } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
+import { addDoc } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/usersSlice'
+import { currentUserStateEmail, currentUserStateId } from 'store/slices/usersSlice'
 import { useNavigate } from 'react-router-dom'
 import { generalBoardCollection } from 'firebase-client'
 
 
 const AddBoardForm = ({ open, setIsOpen }) => {
 
-  const userId = useSelector(currentUserStateId)
-  // const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
+  const userEmail = useSelector(currentUserStateEmail)
+
   const [dashboardTitle, setDashboardTitle] = useState("")
   const navigate = useNavigate()
   const style = {
@@ -42,7 +41,7 @@ const AddBoardForm = ({ open, setIsOpen }) => {
     addDoc(generalBoardCollection, {
       title: dashboardTitle, 
       timeOfAdd: new Date().getTime(),
-      members: [userId]
+      members: [userEmail]
     })
     setDashboardTitle("")
     setIsOpen(false)

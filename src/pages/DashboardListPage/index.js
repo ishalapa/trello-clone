@@ -15,9 +15,9 @@ import Dashboard from 'components/Dashboard'
 const DashboardListPage = () => {
   const dashboardList = useSelector(dashboardsState)
 
-  const spreadDashboards = [...dashboardList]
+  const copiedDashboards = [...dashboardList]
 
-  const sortedDashboardList = spreadDashboards.sort((a,b) => {
+  const sortedDashboardList = copiedDashboards.sort((a,b) => {
     return new Date(a.timeOfAdd) - new Date(b.timeOfAdd);
   });
 

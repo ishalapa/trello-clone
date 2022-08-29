@@ -14,6 +14,7 @@ import { usersCollection } from 'firebase-client'
 import { currentUserStateId } from 'store/slices/usersSlice'
 import { useDispatch } from 'react-redux'
 import { generalBoardCollection } from 'firebase-client'
+import MembersPopper from 'components/MembersPopper'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -51,7 +52,6 @@ const DashboardPage = () => {
         <Button onClick={() => navigate("/home")} startIcon={<MdOutlineArrowBackIos/>} variant='contained'>
           Back
         </Button>
-        <CustomSelect />
         {!isDashboardTitleEditOpen ? (
           <Button
             onClick={() => setIsDashboardTitleEditOpen(true)}
@@ -71,6 +71,7 @@ const DashboardPage = () => {
           />
           </form>
         )}
+        <MembersPopper  />
       </Stack>
       <Box pt={3}>
         <Stack spacing={2} direction="row">

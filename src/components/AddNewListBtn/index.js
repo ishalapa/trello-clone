@@ -5,8 +5,7 @@ import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { addDoc, collection, query, where } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateEmail, currentUserStateId } from 'store/slices/usersSlice'
+
 import { generalBoardCollection } from 'firebase-client'
 
 const AddNewListBtn = () => {
@@ -14,11 +13,8 @@ const AddNewListBtn = () => {
   const [boardCardText, setBoardCardText] = useState('')
   const [isValid, setIsValid] = useState(true)
 
-  const userId = useSelector(currentUserStateId)
-  const currentUserEmail = useSelector(currentUserStateEmail)
   const dashboardId = useSelector(currentDashboardIdState)
-  // const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const qGeneralBoardCollection = query(generalBoardCollection, where("members", "array-contains", `${userId}`))
+
   const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, 'cards')
 
   const addNewList = async (e) => {

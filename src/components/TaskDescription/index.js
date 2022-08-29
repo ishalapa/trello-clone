@@ -213,7 +213,6 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
           </Grid>
           <Grid item md={2}>
             <Stack spacing={1}>
-              <MembersPopper  />
               {/* <Button onClick={handleClick} variant="outlined">Add members</Button> */}
               <Button onClick={deleteTask} variant="outlined" color="error">
                 Delete this task

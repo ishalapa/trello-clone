@@ -21,12 +21,10 @@ import { generalBoardCollection } from 'firebase-client'
 // TODO change /home/:dashboard to /home/:dashboardName
 
 function App() {
-  const userId = useSelector(currentUserStateId)
   const dashboardId = useSelector(currentDashboardIdState)
 
   const [finalColumn, setFinalColumn] = useState(null)
 
-  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const boardCardColumns = useSelector(boardCardsState)
 
   const reorderColumnList = (sourceColumn, startIndex, endIndex) => {
