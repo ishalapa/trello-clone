@@ -3,15 +3,12 @@ import { useSelector } from 'react-redux'
 
 import { Container, Box, Stack, Button, TextField } from '@mui/material'
 import { useNavigate} from "react-router-dom"
-import CustomSelect from 'components/CustomSelect'
 import { currentDashboardState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
 import BoardCard from 'components/BoardCard'
 import AddNewListBtn from 'components/AddNewListBtn'
 import { boardCardsState } from 'store/slices/dashboardsSlice'
 import {MdOutlineArrowBackIos} from "react-icons/md"
 import { doc, updateDoc } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import { useDispatch } from 'react-redux'
 import { generalBoardCollection } from 'firebase-client'
 import MembersPopper from 'components/MembersPopper'
@@ -22,9 +19,7 @@ const DashboardPage = () => {
 
   const currentDashboard = useSelector(currentDashboardState)
   const cardList = useSelector(boardCardsState)
-  const userId = useSelector(currentUserStateId)
 
-  // const dashboardDoc =  currentDashboard && doc(usersCollection, `${userId}`, "dashboards", currentDashboard.id)
   const dashboardDoc =  currentDashboard && doc(generalBoardCollection, currentDashboard.id)
 
   const [isDashboardTitleEditOpen, setIsDashboardTitleEditOpen] = useState(false)

@@ -4,19 +4,14 @@ import { Button, Grid, IconButton, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setCurrentDashboard } from 'store/slices/dashboardsSlice'
-import { collection, deleteDoc, doc } from 'firebase/firestore'
+import { deleteDoc, doc } from 'firebase/firestore'
 
 import { AiFillDelete } from 'react-icons/ai'
-import { usersCollection } from 'firebase-client'
-import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/usersSlice'
+
 import { generalBoardCollection } from 'firebase-client'
 
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()
-  const userId = useSelector(currentUserStateId)
-
-  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
 
   const openDashboardPage = async (id) => {
     dispatch(setCurrentDashboard({ title: board.title, id: id, members: board.members }))

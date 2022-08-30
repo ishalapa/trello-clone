@@ -22,12 +22,10 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
-import { usersState } from 'store/slices/usersSlice'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
-  const users = useSelector(usersState)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')

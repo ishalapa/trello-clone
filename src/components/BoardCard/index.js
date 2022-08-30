@@ -3,12 +3,10 @@ import React, { useState } from 'react'
 import { CardContent, Typography, Button, Card, TextField, Box, Stack, IconButton, Alert } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
-import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { Droppable } from 'react-beautiful-dnd'
 import Task from 'components/Task'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import TaskDescription from 'components/TaskDescription'
 import { useDispatch } from 'react-redux'
 import { setDescriptionTitle } from 'store/slices/descriptionSlice'
@@ -33,9 +31,6 @@ const BoardCard = ({ card }) => {
   const [cardTitle, setCardTitle] = useState('')
 
   const dashboardId = useSelector(currentDashboardIdState)
-  const userId = useSelector(currentUserStateId)
-
-  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const genNumKey = (key) => {

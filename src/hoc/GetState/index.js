@@ -2,9 +2,9 @@ import { usersCollection } from 'firebase-client'
 import { collection, onSnapshot, query, where } from 'firebase/firestore'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { dashboardsState, setBoardCards } from 'store/slices/dashboardsSlice'
+import { setBoardCards } from 'store/slices/dashboardsSlice'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { currentUserStateEmail, currentUserStateId } from 'store/slices/usersSlice'
+import { currentUserStateEmail } from 'store/slices/usersSlice'
 import { setDashboards } from 'store/slices/dashboardsSlice'
 import { setUsers } from 'store/slices/usersSlice'
 import { generalBoardCollection } from 'firebase-client'
@@ -15,7 +15,7 @@ const GetState = ({ children }) => {
   const userEmail = useSelector(currentUserStateEmail)
 
 
-  const qGeneralBoardCollection = query(generalBoardCollection, where("members", "array-contains", `${userEmail}`))
+  const qGeneralBoardCollection = query(generalBoardCollection, where("members", "array-contains", userEmail))
   const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, "cards")
   
   useEffect(() => {
@@ -28,7 +28,7 @@ const GetState = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    onSnapshot(qGeneralBoardCollection, (snapshot) => {
+    onSnapshot(generalBoardCollection, (snapshot) => {
       const dashboardSnap = snapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id }
       })

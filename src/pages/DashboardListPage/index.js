@@ -10,10 +10,12 @@ import { CgTrello } from 'react-icons/cg'
 import { useSelector } from 'react-redux'
 import { dashboardsState } from 'store/slices/dashboardsSlice'
 import Dashboard from 'components/Dashboard'
+import { currentUserStateEmail } from 'store/slices/usersSlice'
 
 
 const DashboardListPage = () => {
   const dashboardList = useSelector(dashboardsState)
+  const userEmail = useSelector(currentUserStateEmail)
 
   const copiedDashboards = [...dashboardList]
 
@@ -29,7 +31,15 @@ const DashboardListPage = () => {
           <Typography variant="h5">Trello Workspace</Typography>
         </Box>
         <Grid container textAlign="center" rowSpacing={2} columnSpacing={2}>
-          {sortedDashboardList && sortedDashboardList.map((board) => <Dashboard key={board.id} board={board} />)}
+          {/* {sortedDashboardList && sortedDashboardList.map((board) => {
+            if (board.members && board.members.includes(userEmail)) {
+              return <Dashboard key={board.id} board={board} />
+            }
+            console.log(sortedDashboardList) */}
+            {sortedDashboardList && sortedDashboardList.filter(board => board.members.includes(userEmail))
+            .map(board => console.log(board))}
+            
+          {/* })} */}
         </Grid>
       </Box>
     </Container>

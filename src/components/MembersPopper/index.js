@@ -2,30 +2,26 @@ import React, { useState } from 'react'
 import Popover from '@mui/material/Popover'
 import Typography from '@mui/material/Typography'
 
-import { Box, Divider, Stack, TextField, Card, Button, IconButton } from '@mui/material'
+import { Box, Divider, Stack, TextField, Card, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateId, setUsers, usersState } from 'store/slices/usersSlice'
+import { usersState } from 'store/slices/usersSlice'
 
 import {
   currentDashboardState,
   dashboardsState,
-  dashboardState,
   setCurrentDashboard,
 } from 'store/slices/dashboardsSlice'
 import { TiUserDeleteOutline, TiUserAddOutline } from 'react-icons/ti'
-import { arrayRemove, arrayUnion, deleteDoc, doc, query, setDoc, updateDoc, where } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
 import { useDispatch } from 'react-redux'
-import { usersCollection } from 'firebase-client'
 
 const MembersPopper = () => {
   const dispatch = useDispatch()
   const currentDashboard = useSelector(currentDashboardState)
   const userList = useSelector(usersState)
+  const dashboardList = useSelector(dashboardsState)
 
-  const genNumKey = (key) => {
-    return key + new Date().getTime()
-  }
   // const qGeneralBoardCollection = query(generalBoardCollection, where('members', 'array-contains', `${userEmail}`))
   const dashboardDoc = doc(generalBoardCollection, `${currentDashboard.id}`)
   
@@ -49,7 +45,6 @@ const MembersPopper = () => {
     if (currentDashboard.members.includes(user.name)) {
       return
     } else {
-      // await deleteDoc(doc(usersCollection, user.id))
 
       dispatch(setCurrentDashboard({ ...currentDashboard, members: [...currentDashboard.members, user.name] }))
 
@@ -58,7 +53,7 @@ const MembersPopper = () => {
       })
     }
   }
-  console.log(currentDashboard.members)
+  
   const deleteMember = async (member) => {
     await updateDoc(dashboardDoc, {
       members: arrayRemove(member),
@@ -66,10 +61,9 @@ const MembersPopper = () => {
     const filteredMembers = currentDashboard.members.filter(memb => memb !== member)
 
     dispatch(setCurrentDashboard({ ...currentDashboard, members: filteredMembers }))
-    // dispatch(setUsers([...userList, member]))
 
-    // await setDoc(usersCollection, { name: member })
   }
+  console.log(dashboardList)
   return (
     <>
       <Button aria-describedby={id} variant="outlined" onClick={openPopper}>

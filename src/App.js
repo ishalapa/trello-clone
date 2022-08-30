@@ -13,9 +13,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import SignUp from 'pages/SignUp'
 import { useSelector } from 'react-redux'
 import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
 
 // TODO change /home/:dashboard to /home/:dashboardName

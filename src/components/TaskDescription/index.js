@@ -4,10 +4,8 @@ import { Card, Modal, Typography, Grid, Box, TextField, Stack, Button, IconButto
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { currentTaskState, setCurrentTaskTitle } from 'store/slices/tasksSlice'
-import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import Description from 'components/Description'
 import { descriptionState, setDescriptionId } from 'store/slices/descriptionSlice'
 import { useDispatch } from 'react-redux'
@@ -15,13 +13,11 @@ import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
 import { generalBoardCollection } from 'firebase-client'
-import MembersPopper from 'components/MembersPopper'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
-  const userId = useSelector(currentUserStateId)
   const description = useSelector(descriptionState)
 
   const genNumKey = (key) => {
@@ -40,7 +36,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     p: 4,
   }
 
-  // const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
+
   const descriptionDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
   const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
@@ -213,7 +209,6 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
           </Grid>
           <Grid item md={2}>
             <Stack spacing={1}>
-              {/* <Button onClick={handleClick} variant="outlined">Add members</Button> */}
               <Button onClick={deleteTask} variant="outlined" color="error">
                 Delete this task
               </Button>
