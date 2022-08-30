@@ -12,16 +12,15 @@ import { dashboardsState } from 'store/slices/dashboardsSlice'
 import Dashboard from 'components/Dashboard'
 import { currentUserStateEmail } from 'store/slices/usersSlice'
 
-
 const DashboardListPage = () => {
   const dashboardList = useSelector(dashboardsState)
   const userEmail = useSelector(currentUserStateEmail)
 
   const copiedDashboards = [...dashboardList]
 
-  const sortedDashboardList = copiedDashboards.sort((a,b) => {
-    return new Date(a.timeOfAdd) - new Date(b.timeOfAdd);
-  });
+  const sortedDashboardList = copiedDashboards.sort((a, b) => {
+    return new Date(a.timeOfAdd) - new Date(b.timeOfAdd)
+  })
 
   return (
     <Container maxWidth="md">
@@ -31,15 +30,12 @@ const DashboardListPage = () => {
           <Typography variant="h5">Trello Workspace</Typography>
         </Box>
         <Grid container textAlign="center" rowSpacing={2} columnSpacing={2}>
-          {/* {sortedDashboardList && sortedDashboardList.map((board) => {
-            if (board.members && board.members.includes(userEmail)) {
-              return <Dashboard key={board.id} board={board} />
-            }
-            console.log(sortedDashboardList) */}
-            {sortedDashboardList && sortedDashboardList.filter(board => board.members.includes(userEmail))
-            .map(board => console.log(board))}
-            
-          {/* })} */}
+          {sortedDashboardList &&
+            sortedDashboardList.map((board) => {
+              if (board.members && board.members.includes(userEmail)) {
+                return <Dashboard key={board.id} board={board} />
+              }
+            })}
         </Grid>
       </Box>
     </Container>

@@ -60,7 +60,7 @@ const SignUpForm = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const user = result.user
-        addDoc(usersCollection, { name: email })
+        addDoc(usersCollection, { name: user.email })
 
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))

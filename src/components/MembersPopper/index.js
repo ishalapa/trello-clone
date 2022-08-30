@@ -6,12 +6,9 @@ import { Box, Divider, Stack, TextField, Card, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { usersState } from 'store/slices/usersSlice'
 
-import {
-  currentDashboardState,
-  dashboardsState,
-  setCurrentDashboard,
-} from 'store/slices/dashboardsSlice'
+import { currentDashboardState, dashboardsState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
 import { TiUserDeleteOutline, TiUserAddOutline } from 'react-icons/ti'
+import { MdDone } from 'react-icons/md'
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
 import { useDispatch } from 'react-redux'
@@ -24,7 +21,6 @@ const MembersPopper = () => {
 
   // const qGeneralBoardCollection = query(generalBoardCollection, where('members', 'array-contains', `${userEmail}`))
   const dashboardDoc = doc(generalBoardCollection, `${currentDashboard.id}`)
-  
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -45,28 +41,25 @@ const MembersPopper = () => {
     if (currentDashboard.members.includes(user.name)) {
       return
     } else {
-
       dispatch(setCurrentDashboard({ ...currentDashboard, members: [...currentDashboard.members, user.name] }))
-
       await updateDoc(dashboardDoc, {
         members: arrayUnion(user.name),
       })
     }
   }
-  
+
   const deleteMember = async (member) => {
     await updateDoc(dashboardDoc, {
       members: arrayRemove(member),
     })
-    const filteredMembers = currentDashboard.members.filter(memb => memb !== member)
+    const filteredMembers = currentDashboard.members.filter((memb) => memb !== member)
 
     dispatch(setCurrentDashboard({ ...currentDashboard, members: filteredMembers }))
-
   }
-  console.log(dashboardList)
+
   return (
     <>
-      <Button aria-describedby={id} variant="outlined" onClick={openPopper}>
+      <Button aria-describedby={id} variant="contained" onClick={openPopper}>
         Members
       </Button>
       <Popover
@@ -107,23 +100,22 @@ const MembersPopper = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          paddingRight: '2px',
+                          paddingRight: '1px',
                         }}
                       >
                         <Typography color={'black'} p={1} variant="body1">
                           {user.name}
                         </Typography>
-                        <Box
-                          onClick={() => addMember(user)}
-                          height={33}
-                          width={53}
-                          display={'flex'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          borderRadius={1}
-                          sx={{ '&:hover': { backgroundColor: '#e6f0ff', color: 'black', cursor: 'pointer' } }}
-                        >
-                          <TiUserAddOutline size={23} color={'0073e6'} />
+
+                        <Box display={'flex'} justifyContent={'space-between'} alignItems={"center"}>
+                          {currentDashboard.members.includes(user.name) && <MdDone size={23} color={'0073e6'} />}
+                          <Button
+                            onClick={() => addMember(user)}
+                            variant={'text'}
+                            sx={{ '&:hover': { backgroundColor: '#e6f0ff' } }}
+                          >
+                            <TiUserAddOutline size={23} color={'0073e6'} />
+                          </Button>
                         </Box>
                       </Card>
                     ))}
@@ -147,18 +139,13 @@ const MembersPopper = () => {
                         <Typography color={'black'} p={1} variant="body1">
                           {member}
                         </Typography>
-                        <Box
+                        <Button
                           onClick={() => deleteMember(member)}
-                          height={33}
-                          width={53}
-                          display={'flex'}
-                          alignItems={'center'}
-                          justifyContent={'center'}
-                          borderRadius={1}
-                          sx={{ '&:hover': { backgroundColor: '#ffe6e6', color: 'black', cursor: 'pointer' } }}
+                          variant={'text'}
+                          sx={{ '&:hover': { backgroundColor: '#ffe6e6' } }}
                         >
                           <TiUserDeleteOutline size={23} color={'800000'} />
-                        </Box>
+                        </Button>
                       </Card>
                     ))}
                 </Stack>

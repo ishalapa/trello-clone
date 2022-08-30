@@ -15,7 +15,7 @@ const GetState = ({ children }) => {
   const userEmail = useSelector(currentUserStateEmail)
 
 
-  const qGeneralBoardCollection = query(generalBoardCollection, where("members", "array-contains", userEmail))
+  // const qGeneralBoardCollection = query(generalBoardCollection, where("members", "array-contains", userEmail))
   const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, "cards")
   
   useEffect(() => {
