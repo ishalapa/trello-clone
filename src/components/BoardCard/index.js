@@ -19,6 +19,9 @@ const BoardCard = ({ card }) => {
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false)
   const [isValid, setIsValid] = useState(true)
 
+  const [isBoardcardTitleEditOpen, setIsBoardcardTitleEditOpen] = useState(false)
+  const [boardCardTitle, setBoardCardTitle] = useState(card.title ?  card.title : '')
+
   const openDescriptionModal = () => setIsDescriptionModalOpen(true)
 
   const closeDescriptionModal = (setInput, setIsDescOpen) => {
@@ -50,17 +53,42 @@ const BoardCard = ({ card }) => {
       setCardTitle('')
     }
   }
+ 
+  const updateDashboardTitle = async (e) => {
+    e.preventDefault()
 
+    updateDoc(tasksDoc, {
+      title: boardCardTitle,
+    })
+    setIsBoardcardTitleEditOpen(false)
+  }
   return (
     <Droppable droppableId={card.title}>
       {(provided) => (
         <Card ref={provided.innerRef} {...provided.droppableProps} sx={{ width: '290px', backgroundColor: '#f2f2f2' }}>
           <CardContent>
-            <Box display={"flex"} flexDirection={"row"} justifyContent="space-between">
-              <Typography variant="h6" color="#000066">
-                {card.title}
-              </Typography>
-              <DeletePopover title={card.title} card={card}/>
+            <Box display={'flex'} flexDirection={'row'} justifyContent="space-between">
+              {!isBoardcardTitleEditOpen ? (
+                <Typography
+                  onClick={() => setIsBoardcardTitleEditOpen(true)}
+                  variant="h6"
+                  color="#000066"
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {card.title}
+                </Typography>
+              ) : (
+                <form action="" onSubmit={(e) => updateDashboardTitle(e)}>
+                  <TextField
+                    value={boardCardTitle}
+                    onChange={(e) => setBoardCardTitle(e.target.value)}
+                    sx={{ backgroundColor: 'white' }}
+                    size="small"
+                    variant="outlined"
+                  />
+                </form>
+              )}
+              <DeletePopover title={card.title} card={card} />
             </Box>
             <Stack pt={1} spacing={1}>
               {card.tasks &&

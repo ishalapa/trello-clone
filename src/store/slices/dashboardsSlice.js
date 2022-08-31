@@ -6,10 +6,10 @@ const initialState = {
     boardCards: null,
   },
   currentDashboard: {
-    title: "",
+    title: '',
     id: null,
-    members: []
-},
+    members: [],
+  },
 }
 const dashboardsSlice = createSlice({
   name: 'dashboards',
@@ -23,7 +23,7 @@ const dashboardsSlice = createSlice({
     },
     setCurrentDashboard: (state, action) => {
       state.currentDashboard = action.payload
-    }
+    },
   },
 })
 
@@ -33,7 +33,7 @@ export const dashboardsState = (state) => state.dashboards.dashboards.list
 export const dashboardState = (state) => state.dashboards.dashboard
 export const boardCardsState = (state) => state.dashboards.dashboards.boardCards
 
-export const currentDashboardState = state => state.dashboards.currentDashboard
-export const currentDashboardIdState = state => state.dashboards.currentDashboard.id
+export const currentDashboardState = (state) => state.dashboards.currentDashboard
+export const currentDashboardIdState = (state) => state.dashboards.currentDashboard.id
 
 export default dashboardsSlice.reducer
