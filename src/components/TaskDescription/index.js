@@ -45,6 +45,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [descriptionText, setDescriptionText] = useState('')
   const [taskTitle, setTaskTitle] = useState('')
+  
   const [isEditTitleOpen, setIsEditTitleOpen] = useState(false)
 
   const updateDascription = async (e) => {
@@ -137,7 +138,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
                 </Typography>
               </Grid>
             </Grid>
-            <AssignedMembers tasksDoc={tasksDoc} card={card}/>
+            <AssignedMembers tasksDoc={tasksDoc} card={card} />
             <Grid container pt={2}>
               <Grid item md={1}>
                 <MdOutlineDescription size={27} color={'#595959'} />

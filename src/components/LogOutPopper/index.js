@@ -6,7 +6,6 @@ import {
   currentUserStateEmail,
   currentUserStateName,
   setCurrentUserEmail,
-  setCurrentUserId,
   setCurrentUserName,
 } from 'store/slices/usersSlice'
 
@@ -41,7 +40,6 @@ const LogOutPopper = () => {
   const logOut = () => {
     signOut(auth)
       .then(() => {
-        dispatch(setCurrentUserId(null))
         dispatch(setCurrentUserEmail(''))
         dispatch(setCurrentUserName(''))
         setIconName('Name Name')
@@ -51,7 +49,6 @@ const LogOutPopper = () => {
       })
   }
 
-  // const handleClick = () => null
   return (
     <>
       <UserCircle handleClick={handleClick} size={45} />

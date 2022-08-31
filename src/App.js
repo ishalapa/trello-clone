@@ -72,6 +72,13 @@ function App() {
         ? sourceColumn.descriptions.filter((desc) => desc.id === removedTask.id).pop()
         : null
 
+      const removedMembers = sourceColumn.members
+        ? sourceColumn.members.filter((member) => member.id === removedTask.id)
+        : null
+      const restMembers = sourceColumn.members
+        ? sourceColumn.members.filter((member) => member.id !== removedTask.id)
+        : null
+
       const removedComments = sourceColumn.comments
         ? sourceColumn.comments.filter((comment) => comment.id === removedTask.id)
         : null
@@ -81,6 +88,7 @@ function App() {
       await updateDoc(sourceDoc, {
         tasks: sourceColumnTasks,
         comments: restComments,
+        members: restMembers,
       })
 
       let destinationColumnTasks = destinationColumn.tasks ? Array.from(destinationColumn.tasks) : []
@@ -106,6 +114,17 @@ function App() {
         !destinationColumn.comments &&
         (await updateDoc(destinationDoc, {
           comments: removedComments,
+        }))
+
+      removedMembers &&
+        destinationColumn.members &&
+        (await updateDoc(destinationDoc, {
+          members: destinationColumn.members.concat(removedMembers),
+        }))
+      removedMembers &&
+        !destinationColumn.members &&
+        (await updateDoc(destinationDoc, {
+          members: removedMembers,
         }))
     }
   }
