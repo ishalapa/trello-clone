@@ -2,25 +2,27 @@ import React, { useState } from 'react'
 import Popover from '@mui/material/Popover'
 import Typography from '@mui/material/Typography'
 
-import { Box, Divider, Stack, TextField, Card, Button } from '@mui/material'
+import { Box, Divider, Stack, TextField, Card, Button, IconButton } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { usersState } from 'store/slices/usersSlice'
+import { currentUserStateEmail, currentUserStateId, usersState } from 'store/slices/usersSlice'
 
 import { currentDashboardState, dashboardsState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
 import { TiUserDeleteOutline, TiUserAddOutline } from 'react-icons/ti'
 import { MdDone } from 'react-icons/md'
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { AiFillHeart } from 'react-icons/ai'
+import { addDoc, arrayRemove, arrayUnion,  doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
 import { useDispatch } from 'react-redux'
+import CustomSelect from 'components/CustomSelect'
+
 
 const MembersPopper = () => {
   const dispatch = useDispatch()
   const currentDashboard = useSelector(currentDashboardState)
   const userList = useSelector(usersState)
-  const dashboardList = useSelector(dashboardsState)
 
-  // const qGeneralBoardCollection = query(generalBoardCollection, where('members', 'array-contains', `${userEmail}`))
   const dashboardDoc = doc(generalBoardCollection, `${currentDashboard.id}`)
+  // const userDoc = doc(usersCollection, `${userId}`)
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -47,7 +49,6 @@ const MembersPopper = () => {
       })
     }
   }
-
   const deleteMember = async (member) => {
     await updateDoc(dashboardDoc, {
       members: arrayRemove(member),
@@ -57,6 +58,13 @@ const MembersPopper = () => {
     dispatch(setCurrentDashboard({ ...currentDashboard, members: filteredMembers }))
   }
 
+  // const addToFavorite = async (user) => {
+  //   await updateDoc(userDoc, {
+  //     members: arrayUnion(user),
+  //   })
+  //   console.log(user)
+  // }
+  // const currentUser = userList && userList.filter(user => userEmail === user.name)[0]
   return (
     <>
       <Button aria-describedby={id} variant="contained" onClick={openPopper}>
@@ -86,38 +94,44 @@ const MembersPopper = () => {
               {/* <CustomSelect /> */}
             </Stack>
             <Box p={1} width={'100%'}>
-              {/* <UserCircle handleClick={handleClick} size={45} /> */}
               {!isAddMembersOpen ? (
                 <Stack spacing={1}>
                   <Typography width={'100%'} textAlign={'center'} variant="body1">
-                    Choose members to add
+                    Choose members to add to this board
                   </Typography>
                   {userList &&
                     userList.map((user) => (
-                      <Card
-                        key={user.id}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          paddingRight: '1px',
-                        }}
-                      >
-                        <Typography color={'black'} p={1} variant="body1">
-                          {user.name}
-                        </Typography>
+                      <Box key={user.id} display={'flex'} alignItems={'center'}>
+                        {/* {currentUser && currentUser.members.includes(user) ? (
+                          <IconButton onClick={() => addToFavorite(user)}>{<AiFillHeart color='blue'/>}</IconButton>
+                        ) : (
+                          <IconButton onClick={() => addToFavorite(user)}>{<AiFillHeart color='red'/>}</IconButton>
+                        )} */}
+                        <Card
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            paddingRight: '1px',
+                          }}
+                        >
+                          <Typography color={'black'} p={1} variant="body1">
+                            {user.name}
+                          </Typography>
 
-                        <Box display={'flex'} justifyContent={'space-between'} alignItems={"center"}>
-                          {currentDashboard.members.includes(user.name) && <MdDone size={23} color={'0073e6'} />}
-                          <Button
-                            onClick={() => addMember(user)}
-                            variant={'text'}
-                            sx={{ '&:hover': { backgroundColor: '#e6f0ff' } }}
-                          >
-                            <TiUserAddOutline size={23} color={'0073e6'} />
-                          </Button>
-                        </Box>
-                      </Card>
+                          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                            {currentDashboard.members.includes(user.name) && <MdDone size={23} color={'0073e6'} />}
+                            <Button
+                              onClick={() => addMember(user)}
+                              variant={'text'}
+                              sx={{ '&:hover': { backgroundColor: '#e6f0ff' } }}
+                            >
+                              <TiUserAddOutline size={23} color={'0073e6'} />
+                            </Button>
+                          </Box>
+                        </Card>
+                      </Box>
                     ))}
                 </Stack>
               ) : (

@@ -13,6 +13,7 @@ import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
 import { generalBoardCollection } from 'firebase-client'
+import AssignMembersPopper from 'components/AssignMembersPopper'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
@@ -135,6 +136,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
                 </Typography>
               </Grid>
             </Grid>
+            <AssignMembersPopper />
             <Grid container pt={2}>
               <Grid item md={1}>
                 <MdOutlineDescription size={27} color={'#595959'} />
@@ -212,6 +214,9 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
               <Button onClick={deleteTask} variant="outlined" color="error">
                 Delete this task
               </Button>
+              <Stack >
+
+              </Stack>
             </Stack>
           </Grid>
         </Grid>

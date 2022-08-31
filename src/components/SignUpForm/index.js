@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux'
 import {
   currentUserStateEmail,
   setCurrentUserEmail,
-  setCurrentUserId,
   setCurrentUserName,
+  usersState,
 } from 'store/slices/usersSlice'
 import {
   createUserWithEmailAndPassword,
@@ -26,6 +26,7 @@ import { usersCollection } from 'firebase-client'
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
+  const userList = useSelector(usersState)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')
@@ -58,17 +59,15 @@ const SignUpForm = () => {
   const signUpWithPass = (e) => {
     e.preventDefault()
     createUserWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then( (result) => {
         const user = result.user
         addDoc(usersCollection, { name: user.email })
-
+        
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
-        return user.email
       })
-      .then((id) => {
+      .then(() => {
         navigate('/home')
-        dispatch(setCurrentUserId(id))
       })
   }
   const signInwithPass = async (e) => {
@@ -78,11 +77,9 @@ const SignUpForm = () => {
         const user = result.user
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
-        return user.email
       })
-      .then((id) => {
-        navigate('/home')
-        dispatch(setCurrentUserId(id))
+      .then(() => {
+          navigate('/home')
       })
   }
 

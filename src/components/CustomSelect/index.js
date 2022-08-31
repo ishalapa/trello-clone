@@ -20,8 +20,8 @@ const CustomSelect = () => {
         label="members"
         onChange={handleChange}
       >
-        <MenuItem value={10}>Atached</MenuItem>
-        <MenuItem value={20}>Unattached</MenuItem>
+        <MenuItem value={"All"}>All</MenuItem>
+        <MenuItem value={"Favorites"}>Favorited</MenuItem>
       </Select>
     </FormControl>
   </Box>
