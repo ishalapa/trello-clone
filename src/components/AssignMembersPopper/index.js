@@ -2,14 +2,20 @@ import React, {useState} from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { currentDashboardState } from 'store/slices/dashboardsSlice';
+import { currentDashboardIdState, currentDashboardState } from 'store/slices/dashboardsSlice';
 import { useSelector } from 'react-redux';
 import { TiUserDeleteOutline } from 'react-icons/ti';
 import { Card, Divider, Stack, TextField } from '@mui/material';
 import { Box } from '@mui/system';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { generalBoardCollection } from 'firebase-client';
+import { currentTaskState } from 'store/slices/tasksSlice';
 
-const AssignMembersPopper = () => {
+const AssignMembersPopper = ({card}) => {
     const currentDashboard = useSelector(currentDashboardState)
+    const dashboardId = useSelector(currentDashboardIdState)
+    const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
+    const currentTask = useSelector(currentTaskState)
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -24,10 +30,16 @@ const AssignMembersPopper = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
+
+  const addMember = async (member) => {
+    await updateDoc(tasksDoc, {
+      members: arrayUnion({ email: member, id: currentTask.id, key: member }),
+    })
+  }
   return (
     <div>
-      <Button aria-describedby={id} variant="outlined" onClick={handleClick}>
-        +
+      <Button size='small' aria-describedby={id} variant="outlined" onClick={handleClick}>
+        Add
       </Button>
       <Popover
         id={id}
@@ -61,6 +73,7 @@ const AssignMembersPopper = () => {
                   {currentDashboard &&
                     currentDashboard.members.map((member) => (
                       <Card
+                      onClick={() => addMember(member)}
                         key={`${member}${new Date().getTime()}`}
                         sx={{
                           display: 'flex',
