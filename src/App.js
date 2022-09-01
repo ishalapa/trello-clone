@@ -71,6 +71,9 @@ function App() {
       const removedDescription = sourceColumn.descriptions
         ? sourceColumn.descriptions.filter((desc) => desc.id === removedTask.id).pop()
         : null
+        const restDescription = sourceColumn.descriptions
+        ? sourceColumn.descriptions.filter((desc) => desc.id !== removedTask.id)
+        : null
 
       const removedMembers = sourceColumn.members
         ? sourceColumn.members.filter((member) => member.id === removedTask.id)
@@ -89,6 +92,7 @@ function App() {
         tasks: sourceColumnTasks,
         comments: restComments,
         members: restMembers,
+        descriptions: restDescription
       })
 
       let destinationColumnTasks = destinationColumn.tasks ? Array.from(destinationColumn.tasks) : []
@@ -126,8 +130,11 @@ function App() {
         (await updateDoc(destinationDoc, {
           members: removedMembers,
         }))
+        console.log(restDescription)
     }
+    
   }
+  
   const onDragStart = () => {
     setFinalColumn(finalColumn)
   }

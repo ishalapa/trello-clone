@@ -93,6 +93,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
           await updateDoc(tasksDoc, {
             descriptions: arrayRemove({ title: desc.title, id: desc.id }),
           })
+          console.log("descId")
         }
       })
     closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
