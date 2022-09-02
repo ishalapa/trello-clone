@@ -2,23 +2,20 @@ import React, { useState } from 'react'
 
 import { Grid, Card, Box, Typography, TextField, Stack, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import UserCircle from 'ui/UserCircle'
-import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentTaskState } from 'store/slices/tasksSlice'
+import { generalBoardCollection } from 'firebase-client'
 
 const CommentWrite = ({card}) => {
-  const userId = useSelector(currentUserStateId)
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
 
   const [commentText, setCommentText] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const genNumKey = (key) => {
     return key + new Date().getTime()

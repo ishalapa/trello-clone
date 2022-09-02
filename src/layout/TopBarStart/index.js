@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from "assets/scss/TopBarStart.module.scss"
+import styles from 'assets/scss/TopBarStart.module.scss'
 import { Link } from 'react-router-dom'
 import { CgTrello } from 'react-icons/cg'
 import LogBtn from 'ui/LogBtn'
@@ -11,13 +11,19 @@ const TopBarStart = () => {
       <ul className={styles.leftSide}>
         <li>
           <a className={styles.a} href="/">
-            <CgTrello size={30} color="#0073e6"/>
+            <CgTrello size={30} color="#0073e6" />
             <p className={styles.logoText}>Trello</p>
           </a>
         </li>
       </ul>
       <ul className={styles.rightSide}>
-        <li><LogBtn color={"white"} textColor={"black"}>Log In</LogBtn></li>
+        <li>
+          <Link to="/signin">
+            <LogBtn color={'white'} textColor={'black'}>
+              Log In
+            </LogBtn>
+          </Link>
+        </li>
         <li>
           <LogBtn>Get Trello for free</LogBtn>
         </li>

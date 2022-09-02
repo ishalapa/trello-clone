@@ -12,6 +12,6 @@ export const store = configureStore({
         tasks: tasksReducer,
         users: usersReducer,
         description: descriptionReducer,
-        comment: commentReducer
+        comment: commentReducer,
     }
 })

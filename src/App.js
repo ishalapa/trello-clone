@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import GetState from 'hoc/GetState'
 import DashboardListPage from 'pages/DashboardListPage'
 import HomePage from 'pages/HomePage'
@@ -12,19 +13,16 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import SignUp from 'pages/SignUp'
 import { useSelector } from 'react-redux'
 import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { generalBoardCollection } from 'firebase-client'
 
 // TODO change /home/:dashboard to /home/:dashboardName
 
 function App() {
-  const userId = useSelector(currentUserStateId)
   const dashboardId = useSelector(currentDashboardIdState)
 
   const [finalColumn, setFinalColumn] = useState(null)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
   const boardCardColumns = useSelector(boardCardsState)
 
   const reorderColumnList = (sourceColumn, startIndex, endIndex) => {
@@ -55,7 +53,7 @@ function App() {
     const sourceColumn = sourceColumnArr[0]
     const destinationColumn = desctinationColumnArr[0]
 
-    const sourceDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
+    const sourceDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', sourceColumn.id)
     // if user drops within the same column
     if (sourceColumnName === destinationColumnName) {
       const newColumn = reorderColumnList(sourceColumn, source.index, destination.index)
@@ -65,13 +63,23 @@ function App() {
       })
       // if user drops from one column to another
     } else {
-      const destinationDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', destinationColumn.id)
+      const destinationDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', destinationColumn.id)
 
       const sourceColumnTasks = Array.from(sourceColumn.tasks)
       const [removedTask] = sourceColumnTasks.splice(source.index, 1)
 
       const removedDescription = sourceColumn.descriptions
         ? sourceColumn.descriptions.filter((desc) => desc.id === removedTask.id).pop()
+        : null
+        const restDescription = sourceColumn.descriptions
+        ? sourceColumn.descriptions.filter((desc) => desc.id !== removedTask.id)
+        : null
+
+      const removedMembers = sourceColumn.members
+        ? sourceColumn.members.filter((member) => member.id === removedTask.id)
+        : null
+      const restMembers = sourceColumn.members
+        ? sourceColumn.members.filter((member) => member.id !== removedTask.id)
         : null
 
       const removedComments = sourceColumn.comments
@@ -83,6 +91,8 @@ function App() {
       await updateDoc(sourceDoc, {
         tasks: sourceColumnTasks,
         comments: restComments,
+        members: restMembers,
+        descriptions: restDescription
       })
 
       let destinationColumnTasks = destinationColumn.tasks ? Array.from(destinationColumn.tasks) : []
@@ -109,15 +119,28 @@ function App() {
         (await updateDoc(destinationDoc, {
           comments: removedComments,
         }))
-        console.log(destinationColumn.id)
+
+      removedMembers &&
+        destinationColumn.members &&
+        (await updateDoc(destinationDoc, {
+          members: destinationColumn.members.concat(removedMembers),
+        }))
+      removedMembers &&
+        !destinationColumn.members &&
+        (await updateDoc(destinationDoc, {
+          members: removedMembers,
+        }))
+        console.log(restDescription)
     }
+    
   }
+  
   const onDragStart = () => {
     setFinalColumn(finalColumn)
   }
   return (
-    <GetState>
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <GetState>
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="/signup" element={<SignUp />} />
@@ -127,8 +150,8 @@ function App() {
             <Route path={`/home/:dashboardName`} element={<DashboardPage />} />
           </Route>
         </Routes>
-      </DragDropContext>
-    </GetState>
+      </GetState>
+    </DragDropContext>
   )
 }
 

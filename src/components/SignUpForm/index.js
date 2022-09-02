@@ -6,10 +6,9 @@ import { FcGoogle } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
 import {
   currentUserStateEmail,
-  currentUserStateId,
   setCurrentUserEmail,
-  setCurrentUserId,
   setCurrentUserName,
+  usersState,
 } from 'store/slices/usersSlice'
 import {
   createUserWithEmailAndPassword,
@@ -23,14 +22,11 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
-import { usersState } from 'store/slices/usersSlice'
-import { async } from '@firebase/util'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
-  const users = useSelector(usersState)
-  const userId = useSelector(currentUserStateId)
+  const userList = useSelector(usersState)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')
@@ -63,22 +59,15 @@ const SignUpForm = () => {
   const signUpWithPass = (e) => {
     e.preventDefault()
     createUserWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then( (result) => {
         const user = result.user
-        addDoc(usersCollection, { name: email })
-
+        addDoc(usersCollection, { name: user.email })
+        
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
-        return user.email
       })
-      .then((userEmail) => {
-        const id = users.find((user) => user.name === userEmail)
-        console.log(userEmail)
-        return id.id
-      })
-      .then((id) => {
+      .then(() => {
         navigate('/home')
-        dispatch(setCurrentUserId(id))
       })
   }
   const signInwithPass = async (e) => {
@@ -88,15 +77,9 @@ const SignUpForm = () => {
         const user = result.user
         dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
-        return user.email
       })
-      .then((userEmail) => {
-        const id = users.find((user) => user.name === userEmail)
-        return id.id
-      })
-      .then((id) => {
-        navigate('/home')
-        dispatch(setCurrentUserId(id))
+      .then(() => {
+          navigate('/home')
       })
   }
 

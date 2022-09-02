@@ -4,22 +4,22 @@ import { Card, Modal, Typography, Grid, Box, TextField, Stack, Button, IconButto
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { currentTaskState, setCurrentTaskTitle } from 'store/slices/tasksSlice'
-import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import Description from 'components/Description'
 import { descriptionState, setDescriptionId } from 'store/slices/descriptionSlice'
 import { useDispatch } from 'react-redux'
 import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
+import { generalBoardCollection } from 'firebase-client'
+import AssignMembersPopper from 'components/AssignMembersPopper'
+import AssignedMembers from 'components/AssignMembersPopper/AssignedMembers'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
-  const userId = useSelector(currentUserStateId)
   const description = useSelector(descriptionState)
 
   const genNumKey = (key) => {
@@ -38,13 +38,14 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     p: 4,
   }
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const descriptionDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+
+  const descriptionDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [descriptionText, setDescriptionText] = useState('')
   const [taskTitle, setTaskTitle] = useState('')
+  
   const [isEditTitleOpen, setIsEditTitleOpen] = useState(false)
 
   const updateDascription = async (e) => {
@@ -61,14 +62,11 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
   }
 
   const editTaskTitle = async () => {
-    console.log(currentTask.title)
     setIsEditTitleOpen(true)
     setTaskTitle(currentTask.title)
   }
 
   const updateTaskTitle = async () => {
-    console.log(currentTask.title)
-    console.log(currentTask.id)
     await updateDoc(tasksDoc, {
       tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
     })
@@ -82,7 +80,23 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
 
   const openDescription = () => {
     setIsDescriptionOpen(true)
-    setDescriptionText(description.title)
+    setDescriptionText(description && description.title)
+  }
+
+  const deleteTask = async () => {
+    await updateDoc(tasksDoc, {
+      tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
+    })
+    card.descriptions &&
+      card.descriptions.map(async (desc) => {
+        if (desc.id === currentTask.id) {
+          await updateDoc(tasksDoc, {
+            descriptions: arrayRemove({ title: desc.title, id: desc.id }),
+          })
+          console.log("descId")
+        }
+      })
+    closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
   }
 
   return (
@@ -125,6 +139,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
                 </Typography>
               </Grid>
             </Grid>
+            <AssignedMembers tasksDoc={tasksDoc} card={card} />
             <Grid container pt={2}>
               <Grid item md={1}>
                 <MdOutlineDescription size={27} color={'#595959'} />
@@ -198,13 +213,14 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
             </Stack>
           </Grid>
           <Grid item md={2}>
-            <ul>
-              <li>dsa</li>
-              <li>dsa</li>
-              <li>dsad</li>
-              <li>dsad</li>
-              <li>dsad</li>
-            </ul>
+            <Stack spacing={1}>
+              <Button onClick={deleteTask} variant="outlined" color="error">
+                Delete this task
+              </Button>
+              <Stack >
+
+              </Stack>
+            </Stack>
           </Grid>
         </Grid>
       </Card>
