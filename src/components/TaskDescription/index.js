@@ -15,12 +15,14 @@ import Comment from 'components/Comment'
 import { generalBoardCollection } from 'firebase-client'
 import AssignMembersPopper from 'components/AssignMembersPopper'
 import AssignedMembers from 'components/AssignMembersPopper/AssignedMembers'
+import { currentUserStateName } from 'store/slices/usersSlice'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
   const description = useSelector(descriptionState)
+  const userName = useSelector(currentUserStateName)
 
   const genNumKey = (key) => {
     return key + new Date().getTime()
@@ -31,7 +33,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '55%',
+    width: '65%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -93,7 +95,6 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
           await updateDoc(tasksDoc, {
             descriptions: arrayRemove({ title: desc.title, id: desc.id }),
           })
-          console.log("descId")
         }
       })
     closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
@@ -108,7 +109,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     >
       <Card sx={style}>
         <Grid container>
-          <Grid item md={10} width={'95%'}>
+          <Grid item md={10} xs={8} width={'95%'}>
             <Grid container>
               <Grid item md={1}>
                 <MdOutlineSubtitles size={27} color={'#595959'} />
@@ -212,7 +213,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
               </Stack>
             </Stack>
           </Grid>
-          <Grid item md={2}>
+          <Grid item md={2} xs={4}>
             <Stack spacing={1}>
               <Button onClick={deleteTask} variant="outlined" color="error">
                 Delete this task

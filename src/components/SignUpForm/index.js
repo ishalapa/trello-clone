@@ -4,34 +4,36 @@ import { Card, CardContent, Typography, Box, TextField, Button, Alert, Stack } f
 
 import { FcGoogle } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
-import {
-  currentUserStateEmail,
-  setCurrentUserEmail,
-  setCurrentUserName,
-  usersState,
-} from 'store/slices/usersSlice'
+import { currentUserStateEmail, currentUserStateId, setCurrentUserEmail, setCurrentUserId, setCurrentUserName, usersState } from 'store/slices/usersSlice'
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  updateProfile,
 } from 'firebase/auth'
 import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { addDoc } from 'firebase/firestore'
+import { addDoc, doc, updateDoc } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
   const userList = useSelector(usersState)
+  const userId = useSelector(currentUserStateId)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')
+  const [name, setName] = useState({
+    firstName: '',
+    lastName: '',
+  })
   const [showError, setShowError] = useState(false)
   const [isSignUp, setIsSignUp] = useState(true)
+ 
 
   let navigate = useNavigate()
 
@@ -59,28 +61,50 @@ const SignUpForm = () => {
   const signUpWithPass = (e) => {
     e.preventDefault()
     createUserWithEmailAndPassword(auth, email, password)
-      .then( (result) => {
+    
+      .then(async (result) => {
         const user = result.user
-        addDoc(usersCollection, { name: user.email })
+        addDoc(usersCollection, { email: user.email })
         
-        dispatch(setCurrentUserName(user.displayName))
+        updateProfile(auth.currentUser, {
+          displayName: `${name.firstName} ${name.lastName}`
+        })
+
+        dispatch(setCurrentUserName(`${name.firstName} ${name.lastName}`))
         dispatch(setCurrentUserEmail(user.email))
       })
       .then(() => {
         navigate('/home')
       })
   }
+
   const signInwithPass = async (e) => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const user = result.user
-        dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
+        dispatch(setCurrentUserName(user.displayName))
+
+        return email
+      })
+      .then(userEmail => {
+        const currentUser = userList.find(user => user.email === userEmail)
+        dispatch(setCurrentUserId(currentUser.id))
       })
       .then(() => {
-          navigate('/home')
+        navigate('/home')
       })
+
+      
+  }
+
+  const handleChange = (e) => {
+    const value = e.target.value
+    setName({
+      ...name,
+      [e.target.name]: value,
+    })
   }
 
   return (
@@ -92,6 +116,30 @@ const SignUpForm = () => {
           </Typography>
           <form action="" onSubmit={(e) => (isSignUp ? signUpWithPass(e) : signInwithPass(e))}>
             <Stack spacing={1}>
+              {isSignUp && (
+                <Stack direction={'row'} spacing={1}>
+                  <TextField
+                    name={'firstName'}
+                    required
+                    value={name.firstName}
+                    onChange={handleChange}
+                    placeholder="Enter first name"
+                    type="text"
+                    fullWidth
+                    size="small"
+                  />
+                  <TextField
+                    name={'lastName'}
+                    required
+                    value={name.lastName}
+                    onChange={handleChange}
+                    placeholder="Enter last name"
+                    type="text"
+                    fullWidth
+                    size="small"
+                  />
+                </Stack>
+              )}
               <TextField
                 required
                 value={email}
@@ -111,17 +159,6 @@ const SignUpForm = () => {
                 fullWidth
                 size="small"
               />
-              {/* {isSignUp && (
-                <TextField
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Confirm password"
-                  type="password"
-                  fullWidth
-                  size="small"
-                />
-              )} */}
             </Stack>
 
             <Typography pt={1} pb={1} textAlign="center" variant="subtitle2" color="text.secondary">

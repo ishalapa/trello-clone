@@ -19,20 +19,12 @@ const Comment = ({ comment, card }) => {
   const [editInp, setEditInp] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)
 
+  
 
   const updateComment = async () => {
     await updateDoc(commentDoc, {
       comments: arrayRemove({ title: comment.title, id: comment.id, unic: comment.unic }),
     })
-    // await updateDoc(commentDoc, {
-    //   comments: arrayUnion({ title: editInp, id: currentTask.id, unic: genNumKey(currentTask.id) }),
-    // })
-    // await updateDoc(commentDoc, {
-    //   tasks: arrayUnion({ title: editInp, id: currentTask.id }),
-    // })
-    // // dispatch(setCommentTitle(editInp))
-    // setIsEditCommentOpen(false)
-    // setEditInp('')
   }
   const openEditComment = () => {
     setIsEditCommentOpen(true)
@@ -44,12 +36,12 @@ const Comment = ({ comment, card }) => {
       comments: arrayRemove({ title: comment.title, id: currentTask.id, unic: comment.unic }),
     })
   }
-
+  console.log(comment.title)
   const handleClick = () => null
   return (
     <Grid container>
       <Grid item xs={4} md={1} display={'flex'} alignItems={'center'}>
-        <UserCircle handleClick={handleClick} size={35} />
+        <UserCircle iconName={comment.author} handleClick={handleClick} size={35} />
       </Grid>
       <Grid item xs={8} md={11} display={'flex'} alignItems={'center'}>
         {!isEditCommentOpen ? (

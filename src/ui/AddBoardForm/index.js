@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { addDoc } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
-import { currentUserStateEmail, currentUserStateId } from 'store/slices/usersSlice'
+import { currentUserStateEmail } from 'store/slices/usersSlice'
 import { useNavigate } from 'react-router-dom'
 import { generalBoardCollection } from 'firebase-client'
 

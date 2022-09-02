@@ -7,10 +7,12 @@ import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentTaskState } from 'store/slices/tasksSlice'
 import { generalBoardCollection } from 'firebase-client'
+import { currentUserStateName } from 'store/slices/usersSlice'
 
 const CommentWrite = ({card}) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
+  const userName = useSelector(currentUserStateName)
 
   const [commentText, setCommentText] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)
@@ -24,7 +26,7 @@ const CommentWrite = ({card}) => {
   const addComment = async (e) => {
     e.preventDefault()
     await updateDoc(tasksDoc, {
-      comments: arrayUnion({ title: commentText, id: currentTask.id, unic: genNumKey(currentTask.id) }),
+      comments: arrayUnion({ title: commentText, id: currentTask.id, unic: genNumKey(currentTask.id), author: userName }),
     })
     setIsEditCommentOpen(false)
     setCommentText('')
@@ -34,10 +36,10 @@ const CommentWrite = ({card}) => {
 
   return (
     <Grid container>
-      <Grid item xs={4} md={1} display={"flex"} alignItems={"center"}>
-        <UserCircle handleClick={handleClick} size={35}/>
+      <Grid item xs={3} md={1} display={"flex"} alignItems={"center"}>
+        <UserCircle iconName={userName}  handleClick={handleClick} size={35}/>
       </Grid>
-      <Grid item xs={8} md={11} display={'flex'} alignItems={'center'} justifyContent={'end'}>
+      <Grid item xs={9} md={11} display={'flex'} alignItems={'center'} justifyContent={'end'}>
         {!isEditCommentOpen ? (
           <Card
             onClick={() => setIsEditCommentOpen(true)}

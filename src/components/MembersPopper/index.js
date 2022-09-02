@@ -38,12 +38,12 @@ const MembersPopper = () => {
   const [searchTerm, setSearchTerm] = useState('')
 
   const addMember = async (user) => {
-    if (currentDashboard.members.includes(user.name)) {
+    if (currentDashboard.members.includes(user.email)) {
       return
     } else {
-      dispatch(setCurrentDashboard({ ...currentDashboard, members: [...currentDashboard.members, user.name] }))
+      dispatch(setCurrentDashboard({ ...currentDashboard, members: [...currentDashboard.members, user.email] }))
       await updateDoc(dashboardDoc, {
-        members: arrayUnion(user.name),
+        members: arrayUnion(user.email),
       })
     }
   }
@@ -96,7 +96,7 @@ const MembersPopper = () => {
                   </Typography>
                   {userList &&
                     userList
-                      .filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                      .filter((user) => user.email.toLowerCase().includes(searchTerm.toLowerCase()))
                       .map((user) => (
                         <Box key={user.id} display={'flex'} alignItems={'center'}>
                           <Card
@@ -109,11 +109,11 @@ const MembersPopper = () => {
                             }}
                           >
                             <Typography color={'black'} p={1} variant="body1">
-                              {user.name}
+                              {user.email}
                             </Typography>
 
                             <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                              {currentDashboard.members.includes(user.name) && <MdDone size={23} color={'0073e6'} />}
+                              {currentDashboard.members.includes(user.email) && <MdDone size={23} color={'0073e6'} />}
                               <Button
                                 onClick={() => addMember(user)}
                                 variant={'text'}

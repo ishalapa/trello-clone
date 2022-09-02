@@ -130,7 +130,6 @@ function App() {
         (await updateDoc(destinationDoc, {
           members: removedMembers,
         }))
-        console.log(restDescription)
     }
     
   }

@@ -32,14 +32,14 @@ const DashboardListPage = () => {
           <CgTrello size={40} color="#0073e6" />
           <Typography variant="h5">Trello Workspace</Typography>
         </Box>
-        <Grid container textAlign="center" rowSpacing={2} columnSpacing={2}>
+        <Grid container textAlign="center" spacing={2}>
           {sortedDashboardList &&
             sortedDashboardList.map((board) => {
               if (board.members && board.members.includes(userEmail)) {
                 return <Dashboard key={board.id} board={board} />
               }
             })}
-          <Grid item xs={6} md={3}>
+          <Grid item xs={4} md={3}>
             <Box position="relative" onClick={() => setOpenModal(true)}>
               <Button sx={{ width: '200px', height: '200px' }} variant="outlined" size="large">
                 Create board

@@ -6,7 +6,7 @@ import MediaCard from 'ui/MediaCard'
 
 import { Link } from 'react-router-dom'
 
-import { Container, Stack, Box, TextField, Button, Divider } from '@mui/material'
+import { Container, Stack, Box, TextField, Button, Divider, Grid } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { setCurrentUserEmail } from 'store/slices/usersSlice'
 
@@ -51,7 +51,7 @@ const HomePage = () => {
             </Box>
           </Stack>
           <Divider />
-          <Stack pt={5} direction="row" spacing={3} display="flex" justifyContent="center">
+          <Grid container pt={5} spacing={2} justifyContent="center">
             <MediaCard
               img="https://cdn.pixabay.com/photo/2017/01/28/19/06/label-2016248_960_720.png"
               header="See Trello pricing"
@@ -67,7 +67,7 @@ const HomePage = () => {
               header="Discover Trello Enterprise"
               text="The productivity tool teams love, paired with the features and security needed for scale."
             />
-          </Stack>
+          </Grid>
         </Container>
       </div>
     </>
