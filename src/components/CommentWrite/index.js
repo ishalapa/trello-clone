@@ -36,10 +36,10 @@ const CommentWrite = ({card}) => {
 
   return (
     <Grid container>
-      <Grid item xs={3} md={1} display={"flex"} alignItems={"center"}>
+      <Grid item xs={2} md={1} display={"flex"} alignItems={"center"}>
         <UserCircle iconName={userName}  handleClick={handleClick} size={35}/>
       </Grid>
-      <Grid item xs={9} md={11} display={'flex'} alignItems={'center'} justifyContent={'end'}>
+      <Grid item xs={10} md={11} display={'flex'} alignItems={'center'} justifyContent={'end'}>
         {!isEditCommentOpen ? (
           <Card
             onClick={() => setIsEditCommentOpen(true)}

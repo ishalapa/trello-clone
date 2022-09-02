@@ -36,16 +36,18 @@ const Comment = ({ comment, card }) => {
       comments: arrayRemove({ title: comment.title, id: currentTask.id, unic: comment.unic }),
     })
   }
-  console.log(comment.title)
+
   const handleClick = () => null
   return (
     <Grid container>
-      <Grid item xs={4} md={1} display={'flex'} alignItems={'center'}>
-        <UserCircle iconName={comment.author} handleClick={handleClick} size={35} />
+      <Grid item xs={2} md={1} display={'flex'} alignItems={'center'}>
+        <Box sx={{position: "relative", top:"-30px"}}><UserCircle iconName={comment.author} handleClick={handleClick} size={35} /></Box>
+        
       </Grid>
-      <Grid item xs={8} md={11} display={'flex'} alignItems={'center'}>
+      <Grid item xs={10} md={11} display={'flex'} alignItems={'center'}>
         {!isEditCommentOpen ? (
           <Box display={'flex'} flexDirection={'column'} width="100%">
+            <Typography fontWeight={600} variant='body1'>{comment.author}</Typography>
             <Card sx={{ height: '40px', width: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <Typography p={2}>{comment.title}</Typography>
             </Card>

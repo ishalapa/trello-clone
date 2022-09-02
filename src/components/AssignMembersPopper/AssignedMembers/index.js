@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-import { Button, Card, Grid, Typography } from '@mui/material'
+import { Button, Grid, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { currentTaskState } from 'store/slices/tasksSlice'
 import { Box } from '@mui/system'

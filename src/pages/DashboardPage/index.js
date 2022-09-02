@@ -42,7 +42,7 @@ const DashboardPage = () => {
   });
 
   return (
-    <Box p={1} pl={2} pr={2}>
+    <Box sx={{overflow: "auto"}} p={1} pl={2} pr={2}>
       <Stack direction="row" spacing={2} pt={2}>
         <Button onClick={() => navigate("/home")} startIcon={<MdOutlineArrowBackIos/>} variant='contained'>
           Back

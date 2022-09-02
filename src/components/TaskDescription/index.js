@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Card, Modal, Typography, Grid, Box, TextField, Stack, Button, IconButton } from '@mui/material'
+import { Modal, Typography, Grid, Box, TextField, Stack, Button, IconButton } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { currentTaskState, setCurrentTaskTitle } from 'store/slices/tasksSlice'
@@ -13,16 +13,14 @@ import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
 import { generalBoardCollection } from 'firebase-client'
-import AssignMembersPopper from 'components/AssignMembersPopper'
 import AssignedMembers from 'components/AssignMembersPopper/AssignedMembers'
-import { currentUserStateName } from 'store/slices/usersSlice'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
   const description = useSelector(descriptionState)
-  const userName = useSelector(currentUserStateName)
+
 
   const genNumKey = (key) => {
     return key + new Date().getTime()
@@ -33,11 +31,12 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '65%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    maxHeight: "calc(100vh - 150px)",
+    overflow: "auto"
   }
 
 
@@ -107,9 +106,8 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Card sx={style}>
-        <Grid container>
-          <Grid item md={10} xs={8} width={'95%'}>
+        <Grid md={7} xs={9} sx={style} container>
+          <Grid item md={10} xs={10} width={'95%'}>
             <Grid container>
               <Grid item md={1}>
                 <MdOutlineSubtitles size={27} color={'#595959'} />
@@ -213,18 +211,12 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
               </Stack>
             </Stack>
           </Grid>
-          <Grid item md={2} xs={4}>
-            <Stack spacing={1}>
+          <Grid item md={2} xs={2}>
               <Button onClick={deleteTask} variant="outlined" color="error">
                 Delete this task
               </Button>
-              <Stack >
-
-              </Stack>
-            </Stack>
           </Grid>
         </Grid>
-      </Card>
     </Modal>
   )
 }
