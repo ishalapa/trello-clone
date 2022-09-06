@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux'
 import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
+import NotFound from 'pages/NotFaund'
 
 // TODO change /home/:dashboard to /home/:dashboardName
 
@@ -148,6 +149,7 @@ function App() {
             <Route path="/home" element={<DashboardListPage />} />
             <Route path={`/home/:dashboardName`} element={<DashboardPage />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </GetState>
     </DragDropContext>

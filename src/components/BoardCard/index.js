@@ -65,7 +65,7 @@ const BoardCard = ({ card }) => {
   return (
     <Droppable droppableId={card.title}>
       {(provided) => (
-        <Card ref={provided.innerRef} {...provided.droppableProps} sx={{ width: '290px', backgroundColor: '#f2f2f2' }}>
+        <Card ref={provided.innerRef} {...provided.droppableProps} sx={{ width: '290px', backgroundColor: '#f0f0f5' }}>
           <CardContent>
             <Box display={'flex'} flexDirection={'row'} justifyContent="space-between">
               {!isBoardcardTitleEditOpen ? (

@@ -6,6 +6,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { useSelector } from 'react-redux'
 import {
   currentUserStateEmail,
+  currentUserStateId,
   setCurrentUserEmail,
   setCurrentUserId,
   setCurrentUserName,
@@ -22,13 +23,14 @@ import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { addDoc } from 'firebase/firestore'
+import { addDoc, getDocs, query, where } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
   const userList = useSelector(usersState)
+  const userID = useSelector(currentUserStateId)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')
@@ -68,12 +70,13 @@ const SignUpForm = () => {
         alert(error.code)
       })
   }
+
   const signUpWithPass = (e) => {
     e.preventDefault()
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (result) => {
         const user = result.user
-        addDoc(usersCollection, { email: user.email })
+        addDoc(usersCollection, { email: user.email, id: user.uid })
 
         updateProfile(auth.currentUser, {
           displayName: `${name.firstName} ${name.lastName}`,
@@ -81,8 +84,13 @@ const SignUpForm = () => {
 
         dispatch(setCurrentUserName(`${name.firstName} ${name.lastName}`))
         dispatch(setCurrentUserEmail(user.email))
+
+        const q = query(usersCollection, where("id", "==", user.uid));
+        const doc = await getDocs(q);
+        return doc
       })
-      .then(() => {
+      .then((doc) => {
+        dispatch(setCurrentUserId(doc.docs[0].id))
         navigate('/home')
       })
       .catch((error) => {
@@ -100,18 +108,18 @@ const SignUpForm = () => {
   const signInwithPass = async (e) => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then(async(result) => {
         const user = result.user
         dispatch(setCurrentUserEmail(user.email))
         dispatch(setCurrentUserName(user.displayName))
 
-        return email
+        const q = query(usersCollection, where("id", "==", user.uid));
+        const doc = await getDocs(q);
+        
+        return doc
       })
-      .then((userEmail) => {
-        const currentUser = userList.find((user) => user.email === userEmail)
-        dispatch(setCurrentUserId(currentUser.id))
-      })
-      .then(() => {
+      .then((doc) => {
+        dispatch(setCurrentUserId(doc.docs[0].id))
         navigate('/home')
       })
       .catch((error) => {

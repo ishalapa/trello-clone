@@ -13,6 +13,7 @@ import { generalBoardCollection } from 'firebase-client'
 const Dashboard = ({ board }) => {
   const dispatch = useDispatch()
 
+
   const openDashboardPage = async (id) => {
     dispatch(setCurrentDashboard({ title: board.title, id: id, members: board.members }))
   }

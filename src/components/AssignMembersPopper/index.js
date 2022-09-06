@@ -44,7 +44,7 @@ const AssignMembersPopper = ({ card }) => {
 
   return (
     <div>
-      <Button size="small" aria-describedby={id} variant="outlined" onClick={handleClick}>
+      <Button sx={{backgroundColor: "#fff"}} size="small" aria-describedby={id} variant="outlined" onClick={handleClick}>
         Add
       </Button>
       <Popover
@@ -62,19 +62,14 @@ const AssignMembersPopper = ({ card }) => {
             Members
           </Typography>
           <Divider />
-          <Stack display={'flex'} alignItems={'center'} spacing={1}>
-            <Stack pt={1} direction={'row'} spacing={1}>
+          <Stack display={'flex'} alignItems={'center'} spacing={1} pt={1}>
               <TextField
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search members"
                 size="small"
+                sx={{width: "90%"}}
               />
-              <Button size="small" variant="contained">
-                Board members
-              </Button>
-              {/* <CustomSelect /> */}
-            </Stack>
             <Box p={1} width={'100%'}>
               <Stack spacing={1}>
                 <Typography width={'100%'} textAlign={'center'} variant="subtitle1">

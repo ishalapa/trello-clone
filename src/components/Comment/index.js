@@ -29,6 +29,7 @@ const Comment = ({ comment, card }) => {
         timeOfAdd: comment.timeOfAdd,
         author: comment.author,
         time: comment.time,
+        edited: comment.edited
       }),
     })
     await updateDoc(commentDoc, {
@@ -38,6 +39,7 @@ const Comment = ({ comment, card }) => {
         timeOfAdd: comment.timeOfAdd,
         author: userName,
         time: comment.time,
+        edited: true
       }),
     })
   }
@@ -54,6 +56,7 @@ const Comment = ({ comment, card }) => {
         timeOfAdd: comment.timeOfAdd,
         author: comment.author,
         time: comment.time,
+        edited: comment.edited
       }),
     })
   }
@@ -75,9 +78,10 @@ const Comment = ({ comment, card }) => {
               </Typography>
               <Typography fontWeight={300} variant="subtitle2" color={'gray'}>
                 {comment.time}
+                {comment.edited && " (edited)"}
               </Typography>
             </Stack>
-            <Card sx={{ height: '40px', width: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <Card sx={{ minHeight: '35px', width: '100%', display: 'flex', alignItems: 'center'}}>
               <Typography p={2}>{comment.title}</Typography>
             </Card>
             <Stack pt={1} direction="row" spacing={2}>

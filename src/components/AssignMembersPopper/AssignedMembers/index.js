@@ -34,6 +34,7 @@ const AssignedMembers = ({ card, tasksDoc }) => {
                   return (
                     <Grid key={member.key} item>
                       <Button
+                      sx={{backgroundColor: "#fff"}}
                       endIcon={<AiFillDelete onClick={() => deleteMember(member)} color = {"800000"} />}
                       variant='outlined'
                       size='small'

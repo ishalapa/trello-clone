@@ -38,6 +38,7 @@ const CommentWrite = ({ card }) => {
         timeOfAdd: new Date().getTime(),
         author: userName,
         time: `${date} at ${time}`,
+        edited: false
       }),
     })
     setIsEditCommentOpen(false)

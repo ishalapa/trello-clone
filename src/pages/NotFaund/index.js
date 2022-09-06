@@ -1,12 +1,11 @@
+import { Box } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { currentUserStateEmail } from 'store/slices/usersSlice'
 
 const NotFound = () => {
-    const userEmail = useSelector(currentUserStateEmail)
-
   return (
-    <div>NotFound</div>
+    <Box height={"100vh"} display={'flex'} justifyContent={'center'} alingItems={'cneter'} fontSize={24}>
+      <h1>Page doesn't exist</h1>
+    </Box>
   )
 }
 
