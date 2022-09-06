@@ -44,7 +44,7 @@ const LogOutPopper = () => {
 
   return (
     <>
-      <UserCircle iconName={userName} handleClick={handleClick} size={45} />
+      <UserCircle authorName={userName} handleClick={handleClick} size={45} />
       <Popper
         sx={{ paddingTop: '10px', width: 300, zIndex: '100' }}
         open={open}
@@ -60,7 +60,7 @@ const LogOutPopper = () => {
               </Typography>
               <Divider />
               <Box p={1} display="flex" justifyContent="space-between">
-                <UserCircle iconName={userName} handleClick={handleClick} size={45} />
+                <UserCircle authorName={userName} handleClick={handleClick} size={45} />
                 <Box width="75%" display="flex" flexDirection="column" justifyContent="center">
                   <Typography variant="h6">{userName}</Typography>
                   <Typography variant="body2">{userEmail}</Typography>

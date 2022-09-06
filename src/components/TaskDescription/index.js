@@ -99,6 +99,15 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
   }
 
+  const copiedCommentList = card.comments && [...card.comments]
+
+  const sortedCommentList =
+  copiedCommentList &&
+    currentTask.title &&
+    copiedCommentList.sort((a, b) => {
+      return new Date(a.timeOfAdd) - new Date(b.timeOfAdd)
+    })
+ 
   return (
     <Modal
       open={isDescriptionModalOpen}
@@ -106,7 +115,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-        <Grid md={7} xs={9} sx={style} container>
+        <Grid item md={7} xs={9} sx={style} container>
           <Grid item md={10} xs={10} width={'95%'}>
             <Grid container>
               <Grid item md={1}>
@@ -201,9 +210,8 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
             <Stack spacing={2}>
               <CommentWrite card={card} />
               <Stack spacing={2}>
-                {card.comments &&
-                  currentTask.title &&
-                  card.comments.map((comment, index) => {
+                {sortedCommentList &&
+                sortedCommentList.map((comment, index) => {
                     if (comment.id === currentTask.id) {
                       return <Comment card={card} key={genNumKey(index)} comment={comment} />
                     }

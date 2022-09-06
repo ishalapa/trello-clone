@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { currentDashboardIdState, currentDashboardState } from 'store/slices/dashboardsSlice'
 import { useSelector } from 'react-redux'
-import { TiUserAddOutline, TiUserDeleteOutline } from 'react-icons/ti'
+import { TiUserAddOutline } from 'react-icons/ti'
 import { Card, Divider, Stack, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
@@ -37,6 +37,11 @@ const AssignMembersPopper = ({ card }) => {
       members: arrayUnion({ email: member, id: currentTask.id, key: member }),
     })
   }
+
+  const searchedMemberList =
+    currentDashboard &&
+    currentDashboard.members.filter((member) => member.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <div>
       <Button size="small" aria-describedby={id} variant="outlined" onClick={handleClick}>
@@ -75,28 +80,26 @@ const AssignMembersPopper = ({ card }) => {
                 <Typography width={'100%'} textAlign={'center'} variant="subtitle1">
                   Board members
                 </Typography>
-                {currentDashboard &&
-                  currentDashboard.members
-                    .filter((member) => member.toLowerCase().includes(searchTerm.toLowerCase()))
-                    .map((member) => (
-                      <Card
-                        onClick={() => addMember(member)}
-                        key={`${member}${new Date().getTime()}`}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          paddingRight: '2px',
-                        }}
-                      >
-                        <Typography color={'black'} p={1} variant="body1">
-                          {member}
-                        </Typography>
-                        <Button variant={'text'} sx={{ '&:hover': { backgroundColor: '#e6f0ff' } }}>
-                          <TiUserAddOutline size={23} color={'0073e6'} />
-                        </Button>
-                      </Card>
-                    ))}
+                {searchedMemberList &&
+                  searchedMemberList.map((member) => (
+                    <Card
+                      onClick={() => addMember(member)}
+                      key={`${member}${new Date().getTime()}`}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        paddingRight: '2px',
+                      }}
+                    >
+                      <Typography color={'black'} p={1} variant="body1">
+                        {member}
+                      </Typography>
+                      <Button variant={'text'} sx={{ '&:hover': { backgroundColor: '#e6f0ff' } }}>
+                        <TiUserAddOutline size={23} color={'0073e6'} />
+                      </Button>
+                    </Card>
+                  ))}
               </Stack>
             </Box>
           </Stack>

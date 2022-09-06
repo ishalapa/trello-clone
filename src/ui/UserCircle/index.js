@@ -1,8 +1,18 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 import { Typography, Box } from '@mui/material';
 
-const UserCircle = ({handleClick, size, iconName}) => {
+const UserCircle = ({handleClick, size, authorName}) => {
+
+  const [userAvatarInitials, setUserAvatarInitials] = useState("")
+
+  const createDefaultUserAvatar = () => {
+    setUserAvatarInitials(authorName.split(' ')[0].slice(0, 1) + authorName.split(' ')[1].slice(0, 1))
+ }
+
+ useEffect(() => {
+  authorName && createDefaultUserAvatar()
+ },[])
 
   return (
     <Box onClick={handleClick('bottom-start')} variant="contained">
@@ -16,7 +26,7 @@ const UserCircle = ({handleClick, size, iconName}) => {
             borderRadius="50%"
           >
             <Typography color={'white'} fontSize={14} textAlign="center" variant="subtitle2" sx={{ p: 1 }}>
-              {iconName ? iconName.split(' ')[0].slice(0, 1) + iconName.split(' ')[1].slice(0, 1) : "User"}
+              {userAvatarInitials}
             </Typography>
           </Box>
         </Box>

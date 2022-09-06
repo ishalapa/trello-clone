@@ -38,7 +38,7 @@ const HomePage = () => {
                 <TextField
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  sx={{ width: '400px', backgroundColor: 'white' }}
+                  sx={{ width: '50%', backgroundColor: 'white' }}
                   id="demo-helper-text-misaligned"
                   label="Email"
                 />
