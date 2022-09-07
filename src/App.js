@@ -16,6 +16,7 @@ import { boardCardsState, currentDashboardIdState } from 'store/slices/dashboard
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
 import NotFound from 'pages/NotFaund'
+import GeneralContext, { GeneralContextProvider } from 'context/GeneralContext'
 
 // TODO change /home/:dashboard to /home/:dashboardName
 
@@ -138,7 +139,7 @@ function App() {
   const onDragStart = () => {
     setFinalColumn(finalColumn)
   }
-  
+
   console.log("rerender App")
   return (
     <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
