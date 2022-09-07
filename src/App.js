@@ -138,6 +138,8 @@ function App() {
   const onDragStart = () => {
     setFinalColumn(finalColumn)
   }
+  
+  console.log("rerender App")
   return (
     <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <GetState>

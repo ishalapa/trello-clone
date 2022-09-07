@@ -4,20 +4,17 @@ import Typography from '@mui/material/Typography'
 
 import { Box, Divider, Stack, TextField, Card, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { usersState } from 'store/slices/usersSlice'
 
 import { currentDashboardState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
-import { TiUserDeleteOutline, TiUserAddOutline } from 'react-icons/ti'
-import { MdDone } from 'react-icons/md'
+import { TiUserDeleteOutline} from 'react-icons/ti'
 
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, doc, updateDoc } from 'firebase/firestore'
 import { generalBoardCollection } from 'firebase-client'
 import { useDispatch } from 'react-redux'
 
 const MembersPopper = () => {
   const dispatch = useDispatch()
   const currentDashboard = useSelector(currentDashboardState)
-  const userList = useSelector(usersState)
 
   const dashboardDoc = doc(generalBoardCollection, `${currentDashboard.id}`)
 
@@ -34,19 +31,8 @@ const MembersPopper = () => {
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
   //
-  const [isAddMembersOpen, setIsAddMembersOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTermin, setSearchTermin] = useState('')
 
-  const addMember = async (user) => {
-    if (currentDashboard.members.includes(user.email)) {
-      return
-    } else {
-      dispatch(setCurrentDashboard({ ...currentDashboard, members: [...currentDashboard.members, user.email] }))
-      await updateDoc(dashboardDoc, {
-        members: arrayUnion(user.email),
-      })
-    }
-  }
   const deleteMember = async (member) => {
     await updateDoc(dashboardDoc, {
       members: arrayRemove(member),
@@ -76,88 +62,44 @@ const MembersPopper = () => {
             Members
           </Typography>
           <Divider />
-          <Stack display={'flex'} alignItems={'center'} spacing={1}>
-            <Stack pt={1} direction={'row'} spacing={1}>
-              <TextField
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search members"
-                size="small"
-              />
-              <Button onClick={() => setIsAddMembersOpen(!isAddMembersOpen)} size="small" variant="contained">
-                {isAddMembersOpen ? 'Add memmbers' : 'Board Members'}
-              </Button>
-            </Stack>
+          <Stack display={'flex'} alignItems={'center'} justifyContent={'center'} spacing={1} pt={1}>
+            <TextField
+              value={searchTermin}
+              onChange={(e) => setSearchTermin(e.target.value)}
+              placeholder="Search members"
+              size="small"
+              sx={{ width: '90%' }}
+            />
             <Box p={1} width={'100%'}>
-              {!isAddMembersOpen ? (
-                <Stack spacing={1}>
-                  <Typography width={'100%'} textAlign={'center'} variant="body1">
-                    Choose members to add to this board
-                  </Typography>
-                  {userList &&
-                    userList
-                      .filter((user) => user.email.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((user) => (
-                        <Box key={user.id} display={'flex'} alignItems={'center'}>
-                          <Card
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              width: '100%',
-                              paddingRight: '1px',
-                            }}
-                          >
-                            <Typography color={'black'} p={1} variant="body1">
-                              {user.email}
-                            </Typography>
-
-                            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                              {currentDashboard.members.includes(user.email) && <MdDone size={23} color={'0073e6'} />}
-                              <Button
-                                onClick={() => addMember(user)}
-                                variant={'text'}
-                                sx={{ '&:hover': { backgroundColor: '#e6f0ff' } }}
-                              >
-                                <TiUserAddOutline size={23} color={'0073e6'} />
-                              </Button>
-                            </Box>
-                          </Card>
-                        </Box>
-                      ))}
-                </Stack>
-              ) : (
-                <Stack spacing={1}>
-                  <Typography width={'100%'} textAlign={'center'} variant="subtitle1">
-                    Board members
-                  </Typography>
-                  {currentDashboard &&
-                    currentDashboard.members
-                      .filter((member) => member.toLowerCase().includes(searchTerm.toLowerCase()))
-                      .map((member) => (
-                        <Card
-                          key={`${member}${new Date().getTime()}`}
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            paddingRight: '2px',
-                          }}
-                        >
-                          <Typography color={'black'} p={1} variant="body1">
-                            {member}
-                          </Typography>
-                          <Button
-                            onClick={() => deleteMember(member)}
-                            variant={'text'}
-                            sx={{ '&:hover': { backgroundColor: '#ffe6e6' } }}
-                          >
-                            <TiUserDeleteOutline size={23} color={'800000'} />
-                          </Button>
-                        </Card>
-                      ))}
-                </Stack>
-              )}
+              <Stack spacing={1}>
+                <Typography width={'100%'} textAlign={'center'} variant="subtitle1">
+                  Board members
+                </Typography>
+                {currentDashboard.members
+                  .filter((member) => member.toLowerCase().includes(searchTermin.toLowerCase()))
+                  .map((member) => (
+                    <Card
+                      key={`${member}${new Date().getTime()}`}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        paddingRight: '2px',
+                      }}
+                    >
+                      <Typography color={'black'} p={1} variant="body1">
+                        {member}
+                      </Typography>
+                      <Button
+                        onClick={() => deleteMember(member)}
+                        variant={'text'}
+                        sx={{ '&:hover': { backgroundColor: '#ffe6e6' } }}
+                      >
+                        <TiUserDeleteOutline size={23} color={'800000'} />
+                      </Button>
+                    </Card>
+                  ))}
+              </Stack>
             </Box>
           </Stack>
         </Box>

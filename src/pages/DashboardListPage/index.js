@@ -24,7 +24,6 @@ const DashboardListPage = () => {
   })
 
   const [openModal, setOpenModal] = useState(false)
-
   return (
     <Container maxWidth="md">
       <Box pt="30px">

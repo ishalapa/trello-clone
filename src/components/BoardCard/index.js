@@ -62,6 +62,7 @@ const BoardCard = ({ card }) => {
     })
     setIsBoardcardTitleEditOpen(false)
   }
+  console.log("rerender board card")
   return (
     <Droppable droppableId={card.title}>
       {(provided) => (

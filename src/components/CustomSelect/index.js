@@ -1,13 +1,13 @@
-import React, {useState} from 'react'
+import React from 'react'
 
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 
-const CustomSelect = () => {
-    const [members, setMembers] = useState('');
+const CustomSelect = ({setMembers, members}) => {
 
   const handleChange = (event) => {
     setMembers(event.target.value);
   };
+
   return (
     <Box sx={{ minWidth: 120 }}>
     <FormControl fullWidth>
@@ -21,7 +21,7 @@ const CustomSelect = () => {
         onChange={handleChange}
       >
         <MenuItem value={"All"}>All</MenuItem>
-        <MenuItem value={"Favorites"}>Favorited</MenuItem>
+        <MenuItem value={"Favorites"}>Favorites</MenuItem>
       </Select>
     </FormControl>
   </Box>

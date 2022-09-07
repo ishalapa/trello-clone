@@ -12,6 +12,7 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { useDispatch } from 'react-redux'
 import { generalBoardCollection } from 'firebase-client'
 import MembersPopper from 'components/MembersPopper'
+import AddMemberPopper from 'components/AddMemberPopper'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -67,6 +68,7 @@ const DashboardPage = () => {
           </form>
         )}
         <MembersPopper  />
+        <AddMemberPopper/>
       </Stack>
       <Box pt={3}>
         <Stack spacing={2} direction="row">

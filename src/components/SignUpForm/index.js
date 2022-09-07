@@ -29,8 +29,6 @@ import { usersCollection } from 'firebase-client'
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
-  const userList = useSelector(usersState)
-  const userID = useSelector(currentUserStateId)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')

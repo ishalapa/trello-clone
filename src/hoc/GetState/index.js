@@ -27,14 +27,14 @@ const GetState = ({ children }) => {
     })
   }, [])
 
-  useEffect(() => {
-    onSnapshot(usersCollection, (snapshot) => {
-      const dashboardSnap = snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id }
-      })
-      dispatch(setDashboards(dashboardSnap))
-    })
-  }, [userEmail])
+  // useEffect(() => {
+  //   onSnapshot(usersCollection, (snapshot) => {
+  //     const dashboardSnap = snapshot.docs.map((doc) => {
+  //       return { ...doc.data(), id: doc.id }
+  //     })
+  //     dispatch(setDashboards(dashboardSnap))
+  //   })
+  // }, [userEmail])
   
   useEffect(() => {
     onSnapshot(generalBoardCollection, (snapshot) => {
