@@ -7,6 +7,7 @@ import { Box, Typography } from '@mui/material'
 import { CgTrello } from 'react-icons/cg'
 
 const SignUp = () => {
+  console.log("sign up")
   return (
     <div className={styles.main}>
       <Box width="100%" display="flex" flexDirection="column" alignItems="center">

@@ -10,31 +10,35 @@ import {
   setCurrentUserEmail,
   setCurrentUserId,
   setCurrentUserName,
+  usersState,
 } from 'store/slices/usersSlice'
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  updateProfile,
 } from 'firebase/auth'
 import { auth } from 'firebase-client'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { addDoc } from 'firebase/firestore'
+import { addDoc, getDocs, query, where } from 'firebase/firestore'
 import { usersCollection } from 'firebase-client'
-import { usersState } from 'store/slices/usersSlice'
-import { async } from '@firebase/util'
 
 const SignUpForm = () => {
   const dispatch = useDispatch()
   const currentEmail = useSelector(currentUserStateEmail)
-  const users = useSelector(usersState)
-  const userId = useSelector(currentUserStateId)
 
   const [email, setEmail] = useState(currentEmail)
   const [password, setPassword] = useState('')
-  const [showError, setShowError] = useState(false)
+  const [name, setName] = useState({
+    firstName: '',
+    lastName: '',
+  })
+
+  const [emailErrorMessage, setEmailErrorMessage] = useState('')
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
   const [isSignUp, setIsSignUp] = useState(true)
 
   let navigate = useNavigate()
@@ -43,8 +47,10 @@ const SignUpForm = () => {
 
   const handleSubmit = (e) => {
     if (!email.match(regex)) {
-      return setShowError(true)
-    } else setShowError(false)
+      return emailErrorMessage
+    } else {
+      isSignUp ? signUpWithPass(e) : signInwithPass(e)
+    }
   }
   const signInWithGoogle = () => {
     let googleProvider = new GoogleAuthProvider()
@@ -58,46 +64,84 @@ const SignUpForm = () => {
       .then(() => {
         navigate('/home')
       })
-      .catch((error) => {})
+      .catch((error) => {
+        alert(error.code)
+      })
   }
+
   const signUpWithPass = (e) => {
     e.preventDefault()
     createUserWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user
-        addDoc(usersCollection, { name: email })
+        addDoc(usersCollection, { email: user.email, id: user.uid, favorites: []})
 
-        dispatch(setCurrentUserName(user.displayName))
+        updateProfile(auth.currentUser, {
+          displayName: `${name.firstName} ${name.lastName}`,
+        })
+
+        dispatch(setCurrentUserName(`${name.firstName} ${name.lastName}`))
         dispatch(setCurrentUserEmail(user.email))
-        return user.email
+
+        const q = query(usersCollection, where("id", "==", user.uid));
+        const doc = await getDocs(q);
+        return doc
       })
-      .then((userEmail) => {
-        const id = users.find((user) => user.name === userEmail)
-        console.log(userEmail)
-        return id.id
-      })
-      .then((id) => {
+      .then((doc) => {
+        dispatch(setCurrentUserId(doc.docs[0].id))
         navigate('/home')
-        dispatch(setCurrentUserId(id))
+      })
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            setEmailErrorMessage(error.code)
+            break
+
+          default:
+            console.log(error.code)
+        }
       })
   }
+
   const signInwithPass = async (e) => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
-      .then((result) => {
+      .then(async(result) => {
         const user = result.user
-        dispatch(setCurrentUserName(user.displayName))
         dispatch(setCurrentUserEmail(user.email))
-        return user.email
+        dispatch(setCurrentUserName(user.displayName))
+
+        const q = query(usersCollection, where("id", "==", user.uid));
+        const doc = await getDocs(q);
+        
+        return doc
       })
-      .then((userEmail) => {
-        const id = users.find((user) => user.name === userEmail)
-        return id.id
-      })
-      .then((id) => {
+      .then((doc) => {
+        dispatch(setCurrentUserId(doc.docs[0].id))
         navigate('/home')
-        dispatch(setCurrentUserId(id))
       })
+      .catch((error) => {
+        setEmailErrorMessage('')
+        setPasswordErrorMessage('')
+        switch (error.code) {
+          case 'auth/user-not-found':
+            setEmailErrorMessage(error.code)
+            break
+          case 'auth/wrong-password':
+            setPasswordErrorMessage(error.code)
+            break
+          default:
+            setPasswordErrorMessage("Something went wrong. Please, check if the data is correct and try again!")
+        }
+      })
+  }
+
+  const handleChange = (e) => {
+    const value = e.target.value
+    setName({
+      ...name,
+      [e.target.name]: value,
+    })
   }
 
   return (
@@ -107,8 +151,32 @@ const SignUpForm = () => {
           <Typography pb={2} fontWeight="600" textAlign="center" variant="h6" color="text.secondary">
             {isSignUp ? 'Sign up for your account' : 'Sign in for your account'}
           </Typography>
-          <form action="" onSubmit={(e) => (isSignUp ? signUpWithPass(e) : signInwithPass(e))}>
+          <form action="" onSubmit={handleSubmit}>
             <Stack spacing={1}>
+              {isSignUp && (
+                <Stack direction={'row'} spacing={1}>
+                  <TextField
+                    name={'firstName'}
+                    required
+                    value={name.firstName}
+                    onChange={handleChange}
+                    placeholder="Enter first name"
+                    type="text"
+                    fullWidth
+                    size="small"
+                  />
+                  <TextField
+                    name={'lastName'}
+                    required
+                    value={name.lastName}
+                    onChange={handleChange}
+                    placeholder="Enter last name"
+                    type="text"
+                    fullWidth
+                    size="small"
+                  />
+                </Stack>
+              )}
               <TextField
                 required
                 value={email}
@@ -118,7 +186,7 @@ const SignUpForm = () => {
                 fullWidth
                 size="small"
               />
-              {showError && <Alert severity="error">Enter valid Email</Alert>}
+              {emailErrorMessage && <Alert severity="error">{emailErrorMessage}</Alert>}
               <TextField
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -128,17 +196,7 @@ const SignUpForm = () => {
                 fullWidth
                 size="small"
               />
-              {/* {isSignUp && (
-                <TextField
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Confirm password"
-                  type="password"
-                  fullWidth
-                  size="small"
-                />
-              )} */}
+              {passwordErrorMessage && <Alert severity="error">{passwordErrorMessage}</Alert>}
             </Stack>
 
             <Typography pt={1} pb={1} textAlign="center" variant="subtitle2" color="text.secondary">

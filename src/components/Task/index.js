@@ -3,7 +3,7 @@ import React from 'react'
 import { Card, Typography, Box, Stack } from '@mui/material'
 import { Draggable } from 'react-beautiful-dnd'
 
-import { RiPencilLine } from 'react-icons/ri'
+import { AiFillSetting } from 'react-icons/ai'
 import { MdOutlineDescription, MdOutlineModeComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { setCurrentTaskId, setCurrentTaskTitle } from 'store/slices/tasksSlice'
@@ -46,7 +46,7 @@ const Task = ({ card, task, index, openDescriptionModal }) => {
                   '&:hover': { backgroundColor: '#e6e6e6', color: 'black' },
                 }}
               >
-                <RiPencilLine size={16} color="#666666" />
+                <AiFillSetting size={16} color="#666666" />
               </Box>
               <Typography p={1} variant="subtitle1" color="#000066">
                 {task.title}

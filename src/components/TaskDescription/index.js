@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
 
-import { Card, Modal, Typography, Grid, Box, TextField, Stack, Button, IconButton } from '@mui/material'
+import { Modal, Typography, Grid, Box, TextField, Stack, Button, IconButton } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { currentTaskState, setCurrentTaskTitle } from 'store/slices/tasksSlice'
-import { arrayRemove, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import Description from 'components/Description'
 import { descriptionState, setDescriptionId } from 'store/slices/descriptionSlice'
 import { useDispatch } from 'react-redux'
 import CommentWrite from 'components/CommentWrite'
 import { MdOutlineDescription, MdOutlineSubtitles } from 'react-icons/md'
 import Comment from 'components/Comment'
+import { generalBoardCollection } from 'firebase-client'
+import AssignedMembers from 'components/AssignMembersPopper/AssignedMembers'
 
 const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }) => {
   const dispatch = useDispatch()
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
-  const userId = useSelector(currentUserStateId)
   const description = useSelector(descriptionState)
+
 
   const genNumKey = (key) => {
     return key + new Date().getTime()
@@ -31,20 +31,22 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '55%',
-    bgcolor: 'background.paper',
+    bgcolor: '#f0f0f5',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    maxHeight: "calc(100vh - 150px)",
+    overflow: "auto"
   }
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const descriptionDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+
+  const descriptionDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
   const [descriptionText, setDescriptionText] = useState('')
   const [taskTitle, setTaskTitle] = useState('')
+  
   const [isEditTitleOpen, setIsEditTitleOpen] = useState(false)
 
   const updateDascription = async (e) => {
@@ -61,14 +63,11 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
   }
 
   const editTaskTitle = async () => {
-    console.log(currentTask.title)
     setIsEditTitleOpen(true)
     setTaskTitle(currentTask.title)
   }
 
   const updateTaskTitle = async () => {
-    console.log(currentTask.title)
-    console.log(currentTask.id)
     await updateDoc(tasksDoc, {
       tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
     })
@@ -82,9 +81,33 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
 
   const openDescription = () => {
     setIsDescriptionOpen(true)
-    setDescriptionText(description.title)
+    setDescriptionText(description && description.title)
   }
 
+  const deleteTask = async () => {
+    await updateDoc(tasksDoc, {
+      tasks: arrayRemove({ title: currentTask.title, id: currentTask.id }),
+    })
+    card.descriptions &&
+      card.descriptions.map(async (desc) => {
+        if (desc.id === currentTask.id) {
+          await updateDoc(tasksDoc, {
+            descriptions: arrayRemove({ title: desc.title, id: desc.id }),
+          })
+        }
+      })
+    closeDescriptionModal(setDescriptionText, setIsDescriptionOpen)
+  }
+
+  const copiedCommentList = card.comments && [...card.comments]
+
+  const sortedCommentList =
+  copiedCommentList &&
+    currentTask.title &&
+    copiedCommentList.sort((a, b) => {
+      return new Date(a.timeOfAdd) - new Date(b.timeOfAdd)
+    })
+ 
   return (
     <Modal
       open={isDescriptionModalOpen}
@@ -92,9 +115,8 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Card sx={style}>
-        <Grid container>
-          <Grid item md={10} width={'95%'}>
+        <Grid item md={7} xs={9} sx={style} container>
+          <Grid item md={10} xs={10} width={'95%'}>
             <Grid container>
               <Grid item md={1}>
                 <MdOutlineSubtitles size={27} color={'#595959'} />
@@ -125,6 +147,7 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
                 </Typography>
               </Grid>
             </Grid>
+            <AssignedMembers tasksDoc={tasksDoc} card={card} />
             <Grid container pt={2}>
               <Grid item md={1}>
                 <MdOutlineDescription size={27} color={'#595959'} />
@@ -187,9 +210,8 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
             <Stack spacing={2}>
               <CommentWrite card={card} />
               <Stack spacing={2}>
-                {card.comments &&
-                  currentTask.title &&
-                  card.comments.map((comment, index) => {
+                {sortedCommentList &&
+                sortedCommentList.map((comment, index) => {
                     if (comment.id === currentTask.id) {
                       return <Comment card={card} key={genNumKey(index)} comment={comment} />
                     }
@@ -197,17 +219,12 @@ const TaskDescription = ({ isDescriptionModalOpen, closeDescriptionModal, card }
               </Stack>
             </Stack>
           </Grid>
-          <Grid item md={2}>
-            <ul>
-              <li>dsa</li>
-              <li>dsa</li>
-              <li>dsad</li>
-              <li>dsad</li>
-              <li>dsad</li>
-            </ul>
+          <Grid item md={2} xs={2}>
+              <Button onClick={deleteTask} variant="outlined" color="error">
+                Delete this task
+              </Button>
           </Grid>
         </Grid>
-      </Card>
     </Modal>
   )
 }

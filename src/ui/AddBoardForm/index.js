@@ -11,17 +11,18 @@ import {
   TextField,
   FormHelperText,
 } from '@mui/material'
-import { addDoc, collection } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
+import { addDoc } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/usersSlice'
+import { currentUserStateEmail } from 'store/slices/usersSlice'
 import { useNavigate } from 'react-router-dom'
+import { generalBoardCollection } from 'firebase-client'
 
 
 const AddBoardForm = ({ open, setIsOpen }) => {
-  const userId = useSelector(currentUserStateId)
-  const dashboardCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const [inp, setInp] = useState("")
+
+  const userEmail = useSelector(currentUserStateEmail)
+
+  const [dashboardTitle, setDashboardTitle] = useState("")
   const navigate = useNavigate()
   const style = {
     position: 'absolute',
@@ -37,12 +38,15 @@ const AddBoardForm = ({ open, setIsOpen }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     navigate("/home")
-    addDoc(dashboardCollection, {
-      title: inp
+    addDoc(generalBoardCollection, {
+      title: dashboardTitle, 
+      timeOfAdd: new Date().getTime(),
+      members: [userEmail]
     })
-    setInp("")
+    setDashboardTitle("")
     setIsOpen(false)
   }
+
   return (
     <Modal
       open={open}
@@ -68,9 +72,8 @@ const AddBoardForm = ({ open, setIsOpen }) => {
           Board title:
         </Typography>
         <form onSubmit={handleSubmit}>
-          <TextField value={inp} onChange={(e) => setInp(e.target.value)} sx={{ width: '300px' }} id="my-input" aria-describedby="my-helper-text" />
+          <TextField required value={dashboardTitle} onChange={(e) => setDashboardTitle(e.target.value)} sx={{ width: '300px' }} id="my-input" aria-describedby="my-helper-text" />
           <FormHelperText id="my-helper-text">Board title is required</FormHelperText>
-        
         <Box display="flex" justifyContent="center" pt={1}>
           <Button type='submit' variant="contained">Submit</Button>
         </Box>

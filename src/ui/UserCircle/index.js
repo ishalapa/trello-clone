@@ -1,18 +1,18 @@
-import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import React, {useState, useEffect} from 'react'
-import { useSelector } from 'react-redux';
-import { currentUserStateName } from 'store/slices/usersSlice';
 
-const UserCircle = ({handleClick, size}) => {
-    const [iconName, setIconName] = useState("")
-    const userName = useSelector(currentUserStateName)
+import { Typography, Box } from '@mui/material';
 
-  useEffect(() => {
-    if(userName) {
-      setIconName(userName.split(' ')[0].slice(0, 1) + userName.split(' ')[1].slice(0, 1))
-    } else setIconName("")
-  }, [userName]);
+const UserCircle = ({handleClick, size, authorName}) => {
+
+  const [userAvatarInitials, setUserAvatarInitials] = useState("")
+
+  const createDefaultUserAvatar = () => {
+    setUserAvatarInitials(authorName.split(' ')[0].slice(0, 1) + authorName.split(' ')[1].slice(0, 1))
+ }
+
+ useEffect(() => {
+  authorName && createDefaultUserAvatar()
+ },[])
 
   return (
     <Box onClick={handleClick('bottom-start')} variant="contained">
@@ -26,7 +26,7 @@ const UserCircle = ({handleClick, size}) => {
             borderRadius="50%"
           >
             <Typography color={'white'} fontSize={14} textAlign="center" variant="subtitle2" sx={{ p: 1 }}>
-              {iconName ? iconName : "User"}
+              {userAvatarInitials}
             </Typography>
           </Box>
         </Box>

@@ -1,31 +1,39 @@
 import React, { useState } from 'react'
 
-import { Button, Box, Stack, IconButton, TextField } from '@mui/material'
+import { Button, Box, Stack, IconButton, TextField, Alert } from '@mui/material'
 import { AiOutlinePlus, AiOutlineClose } from 'react-icons/ai'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, query, where } from 'firebase/firestore'
 import { useSelector } from 'react-redux'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
-import { usersCollection } from 'firebase-client'
-import { currentUserStateId } from 'store/slices/usersSlice'
+
+import { generalBoardCollection } from 'firebase-client'
 
 const AddNewListBtn = () => {
   const [isNewListInputOpen, setIsNewListInputOpen] = useState(false)
-  const [inp, setInp] = useState('')
-  const userId = useSelector(currentUserStateId)
+  const [boardCardText, setBoardCardText] = useState('')
+  const [isValid, setIsValid] = useState(true)
 
   const dashboardId = useSelector(currentDashboardIdState)
-  const dashboardsCollection = collection(usersCollection, `${userId}`, "dashboards")
-  const cardsCollection = collection(dashboardsCollection, `${dashboardId}`, 'cards')
 
-  const handleSubmit = async (e) => {
+  const cardsCollection = collection(generalBoardCollection, `${dashboardId}`, 'cards')
+
+  const addNewList = async (e) => {
     e.preventDefault()
-    addDoc(cardsCollection, {
-      title: inp,
-    })
-    setInp('')
+
+    if (!boardCardText.trim()) {
+      setIsValid(false)
+    } else {
+      setIsValid(true)
+
+      addDoc(cardsCollection, {
+        title: boardCardText,
+        timeOfAdd: new Date().getTime(),
+      })
+      setBoardCardText('')
+    }
   }
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={addNewList}>
       {!isNewListInputOpen ? (
         <Button
           size="medium"
@@ -44,8 +52,9 @@ const AddNewListBtn = () => {
       ) : (
         <Box width="290px">
           <TextField
-            value={inp}
-            onChange={(e) => setInp(e.target.value)}
+            required
+            value={boardCardText}
+            onChange={(e) => setBoardCardText(e.target.value)}
             sx={{ backgroundColor: 'white' }}
             size="small"
             variant="outlined"
@@ -55,9 +64,10 @@ const AddNewListBtn = () => {
             placeholder="Enter a title for this card"
             fullWidth
           />
+          {!isValid && <Alert sx={{mt: "3px"}} severity="warning">Try another title</Alert>}
             <Stack pt={1} spacing={1} direction="row" alignItems="center">
               <Button type="submit" variant="contained">
-                Add card
+                Add list
               </Button>
               <IconButton onClick={() => setIsNewListInputOpen(false)} size="small">
                 <AiOutlineClose />

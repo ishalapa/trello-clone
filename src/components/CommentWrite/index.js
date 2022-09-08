@@ -2,32 +2,44 @@ import React, { useState } from 'react'
 
 import { Grid, Card, Box, Typography, TextField, Stack, Button } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { currentUserStateId } from 'store/slices/usersSlice'
 import UserCircle from 'ui/UserCircle'
-import { arrayUnion, collection, doc, updateDoc } from 'firebase/firestore'
-import { usersCollection } from 'firebase-client'
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { currentDashboardIdState } from 'store/slices/dashboardsSlice'
 import { currentTaskState } from 'store/slices/tasksSlice'
+import { generalBoardCollection } from 'firebase-client'
+import { currentUserStateName } from 'store/slices/usersSlice'
 
-const CommentWrite = ({card}) => {
-  const userId = useSelector(currentUserStateId)
+const CommentWrite = ({ card }) => {
   const dashboardId = useSelector(currentDashboardIdState)
   const currentTask = useSelector(currentTaskState)
+  const userName = useSelector(currentUserStateName)
 
   const [commentText, setCommentText] = useState('')
   const [isEditCommentOpen, setIsEditCommentOpen] = useState(false)
 
-  const dashboardCollection = collection(usersCollection, `${userId}`, 'dashboards')
-  const tasksDoc = doc(dashboardCollection, `${dashboardId}`, 'cards', card.id)
+  const tasksDoc = doc(generalBoardCollection, `${dashboardId}`, 'cards', card.id)
 
   const genNumKey = (key) => {
     return key + new Date().getTime()
   }
+  const date = new Date().toISOString().slice(0, 10)
+
+  const time = new Date().toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 
   const addComment = async (e) => {
     e.preventDefault()
     await updateDoc(tasksDoc, {
-      comments: arrayUnion({ title: commentText, id: currentTask.id, unic: genNumKey(currentTask.id) }),
+      comments: arrayUnion({
+        title: commentText,
+        id: currentTask.id,
+        timeOfAdd: new Date().getTime(),
+        author: userName,
+        time: `${date} at ${time}`,
+        edited: false
+      }),
     })
     setIsEditCommentOpen(false)
     setCommentText('')
@@ -37,10 +49,10 @@ const CommentWrite = ({card}) => {
 
   return (
     <Grid container>
-      <Grid item xs={4} md={1} display={"flex"} alignItems={"center"}>
-        <UserCircle handleClick={handleClick} size={35}/>
+      <Grid item xs={2} md={1} display={'flex'} alignItems={'center'}>
+        <UserCircle authorName={userName} handleClick={handleClick} size={35} />
       </Grid>
-      <Grid item xs={8} md={11} display={'flex'} alignItems={'center'} justifyContent={'end'}>
+      <Grid item xs={10} md={11} display={'flex'} alignItems={'center'} justifyContent={'end'}>
         {!isEditCommentOpen ? (
           <Card
             onClick={() => setIsEditCommentOpen(true)}
@@ -51,7 +63,7 @@ const CommentWrite = ({card}) => {
             </Typography>
           </Card>
         ) : (
-          <Box width={"100%"} pt={1}>
+          <Box width={'100%'} pt={1}>
             <TextField
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
