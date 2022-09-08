@@ -27,9 +27,9 @@ const DashboardListPage = () => {
   return (
     <Container maxWidth="md">
       <Box pt="30px">
-        <Box width="220px" display="flex" justifyContent="space-between" alignItems="center" pb="15px">
+        <Box width="180px" display="flex" justifyContent="space-between" alignItems="center" pb="15px">
           <CgTrello size={40} color="#0073e6" />
-          <Typography variant="h5">Trello Workspace</Typography>
+          <Typography color={"#00004d"} fontWeight={600} variant="h5">Your Boards</Typography>
         </Box>
         <Grid container textAlign="center" spacing={2}>
           {sortedDashboardList &&

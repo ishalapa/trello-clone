@@ -43,17 +43,16 @@ const AddMemberPopper = () => {
     return isUserFavorite
   }
   
-  // функція toggleFavorite викликає дуже багато ререндерингу
   const toggleFavorite = async (user) => {
     const userDoc = doc(usersCollection, `${userID}`)
-    const isUserFavorite = checkIfFavofite(user)
+    const isUserFavorite = checkIfFavofite({email: user.email, id: user.id})
     if (isUserFavorite) {
         await updateDoc(userDoc, {
-            favorites: arrayRemove(user),
+            favorites: arrayRemove({email: user.email, id: user.id}),
           })
     } else {
         await updateDoc(userDoc, {
-            favorites: arrayUnion(user),
+            favorites: arrayUnion({email: user.email, id: user.id}),
           })
     }
   }
@@ -71,7 +70,7 @@ const AddMemberPopper = () => {
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
   //
-  const currentMembers = members === "All" && currentUser && currentUser.favorites ? [...userList] : [...currentUser.favorites]
+  const currentMembers = members === "Favorites" && currentUser.favorites && currentUser ? currentUser.favorites : userList
 
   return (
     <>

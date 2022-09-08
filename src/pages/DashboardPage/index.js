@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Container, Box, Stack, Button, TextField } from '@mui/material'
+import { Box, Stack, Button, TextField } from '@mui/material'
 import { useNavigate} from "react-router-dom"
 import { currentDashboardState, setCurrentDashboard } from 'store/slices/dashboardsSlice'
 import BoardCard from 'components/BoardCard'
@@ -13,7 +13,6 @@ import { useDispatch } from 'react-redux'
 import { generalBoardCollection } from 'firebase-client'
 import MembersPopper from 'components/MembersPopper'
 import AddMemberPopper from 'components/AddMemberPopper'
-import GeneralContext from 'context/GeneralContext'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -43,8 +42,6 @@ const DashboardPage = () => {
     return new Date(a.timeOfAdd) - new Date(b.timeOfAdd);
   });
 
-  const {text} = useContext(GeneralContext);
-  console.log(text)
   return (
     <Box sx={{overflow: "auto"}} p={1} pl={2} pr={2}>
       <Stack direction="row" spacing={2} pt={2}>

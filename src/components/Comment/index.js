@@ -62,6 +62,7 @@ const Comment = ({ comment, card }) => {
   }
 
   const handleClick = () => null
+  console.log("comment rerender")
   return (
     <Grid container>
       <Grid item xs={2} md={1} display={'flex'} alignItems={'center'}>

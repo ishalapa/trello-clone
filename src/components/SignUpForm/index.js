@@ -74,7 +74,7 @@ const SignUpForm = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (result) => {
         const user = result.user
-        addDoc(usersCollection, { email: user.email, id: user.uid })
+        addDoc(usersCollection, { email: user.email, id: user.uid, favorites: []})
 
         updateProfile(auth.currentUser, {
           displayName: `${name.firstName} ${name.lastName}`,
